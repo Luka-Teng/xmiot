@@ -12,6 +12,9 @@
       "git add"
     ]
   },
+  "hooks": {
+    "pre-commit": "echo 111111"
+  },
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
