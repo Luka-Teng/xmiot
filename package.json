@@ -1,0 +1,28 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "publish": "lerna publish",
+    "precommit": "lint-staged",
+    "prettier": "prettier --write \"packages/**/*.jsx\" \"packages/**/*.js\""
+  },
+  "lint-staged": {
+    "packages/**/*.js": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "husky": "^1.1.2",
+    "lerna": "^3.4.3",
+    "lint-staged": "^7.3.0",
+    "prettier": "1.14.3",
+    "rollup": "^0.66.6",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-terser": "^3.0.0"
+  }
+}

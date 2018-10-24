@@ -1,0 +1,19 @@
+{
+  "name": "xmiot-module2",
+  "version": "1.0.8",
+  "description": "module2 for test",
+  "main": "index.js",
+  "scripts": {
+    "prepublishOnly": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Luka",
+  "license": "ISC",
+  "files": [
+    "lib"
+  ],
+  "devDependencies": {
+    "lodash": "^4.17.11"
+  },
+  "gitHead": "262f77c27809a5886d9793812cb81e192264c3bc"
+}
