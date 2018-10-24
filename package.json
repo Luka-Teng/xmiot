@@ -4,11 +4,11 @@
   "scripts": {
     "publish": "lerna publish",
     "precommit": "lint-staged",
-    "prettier": "prettier --ignore-path \"./.prettierignore\" --write \"packages/**/*.jsx\" \"packages/**/*.js\""
+    "prettier": "prettier --write \"packages/**/*.jsx\" \"packages/**/*.js\""
   },
   "lint-staged": {
     "packages/**/*.js": [
-      "prettier --write",
+      "prettier --ignore-path \"./.prettierignore\"  --write",
       "git add"
     ]
   },
