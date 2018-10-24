@@ -1,3 +1,3 @@
 'use strict'
-var template = 11121
+var template = 111212
 module.exports = template
