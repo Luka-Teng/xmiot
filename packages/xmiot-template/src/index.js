@@ -1,3 +1,3 @@
-   const template = 111212
+const template = 111212
 
 export default template

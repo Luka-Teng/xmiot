@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "publish": "lerna publish",
-    "precommit": "lint-staged",
+    "pre-commit": "lint-staged",
     "prettier": "prettier --write \"packages/**/*.jsx\" \"packages/**/*.js\""
   },
   "lint-staged": {
