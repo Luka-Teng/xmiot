@@ -1,6 +1,6 @@
 {
   "name": "xmiot-template",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "A template for xmiot npm-package",
   "main": "lib/index.common.js",
   "module": "lib/index.esm.js",
@@ -15,6 +15,6 @@
   ],
   "gitHead": "262f77c27809a5886d9793812cb81e192264c3bc",
   "dependencies": {
-    "xmiot-module2": "^1.0.11"
+    "xmiot-module2": "^1.0.12"
   }
 }
