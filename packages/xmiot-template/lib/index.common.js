@@ -1,3 +1,1 @@
-'use strict'
-var template = 1112121
-module.exports = template
+"use strict";var template=1112121111;module.exports=template;
