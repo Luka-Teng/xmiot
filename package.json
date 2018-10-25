@@ -8,7 +8,7 @@
   },
   "lint-staged": {
     "packages/**/*.js": [
-      "prettier --ignore-path \"./.prettierignore\"  --write",
+      "prettier --ignore-path \"./.prettierignore\"  --write \"packages/**/*.jsx\" \"packages/**/*.js\"",
       "git add"
     ]
   },
