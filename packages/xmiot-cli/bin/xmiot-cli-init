@@ -1,0 +1,151 @@
+#!/usr/bin/env node
+const rm = require('rimraf').sync
+const download = require('download-git-repo')
+const program = require('commander')
+const chalk = require('chalk')
+const tildify = require('tildify')
+const exists = require('fs').existsSync
+const path = require('path')
+const home = require('user-home')
+const inquirer = require('inquirer')
+const ora = require('ora')
+const logger = require('../lib/logger')
+const generate = require('../lib/generate')
+const { eachWithNext, isLocalPath, getTemplatePath, checkVersion } = require('../utils')
+
+program
+  .usage('<template-name> [project-name]')
+  .option('-c, --clone', 'use git clone')
+  .option('--offline', 'use cached template')
+
+// Help
+program.on('--help', () => {
+  console.log('  Examples:')
+  console.log()
+  console.log(chalk.gray('    # create a new project with an official template'))
+  console.log('    $ iot-cli init react-simple my-project')
+})
+
+function help () {
+  program.parse(process.argv)
+  if (program.args.length < 1) return program.help()
+}
+help()
+
+/*
+* Settings
+* template: 模板名字，offline模式下为模板缓存路径
+* hasSlash: 判断是否为个人git模板还是官方git模板
+* rawName: 初始项目名字，不填写则为'.'
+* inPlace: 项目存放地址是否为当前文件夹
+* name: 项目名，如果初始项目名为'.'
+* to: 项目地址
+* tmp: 本地模板缓存地址
+*/
+let template = program.args[0]
+const hasSlash = template.indexOf('/') > -1
+const rawName = program.args[1]
+const inPlace = !rawName || rawName === '.'
+const name = inPlace ? path.relative('../', process.cwd()) : rawName
+const to = path.resolve(rawName || '.')
+const tmp = path.join(home, '.iot-templates', template.replace(/[\/:]/g, '-'))
+if (program.offline) {
+  console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`)
+  template = tmp
+}
+
+/*
+* 如果没有填写项目名，或者为'.'，则默认当前所在目录为项目地址
+* 如果当前所在项目为项目地址，则发起询问，并请求确认
+*/
+if (inPlace || exists(to)) {
+  inquirer.prompt([{
+    type: 'confirm',
+    message: inPlace
+      ? 'Generate project in current directory?'
+      : 'Target directory exists. Continue?',
+    name: 'ok'
+  }]).then(answers => {
+    if (answers.ok) {
+      run()
+    }
+  }).catch(logger.fatal)
+} else {
+  run()
+}
+
+/*
+* 判断是否为本地模板和git模板
+* 并开始构建或者下载构建
+* 本地模板需放在程序运行所在目录，并以其为根目录
+* 本地模板: 以   '.'   '/'   'x:'   开头
+* 远程模板分为个人模板和官方模板
+* 个人模板: xxx/xxx
+* 官方模板: xxx
+*/
+function run () {
+  // check if template is local
+  if (isLocalPath(template)) {
+    const templatePath = getTemplatePath(template)
+    if (exists(templatePath)) {
+      generate(name, templatePath, to, err => {
+        if (err) logger.fatal(err)
+      })
+    } else {
+      logger.fatal('Local template "%s" not found.', template)
+    }
+  } else {
+    // 判断node版本，和iot-cli版本
+    checkVersion(() => {
+      // 判断是否是官方模板
+      if (!hasSlash) {
+        // use official templates
+        const officialTemplate = 'iot-templates/' + template
+        downloadAndGenerate(officialTemplate)
+      } else {
+        downloadAndGenerate(template)
+      }
+    })
+  }
+}
+
+/*
+* Download a generate from a template repo.
+*/
+
+function downloadAndGenerate (template) {
+  // whiteHouses: 可以仓库地址白名单
+  const whiteHouses = [
+    'gitlab:gitlab.ximalaya.com',
+    'github:github.com'
+  ]
+
+  const spinner = ora('downloading template')
+  // Remove if local template exists
+  if (exists(tmp)) rm(tmp)
+
+  // 在仓库白名单中遍历
+  eachWithNext(whiteHouses, (house, next) => {
+    spinner.start()
+    const fullPath = house + ':' + template
+    download(fullPath, tmp, { clone: true }, err => {
+      if (err) {
+        logger.warn('Failed to download repo ' + fullPath + ': ' + err.message.trim())
+        spinner.stop()
+        next()
+        return
+      }
+      spinner.stop()
+
+      // 防止出错被download-git-repo捕获，出错直接退出程序
+      try {
+        generate(name, tmp, to, err => {
+          if (err) logger.fatal(err)
+          logger.success('Generated "%s".', name)
+        })
+      } catch (err) {
+        logger.fatal(err)
+      }
+    })
+  })
+}

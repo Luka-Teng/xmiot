@@ -1,0 +1,37 @@
+{
+  "name": "xmiot-cli",
+  "version": "1.0.3",
+  "description": "xmiot-cli for ximalaya",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "iot-cli"
+  ],
+  "bin": {
+    "xmiot-cli": "bin/xmiot-cli",
+    "xmiot-cli-init": "bin/xmiot-cli-init"
+  },
+  "author": "luka",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "chalk": "^2.4.1",
+    "commander": "^2.19.0",
+    "consolidate": "^0.15.1",
+    "download-git-repo": "^1.1.0",
+    "handlebars": "^4.0.12",
+    "inquirer": "^6.2.0",
+    "metalsmith": "^2.3.0",
+    "minimatch": "^3.0.4",
+    "ora": "^3.0.0",
+    "read-metadata": "^1.0.0",
+    "semver": "^5.6.0",
+    "tildify": "^1.2.0",
+    "user-home": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}
