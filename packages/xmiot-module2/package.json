@@ -1,6 +1,6 @@
 {
   "name": "xmiot-module2",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "module2 for test",
   "main": "index.js",
   "scripts": {
