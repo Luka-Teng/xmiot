@@ -13,8 +13,12 @@
   "files": [
     "lib"
   ],
+  "devTestType": "react",
   "gitHead": "262f77c27809a5886d9793812cb81e192264c3bc",
   "dependencies": {
+    "@babel/preset-react": "^7.0.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "xmiot-module2": "^1.0.14"
   }
 }
