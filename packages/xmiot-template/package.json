@@ -1,6 +1,6 @@
 {
   "name": "xmiot-template",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "A template for xmiot npm-package",
   "main": "lib/index.common.js",
   "module": "lib/index.esm.js",
@@ -19,6 +19,6 @@
     "@babel/preset-react": "^7.0.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "xmiot-module2": "^1.0.14"
+    "xmiot-module2": "^1.0.15"
   }
 }
