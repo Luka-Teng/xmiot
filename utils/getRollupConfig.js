@@ -12,7 +12,7 @@ import fileAsBlob from 'rollup-plugin-file-as-blob'
 import replace from 'rollup-plugin-replace'
 import { getClientEnvironment } from './env'
 
-export default (options = {}, {type = 'global', packageDir = ''}) => {
+export default (options = {}, {type = 'global', packageDir = ''} = {}) => {
   const defaultOptions = {
     plugins: [
       // 环境变量的定义

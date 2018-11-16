@@ -14,7 +14,7 @@
     "lib"
   ],
   "devTestType": "react",
-  "gitHead": "262f77c27809a5886d9793812cb81e192264c3bc",
+  "gitHead": "6a8e9a35953a44eef9eb49b96fa4de65dac3cf1b",
   "dependencies": {
     "@babel/preset-react": "^7.0.0",
     "react": "^16.6.3",
