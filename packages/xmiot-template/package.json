@@ -16,9 +16,8 @@
   "devTestType": "react",
   "gitHead": "6a8e9a35953a44eef9eb49b96fa4de65dac3cf1b",
   "dependencies": {
-    "@babel/preset-react": "^7.0.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "xmiot-module2": "^1.0.15"
+    "axios": "^0.18.0"
   }
 }

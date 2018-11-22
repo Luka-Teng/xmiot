@@ -1,0 +1,14 @@
+{
+  "name": "{{projectName}}",
+  "version": "1.0.0",
+  "description": "{{description}}",
+  "main": "index.js",
+  "scripts": {
+    "prepublishOnly": "rollup -c"
+  },
+  "author": "{{author}}",
+  "license": "ISC",
+  "files": [
+    "lib"
+  ]
+}

@@ -4,17 +4,28 @@
  * 默认API_ENV配置为development
  * params: type: global, react
  */
-import babel from 'rollup-plugin-babel'
-import resolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
-import postcss from 'rollup-plugin-postcss'
-import fileAsBlob from 'rollup-plugin-file-as-blob'
-import replace from 'rollup-plugin-replace'
-import { getClientEnvironment } from './env'
+const babel = require('rollup-plugin-babel')
+const resolve = require('rollup-plugin-node-resolve')
+const commonjs = require('rollup-plugin-commonjs')
+const postcss = require('rollup-plugin-postcss')
+const fileAsBlob = require('rollup-plugin-file-as-blob')
+const replace = require('rollup-plugin-replace')
+const { eslint } = require('rollup-plugin-eslint')
+const { getClientEnvironment } = require('./env')
+const { multiDeepAssign } = require('./function')
 
-export default (options = {}, {type = 'global', packageDir = ''} = {}) => {
+module.exports = (options = {}, {type = 'global', packageDir = ''} = {}) => {
   const defaultOptions = {
     plugins: [
+      /*
+       * eslint的配置在每个包中，由包主人自行管理
+       * eslint的插件包，preset包由lerna统一管理
+       */
+      eslint({
+        include: ['**/*.js'],
+        cwd: packageDir
+      }),
+
       // 环境变量的定义
       replace({
         ...getClientEnvironment().stringified
@@ -64,5 +75,7 @@ export default (options = {}, {type = 'global', packageDir = ''} = {}) => {
       })
     ].filter((e) => e !== '')
   }
-  return Object.assign({}, options, defaultOptions)
+
+  // 深拷贝options，提供各个包自主配置plugin的能力
+  return multiDeepAssign({}, options, defaultOptions)
 }

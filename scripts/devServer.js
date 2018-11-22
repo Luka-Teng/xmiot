@@ -1,19 +1,11 @@
 /*
- * usage: devServer packageName input
- * todolist: 增加命令行参数 -package:包名 -entry:入口文件 -type:项目类型(global, react)
+ * usage: devServer -package:包名 -entry:入口文件 -type:项目类型(global, react)
  */
-// 开启node对es6的支持，主要支持导入es6模块
-require('@babel/register')({
-  presets: [ '@babel/preset-env' ],
-  // 不添加该plugin会导致其他文件解构失效
-  plugins: ['@babel/plugin-proposal-object-rest-spread']
-})
-
 const logger = require('../utils/logger')
 const path = require('path')
 const fs = require('fs-extra')
 const rollup = require('rollup')
-const getRollupConfig = require('../utils/getRollupConfig').default
+const getRollupConfig = require('../utils/getRollupConfig')
 const serve = require('rollup-plugin-serve')
 const livereload = require('rollup-plugin-livereload')
 const program = require('commander')
@@ -38,7 +30,7 @@ program
 
 // 程序强制结束或自动结束删除缓存文件
 process.on('SIGINT', function () {
-  logger.fatal('程序强制退出')
+  logger.warn('程序强制退出')
 })
 
 process.on('exit', function () {
@@ -50,7 +42,6 @@ process.on('exit', function () {
 
 /*
  * 提取参数，并对参数做验证
- *
  */
 const getOptions = () => {
   let {packageName, entry, type} = program
@@ -59,10 +50,6 @@ const getOptions = () => {
   }
   const packageDir = path.resolve(cwd, 'packages', packageName)
   entry = path.resolve(cwd, 'packages', packageName, entry)
-  const packageInfo = require(path.resolve(packageDir, 'package.json'))
-
-  // type值可以被package.json的devTestType重写
-  type = packageInfo.devTestType || type
 
   if (!fs.existsSync(packageDir)) {
     logger.fatal('不存在该包名')
@@ -70,6 +57,11 @@ const getOptions = () => {
   if (!fs.existsSync(entry)) {
     logger.fatal('不存在该入口文件')
   }
+
+  const packageInfo = require(path.resolve(packageDir, 'package.json'))
+  // type值可以被package.json的devTestType重写
+  type = packageInfo.devTestType || type
+
   return {
     packageName,
     packageDir,

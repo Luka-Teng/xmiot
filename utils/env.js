@@ -1,5 +1,5 @@
 // 将所有的环境变量整合
-export const getClientEnvironment = () => {
+exports.getClientEnvironment = () => {
   const raw = Object.keys(process.env)
     .reduce(
       (env, key) => {
