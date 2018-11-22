@@ -1,6 +1,6 @@
 {
   "name": "xmiot-template",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "description": "A template for xmiot npm-package",
   "main": "lib/index.common.js",
   "module": "lib/index.esm.js",
@@ -16,8 +16,8 @@
   "devTestType": "react",
   "gitHead": "6a8e9a35953a44eef9eb49b96fa4de65dac3cf1b",
   "dependencies": {
+    "axios": "^0.18.0",
     "react": "^16.6.3",
-    "react-dom": "^16.6.3",
-    "axios": "^0.18.0"
+    "react-dom": "^16.6.3"
   }
 }
