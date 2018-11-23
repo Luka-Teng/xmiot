@@ -18,15 +18,11 @@ let metadata = {}
 
 // 注册handlebars的helper
 Handlebars.registerHelper('if_eq', function (a, b, opts) {
-  return a === b
-    ? opts.fn(this)
-    : opts.inverse(this)
+  return a === b ? opts.fn(this) : opts.inverse(this)
 })
 
 Handlebars.registerHelper('unless_eq', function (a, b, opts) {
-  return a === b
-    ? opts.inverse(this)
-    : opts.fn(this)
+  return a === b ? opts.inverse(this) : opts.fn(this)
 })
 
 /*
@@ -37,28 +33,33 @@ Handlebars.registerHelper('unless_eq', function (a, b, opts) {
  * done:回答完后的回调
  */
 const prompt = (data, key, prompt, done) => {
-  inquirer.prompt([{
-    type: prompt.type,
-    name: key,
-    message: prompt.message,
-    default: prompt.default,
-    choices: prompt.choices || []
-  }]).then(answers => {
-    if (Array.isArray(answers[key])) {
-      // 当答案是一个数组时
-      data[key] = {}
-      answers[key].forEach(multiChoiceAnswer => {
-        data[key][multiChoiceAnswer] = true
-      })
-    } else if (typeof answers[key] === 'string') {
-      // 当答案是一个字符串时
-      data[key] = answers[key].replace(/"/g, '\\"')
-    } else {
-      // 其他情况
-      data[key] = answers[key]
-    }
-    done()
-  }).catch(done)
+  inquirer
+    .prompt([
+      {
+        type: prompt.type,
+        name: key,
+        message: prompt.message,
+        default: prompt.default,
+        choices: prompt.choices || []
+      }
+    ])
+    .then(answers => {
+      if (Array.isArray(answers[key])) {
+        // 当答案是一个数组时
+        data[key] = {}
+        answers[key].forEach(multiChoiceAnswer => {
+          data[key][multiChoiceAnswer] = true
+        })
+      } else if (typeof answers[key] === 'string') {
+        // 当答案是一个字符串时
+        data[key] = answers[key].replace(/"/g, '\\"')
+      } else {
+        // 其他情况
+        data[key] = answers[key]
+      }
+      done()
+    })
+    .catch(done)
 }
 
 /*
@@ -67,38 +68,47 @@ const prompt = (data, key, prompt, done) => {
  * to: 包地址
  * prompts: 需要的提问的参数 {type, name, default, message, choices}
  */
-const run = ({from, to, prompts}) => {
+const run = ({ from, to, prompts }) => {
   const metalsmith = Metalsmith(from)
   metadata = metalsmith.metadata()
 
   // 提问并且存取去metaldata
   metalsmith.use((files, metalsmith, done) => {
-    eachWithNext(Object.keys(prompts), (key, next) => {
-      prompt(metadata, key, prompts[key], next)
-    }, done)
+    eachWithNext(
+      Object.keys(prompts),
+      (key, next) => {
+        prompt(metadata, key, prompts[key], next)
+      },
+      done
+    )
   })
 
   // 对模板进行渲染
   metalsmith.use((files, metalsmith, done) => {
     // 异步渲染模板文件
-    eachWithAll(Object.keys(files), (file, next, error) => {
-      const str = files[file].contents.toString()
-      // do not attempt to render files that do not have mustaches
-      if (!/{{([^{}]+)}}/g.test(str)) {
-        return next()
-      }
-      render(str, metadata, (err, res) => {
-        if (err) {
-          error(err)
+    eachWithAll(
+      Object.keys(files),
+      (file, next, error) => {
+        const str = files[file].contents.toString()
+        // do not attempt to render files that do not have mustaches
+        if (!/{{([^{}]+)}}/g.test(str)) {
+          return next()
         }
-        files[file].contents = Buffer.from(res, 'utf8')
-        next()
-      })
-    }, done)
+        render(str, metadata, (err, res) => {
+          if (err) {
+            error(err)
+          }
+          files[file].contents = Buffer.from(res, 'utf8')
+          next()
+        })
+      },
+      done
+    )
   })
 
   // metalsmith的构建
-  metalsmith.clean(true)
+  metalsmith
+    .clean(true)
     .source('.')
     .destination(to)
     .build((err, files) => {
@@ -134,40 +144,44 @@ const outerPrompts = {
   }
 }
 
-eachWithNext(Object.keys(outerPrompts), (key, next) => {
-  prompt(outerAnswers, key, outerPrompts[key], next)
-}, () => {
-  const {type} = outerAnswers
-  let from = ''
-  if (type === 'react') {
-    from = path.resolve(__dirname, './packageTemplates', 'reactTemplate')
-  } else if (type === 'global') {
-    from = path.resolve(__dirname, './packageTemplates', 'globalTemplate')
-  } else {
-    logger.fatal('不存在该类型')
-  }
-
-  // 配置问题
-  const prompts = {
-    projectName: {
-      type: 'input',
-      message: '项目名'
-    },
-    author: {
-      type: 'input',
-      message: '作者',
-      default: 'Luka'
-    },
-    description: {
-      type: 'input',
-      message: '描述'
+eachWithNext(
+  Object.keys(outerPrompts),
+  (key, next) => {
+    prompt(outerAnswers, key, outerPrompts[key], next)
+  },
+  () => {
+    const { type } = outerAnswers
+    let from = ''
+    if (type === 'react') {
+      from = path.resolve(__dirname, './packageTemplates', 'reactTemplate')
+    } else if (type === 'global') {
+      from = path.resolve(__dirname, './packageTemplates', 'globalTemplate')
+    } else {
+      logger.fatal('不存在该类型')
     }
-  }
 
-  // 运行
-  run({
-    from,
-    to,
-    prompts
-  })
-})
+    // 配置问题
+    const prompts = {
+      projectName: {
+        type: 'input',
+        message: '项目名'
+      },
+      author: {
+        type: 'input',
+        message: '作者',
+        default: 'Luka'
+      },
+      description: {
+        type: 'input',
+        message: '描述'
+      }
+    }
+
+    // 运行
+    run({
+      from,
+      to,
+      prompts
+    })
+  }
+)

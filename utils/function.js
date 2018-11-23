@@ -1,8 +1,8 @@
-const isObject = (source) => {
+const isObject = source => {
   return Object.prototype.toString.call(source) === '[object Object]'
 }
 
-const isArray = (source) => {
+const isArray = source => {
   return Object.prototype.toString.call(source) === '[object Array]'
 }
 
@@ -10,12 +10,12 @@ const deepAssign = (target = {}, source) => {
   if (!isObject(source) && !isArray(source)) {
     throw new Error('源参数必须为对象或者数组')
   }
-  Object.keys(source).forEach((key) => {
+  Object.keys(source).forEach(key => {
     if (isArray(source[key])) {
-      isArray(target[key]) ? (() => {})() : target[key] = []
+      isArray(target[key]) ? (() => {})() : (target[key] = [])
       deepAssign(target[key], source[key])
     } else if (isObject(source[key])) {
-      isObject(target[key]) ? (() => {})() : target[key] = {}
+      isObject(target[key]) ? (() => {})() : (target[key] = {})
       deepAssign(target[key], source[key])
     } else {
       target[key] = source[key]
@@ -26,7 +26,7 @@ const deepAssign = (target = {}, source) => {
 
 const multiDeepAssign = (target = {}, ...source) => {
   const arr = [...source.reverse(), target]
-  arr.forEach((e) => {
+  arr.forEach(e => {
     if (!isObject(e)) {
       throw new Error('源参数必须为对象')
     }

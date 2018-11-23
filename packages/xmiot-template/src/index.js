@@ -3,7 +3,7 @@ import './index.less'
 import React from 'react'
 window.env = process.env.NODE_ENV
 class Test extends React.Component {
-  render() {
+  render () {
     return <div>11</div>
   }
 }

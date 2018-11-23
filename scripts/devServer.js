@@ -42,7 +42,7 @@ process.on('exit', function () {
  * 提取参数，并对参数做验证
  */
 const getOptions = () => {
-  let {entry, type} = program
+  let { entry, type } = program
   let packageName = program.args[0]
   if (!packageName) {
     logger.fatal('packageName cannot be null')
@@ -72,15 +72,18 @@ const getOptions = () => {
 // 执行rollup
 const run = () => {
   // 获取参数和插件配置
-  const {type, packageDir, entry} = getOptions()
+  const { type, packageDir, entry } = getOptions()
 
   // 使用的模板，默认为global
   let template = 'global.template.html'
 
-  const config = getRollupConfig({}, {
-    type,
-    packageDir
-  })
+  const config = getRollupConfig(
+    {},
+    {
+      type,
+      packageDir
+    }
+  )
 
   if (!fs.existsSync(serverTemp)) {
     fs.mkdirSync(serverTemp)
@@ -90,7 +93,10 @@ const run = () => {
         template = 'react.template.html'
         break
     }
-    fs.copyFileSync(path.resolve(__dirname, `devTemplates/${template}`), path.resolve(serverTemp, 'index.html'))
+    fs.copyFileSync(
+      path.resolve(__dirname, `devTemplates/${template}`),
+      path.resolve(serverTemp, 'index.html')
+    )
   }
 
   // 增加插件配置
@@ -122,9 +128,7 @@ const run = () => {
     ...inputOptions,
     output: [outputOptions],
     watch: {
-      include: [
-        path.resolve(packageDir, 'src', '**')
-      ]
+      include: [path.resolve(packageDir, 'src', '**')]
     }
   }
 

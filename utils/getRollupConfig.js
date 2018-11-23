@@ -14,7 +14,7 @@ const { eslint } = require('rollup-plugin-eslint')
 const { getClientEnvironment } = require('./env')
 const { multiDeepAssign } = require('./function')
 
-module.exports = (options = {}, {type = 'global', packageDir = ''} = {}) => {
+module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
   const defaultOptions = {
     plugins: [
       /*
@@ -43,12 +43,10 @@ module.exports = (options = {}, {type = 'global', packageDir = ''} = {}) => {
       // babel先对react进行转义,只有在react环境中执行
       type === 'react'
         ? babel({
-          babelrc: false,
-          presets: [
-            '@babel/preset-react'
-          ],
-          exclude: 'node_modules/**'
-        })
+            babelrc: false,
+            presets: ['@babel/preset-react'],
+            exclude: 'node_modules/**'
+          })
         : '',
 
       // Convert CommonJS modules to ES6
@@ -68,12 +66,10 @@ module.exports = (options = {}, {type = 'global', packageDir = ''} = {}) => {
       // babel进行es6转义
       babel({
         babelrc: false,
-        presets: [
-          ['@babel/preset-env', { modules: false }]
-        ],
+        presets: [['@babel/preset-env', { modules: false }]],
         exclude: 'node_modules/**'
       })
-    ].filter((e) => e !== '')
+    ].filter(e => e !== '')
   }
 
   // 深拷贝options，提供各个包自主配置plugin的能力

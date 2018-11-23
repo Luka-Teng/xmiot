@@ -16,7 +16,7 @@ exports.getClientEnvironment = () => {
 
   // Stringify all values so we can feed into rollup replace
   let stringified = {}
-  Object.keys(raw).forEach((key) => {
+  Object.keys(raw).forEach(key => {
     stringified[`process.env.${key}`] = JSON.stringify(raw[key])
   })
 

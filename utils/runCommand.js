@@ -22,7 +22,7 @@ const runCommand = (cmd, args, options) => {
   })
 }
 
-exports.npmInstall = (cwd) => {
+exports.npmInstall = cwd => {
   return runCommand('npm', ['install'], {
     cwd
   }).then(() => {
@@ -30,7 +30,7 @@ exports.npmInstall = (cwd) => {
   })
 }
 
-exports.lernaBoot = (cwd) => {
+exports.lernaBoot = cwd => {
   return runCommand('lerna', ['bootstrap'], {
     cwd
   }).then(() => {
