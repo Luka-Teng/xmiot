@@ -12,7 +12,7 @@ const logger = require('../utils/logger')
 const path = require('path')
 const exists = require('fs').existsSync
 const { eachWithNext, eachWithAll } = require('../utils/function')
-const { npmInstall } = require('../utils/runCommand')
+const { lernaBoot } = require('../utils/runCommand')
 
 let metadata = {}
 
@@ -107,7 +107,7 @@ const run = ({from, to, prompts}) => {
         logger.fatal('初始化失败')
       }
       logger.success('初始化成功')
-      npmInstall(to)
+      lernaBoot(process.cwd())
     })
 }
 
