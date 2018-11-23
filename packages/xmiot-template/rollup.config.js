@@ -5,7 +5,7 @@ export default [
     {
       input: './src/index.js',
       output: {
-        file: './lib/index.common.js',
+        file: './entry/index.common.js',
         format: 'cjs'
       }
     },
@@ -15,7 +15,7 @@ export default [
     {
       input: './src/index.js',
       output: {
-        file: './lib/index.esm.js',
+        file: './entry/index.esm.js',
         format: 'es'
       }
     },

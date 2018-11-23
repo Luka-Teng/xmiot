@@ -4,14 +4,14 @@ export default [
   getRollupConfig({
     input: './src/index.js',
     output: {
-      file: './lib/index.common.js',
+      file: './entry/index.common.js',
       format: 'cjs'
     }
   }, {type: 'global', packageDir: __dirname}),
   getRollupConfig({
     input: './src/index.js',
     output: {
-      file: './lib/index.esm.js',
+      file: './entry/index.esm.js',
       format: 'es'
     }
   }, {type: 'global', packageDir: __dirname})
