@@ -9,6 +9,9 @@ node_modules
 # production
 /build
 
+# lib in package
+/packages/*/entry
+
 # misc
 .DS_Store
 .env.local

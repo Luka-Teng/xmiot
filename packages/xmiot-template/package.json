@@ -2,8 +2,8 @@
   "name": "xmiot-template",
   "version": "1.0.33",
   "description": "A template for xmiot npm-package",
-  "main": "lib/index.common.js",
-  "module": "lib/index.esm.js",
+  "main": "entry/index.common.js",
+  "module": "entry/index.esm.js",
   "scripts": {
     "prepublishOnly": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,7 +11,7 @@
   "author": "Luka",
   "license": "ISC",
   "files": [
-    "lib"
+    "entry"
   ],
   "devTestType": "react",
   "gitHead": "6a8e9a35953a44eef9eb49b96fa4de65dac3cf1b",
