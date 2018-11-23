@@ -30,12 +30,14 @@ module.exports = (name, src, dest, done) => {
   })
 
   // metalsmith中间件，(files, metalsmith, done) => {}
-  metalsmith.use(askQuestions(opts.prompts))
+  metalsmith
+    .use(askQuestions(opts.prompts))
     .use(filterFiles(opts.filters))
     .use(renderTemplateFiles())
 
   // metalsmith的构建
-  metalsmith.clean(true)
+  metalsmith
+    .clean(true)
     .source('.')
     .destination(dest)
     .build((err, files) => {
@@ -55,15 +57,11 @@ module.exports = (name, src, dest, done) => {
 
 // 注册handlebars的helper
 Handlebars.registerHelper('if_eq', function (a, b, opts) {
-  return a === b
-    ? opts.fn(this)
-    : opts.inverse(this)
+  return a === b ? opts.fn(this) : opts.inverse(this)
 })
 
 Handlebars.registerHelper('unless_eq', function (a, b, opts) {
-  return a === b
-    ? opts.inverse(this)
-    : opts.fn(this)
+  return a === b ? opts.inverse(this) : opts.fn(this)
 })
 
 // 渲染模板文件
@@ -73,22 +71,26 @@ function renderTemplateFiles () {
     const metalsmithMetadata = metalsmith.metadata()
 
     // 异步渲染模板文件
-    eachWithAll(keys, (file, next, error) => {
-      const str = files[file].contents.toString()
+    eachWithAll(
+      keys,
+      (file, next, error) => {
+        const str = files[file].contents.toString()
 
-      // do not attempt to render files that do not have mustaches
-      if (!/{{([^{}]+)}}/g.test(str)) {
-        return next()
-      }
-
-      render(str, metalsmithMetadata, (err, res) => {
-        if (err) {
-          error(err)
+        // do not attempt to render files that do not have mustaches
+        if (!/{{([^{}]+)}}/g.test(str)) {
+          return next()
         }
-        files[file].contents = Buffer.from(res, 'utf8')
-        next()
-      })
-    }, done)
+
+        render(str, metalsmithMetadata, (err, res) => {
+          if (err) {
+            error(err)
+          }
+          files[file].contents = Buffer.from(res, 'utf8')
+          next()
+        })
+      },
+      done
+    )
   }
 }
 
@@ -110,9 +112,18 @@ function logMessage (message, data) {
   if (!message) return
   render(message, data, (err, res) => {
     if (err) {
-      console.error('\n   Error when rendering template complete message: ' + err.message.trim())
+      console.error(
+        '\n   Error when rendering template complete message: ' +
+          err.message.trim()
+      )
     } else {
-      console.log('\n' + res.split(/\r?\n/g).map(line => '   ' + line).join('\n'))
+      console.log(
+        '\n' +
+          res
+            .split(/\r?\n/g)
+            .map(line => '   ' + line)
+            .join('\n')
+      )
     }
   })
 }
