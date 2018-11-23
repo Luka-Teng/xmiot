@@ -43,10 +43,10 @@ module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
       // babel先对react进行转义,只有在react环境中执行
       type === 'react'
         ? babel({
-            babelrc: false,
-            presets: ['@babel/preset-react'],
-            exclude: 'node_modules/**'
-          })
+          babelrc: false,
+          presets: ['@babel/preset-react'],
+          exclude: 'node_modules/**'
+        })
         : '',
 
       // Convert CommonJS modules to ES6
