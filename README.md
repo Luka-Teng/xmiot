@@ -14,10 +14,9 @@
 注意事项: 由于是协同作业，各个项目成员对他人项目进行修改时需要进行通知，并打上patch-tag，做好注释，以便回滚。
 
 #### 包的测试环境调试
--> 根目录执行npm run start-prod/start-dev -- -p xx -e xx -t xx
+-> 根目录执行npm run start-prod/start-dev packageName -- -e xx -t xx
 -> start-prod, start-dev对应正式环境和测试环境
 -> --必须写，后面才可以加参数
--> -p 必填，表示需要测试的包名
 -> -e 非必填，包入口，默认是包下的src/index.js文件
 -> -t 非必填，包类型，会被各个项目的package.json里的type覆盖 
 

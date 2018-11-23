@@ -15,15 +15,13 @@ const USER_HOME = process.env.HOME || process.env.USERPROFILE
 const serverTemp = path.resolve(USER_HOME, 'serverTemp')
 
 /*
- * 命令行
- * -p 需要运行的包名称，必填
+ * 命令行 packageName
  * -e 该包的入口文件，默认为src/index.js
  * -t 该包是什么属于什么项目，目前支持react, global
  */
 program
   .version('1.0.0', '-v, --version')
-  .usage('[options]')
-  .option('-p, --package-name [name]', '添加包名', '')
+  .usage('packageName [options]')
   .option('-e, --entry [address]', '添加入口', 'src/index.js')
   .option('-t, --type [type]', '包类型(react, global)', 'global')
   .parse(process.argv)
@@ -44,7 +42,8 @@ process.on('exit', function () {
  * 提取参数，并对参数做验证
  */
 const getOptions = () => {
-  let {packageName, entry, type} = program
+  let {entry, type} = program
+  let packageName = program.args[0]
   if (!packageName) {
     logger.fatal('packageName cannot be null')
   }
@@ -116,7 +115,7 @@ const run = () => {
   const outputOptions = {
     file: `${serverTemp}/index.js`,
     format: 'iife',
-    name: 'output',
+    name: 'ouput',
     sourcemap: true
   }
   const watchOptions = {
