@@ -1,6 +1,8 @@
 // 将所有的环境变量整合
+const XMIOT_ENV = /^XMIOT_/i
 exports.getClientEnvironment = () => {
   const raw = Object.keys(process.env)
+    .filter(key => XMIOT_ENV.test(key))
     .reduce(
       (env, key) => {
         env[key] = process.env[key]
