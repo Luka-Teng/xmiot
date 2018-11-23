@@ -121,7 +121,7 @@ const run = () => {
   const outputOptions = {
     file: `${serverTemp}/index.js`,
     format: 'iife',
-    name: 'ouput',
+    name: 'output',
     sourcemap: true
   }
   const watchOptions = {
