@@ -7,14 +7,12 @@
 const Metalsmith = require('metalsmith')
 const Handlebars = require('handlebars')
 const render = require('consolidate').handlebars.render
-const inquirer = require('inquirer')
+const { prompt } = require('./utils')
 const logger = require('../utils/logger')
 const path = require('path')
 const exists = require('fs').existsSync
 const { eachWithNext, eachWithAll } = require('../utils/function')
 const { lernaBoot } = require('../utils/runCommand')
-
-let metadata = {}
 
 // 注册handlebars的helper
 Handlebars.registerHelper('if_eq', function (a, b, opts) {
@@ -26,43 +24,6 @@ Handlebars.registerHelper('unless_eq', function (a, b, opts) {
 })
 
 /*
- * 对初始化进行提问
- * data: 对提出的问题进行存储
- * key: 问题的key
- * prompt: 问题的具体配置
- * done:回答完后的回调
- */
-const prompt = (data, key, prompt, done) => {
-  inquirer
-    .prompt([
-      {
-        type: prompt.type,
-        name: key,
-        message: prompt.message,
-        default: prompt.default,
-        choices: prompt.choices || []
-      }
-    ])
-    .then(answers => {
-      if (Array.isArray(answers[key])) {
-        // 当答案是一个数组时
-        data[key] = {}
-        answers[key].forEach(multiChoiceAnswer => {
-          data[key][multiChoiceAnswer] = true
-        })
-      } else if (typeof answers[key] === 'string') {
-        // 当答案是一个字符串时
-        data[key] = answers[key].replace(/"/g, '\\"')
-      } else {
-        // 其他情况
-        data[key] = answers[key]
-      }
-      done()
-    })
-    .catch(done)
-}
-
-/*
  * 初始化的运行方法
  * from: 模板地址
  * to: 包地址
@@ -70,7 +31,7 @@ const prompt = (data, key, prompt, done) => {
  */
 const run = ({ from, to, prompts }) => {
   const metalsmith = Metalsmith(from)
-  metadata = metalsmith.metadata()
+  let metadata = metalsmith.metadata()
 
   // 提问并且存取去metaldata
   metalsmith.use((files, metalsmith, done) => {
