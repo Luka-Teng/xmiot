@@ -12,5 +12,8 @@
   "devTestType": "global",
   "files": [
     "entry"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
