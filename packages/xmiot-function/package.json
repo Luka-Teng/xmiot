@@ -1,0 +1,16 @@
+{
+  "name": "xmiot-function",
+  "version": "1.0.0",
+  "description": "集成 常用的基本方法",
+  "main": "entry/index.common.js",
+  "module": "entry/index.esm.js",
+  "scripts": {
+    "prepublishOnly": "rollup -c"
+  },
+  "author": "lyan",
+  "license": "ISC",
+  "devTestType": "global",
+  "files": [
+    "entry"
+  ]
+}
