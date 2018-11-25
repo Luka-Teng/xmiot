@@ -3,11 +3,15 @@
   "private": true,
   "scripts": {
     "publish": "lerna publish",
-    "precommit": "lint-staged",
     "prettier": "prettier-eslint --write \"packages/**/*.jsx\" \"packages/**/*.js\" --eslint-config-path \"./.eslintrc\"",
     "start-prod": "cross-env NODE_ENV=production node scripts/devServer.js",
     "start-dev": "cross-env NODE_ENV=development node scripts/devServer.js",
     "init": "node scripts/init.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "packages/**/*.js": [

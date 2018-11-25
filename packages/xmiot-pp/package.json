@@ -1,7 +1,7 @@
 {
-  "name": "xmiot-test",
-  "version": "1.0.3",
-  "description": "nothing",
+  "name": "xmiot-pp",
+  "version": "1.0.0",
+  "description": "aa",
   "main": "entry/index.common.js",
   "module": "entry/index.esm.js",
   "scripts": {
