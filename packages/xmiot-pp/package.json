@@ -1,6 +1,6 @@
 {
   "name": "xmiot-pp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "aa",
   "main": "entry/index.common.js",
   "module": "entry/index.esm.js",
