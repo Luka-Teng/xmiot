@@ -1,13 +1,13 @@
 {
-  "name": "xmiot-pp",
-  "version": "1.0.1",
-  "description": "aa",
+  "name": "xmiot-test",
+  "version": "1.0.0",
+  "description": "",
   "main": "entry/index.common.js",
   "module": "entry/index.esm.js",
   "scripts": {
     "prepublishOnly": "rollup -c"
   },
-  "author": "Luka",
+  "author": "Luka &lt;luka.teng@ximalaya.com&gt;",
   "license": "ISC",
   "devTestType": "global",
   "files": [

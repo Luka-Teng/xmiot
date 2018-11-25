@@ -7,7 +7,7 @@
 const Metalsmith = require('metalsmith')
 const Handlebars = require('handlebars')
 const render = require('consolidate').handlebars.render
-const { prompt } = require('./utils')
+const { prompt, gitUser } = require('./utils')
 const logger = require('../utils/logger')
 const path = require('path')
 const exists = require('fs').existsSync
@@ -131,7 +131,7 @@ eachWithNext(
       author: {
         type: 'input',
         message: '作者',
-        default: 'Luka'
+        default: gitUser()
       },
       description: {
         type: 'input',

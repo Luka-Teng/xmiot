@@ -1,4 +1,5 @@
 const inquirer = require('inquirer')
+const exec = require('child_process').execSync
 
 /*
  * 对初始化进行提问
@@ -35,4 +36,19 @@ exports.prompt = (data, key, prompt, done) => {
       done()
     })
     .catch(done)
+}
+
+// 获取git的用户数据
+exports.gitUser = () => {
+  let name
+  let email
+
+  try {
+    name = exec('git config --get user.name')
+    email = exec('git config --get user.email')
+  } catch (e) {}
+
+  name = name && JSON.stringify(name.toString().trim()).slice(1, -1)
+  email = email && ' <' + email.toString().trim() + '>'
+  return (name || '') + (email || '')
 }
