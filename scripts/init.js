@@ -125,7 +125,8 @@ eachWithNext(
     const prompts = {
       projectName: {
         type: 'input',
-        message: '项目名'
+        message: '项目名',
+        default: name
       },
       author: {
         type: 'input',
