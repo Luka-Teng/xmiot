@@ -1,5 +1,6 @@
 const chalk = require('chalk')
 const format = require('util').format
+const ora = require('ora')
 
 /**
  * Log a `message` to the console.
@@ -45,4 +46,17 @@ exports.success = (...args) => {
 exports.warn = (...args) => {
   const msg = format.apply(format, args)
   console.log('\n', chalk.yellow('WARNING'), msg)
+}
+
+/**
+ * Log a loading `message` to the console and exit.
+ *
+ * @param {String} message
+ */
+
+exports.load = (...args) => {
+  const msg = format.apply(format, args)
+  const spinner = ora(msg)
+  spinner.start()
+  return spinner.stop.bind(spinner)
 }

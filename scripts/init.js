@@ -3,7 +3,6 @@
  * prompts: name(不可重复)，type（global, react），modules（需要安装的额外npm包）
  * 运行完执行lerna bootstrap
  */
-
 const Metalsmith = require('metalsmith')
 const Handlebars = require('handlebars')
 const render = require('consolidate').handlebars.render

@@ -1,4 +1,5 @@
 const spawn = require('child_process').spawn
+const exec = require('child_process').execSync
 const logger = require('./logger')
 
 const runCommand = (cmd, args, options) => {
@@ -9,6 +10,7 @@ const runCommand = (cmd, args, options) => {
       Object.assign(
         {
           cwd: process.cwd(),
+          // 直接输出到父进程的stdout，即控制台
           stdio: 'inherit',
           shell: true
         },
@@ -21,6 +23,21 @@ const runCommand = (cmd, args, options) => {
     })
   })
 }
+exports.runCommand = runCommand
+
+const execCommand = (cmd, options) => {
+  const result = exec(
+    cmd,
+    Object.assign(
+      {
+        cwd: process.cwd()
+      },
+      options
+    )
+  )
+  return result && result.toString().trim()
+}
+exports.execCommand = execCommand
 
 exports.npmInstall = cwd => {
   return runCommand('npm', ['install'], {

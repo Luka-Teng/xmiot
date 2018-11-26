@@ -32,6 +32,11 @@
 
 #### 注意事项
 -> 最好不要再各个项目内添加eslint-ignore，防止提交代码时候的优化遗漏
+-> lerna发布分为两步
+  1. 给本次commit打上对应tag，并提交到仓库。
+  2. 将对应本次commit的包发布至npm
+  因此如果第一步出错，需要手动回退commit
+  如果第二步错，需要checkout 修改后，自己进入每个包进行npm publish
 
 ---
 ### xmiot-function 

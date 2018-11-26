@@ -1,5 +1,5 @@
 const inquirer = require('inquirer')
-const exec = require('child_process').execSync
+const {execCommand} = require('../utils/runCommand')
 
 /*
  * 对初始化进行提问
@@ -44,8 +44,8 @@ exports.gitUser = () => {
   let email
 
   try {
-    name = exec('git config --get user.name')
-    email = exec('git config --get user.email')
+    name = execCommand('git config --get user.name')
+    email = execCommand('git config --get user.email')
   } catch (e) {}
 
   name = name && JSON.stringify(name.toString().trim()).slice(1, -1)
