@@ -37,10 +37,23 @@ const gitCommitTest = async () => {
   }
 }
 
-// 判断是否npm登录，判断
+// 判断是否npm登录，判断提交文件中
 git().raw([
   'log',
   'master',
   '^origin/master',
   '--name-only'
-]).then(data => console.log(data))
+]).then(data => {
+  const changeFiles = Array.from(
+    new Set(data
+    .split('commit')
+    .slice(1)
+    .reduce((a, b) => {
+      a.push(...b.split('\n').slice(6).filter(x => {
+        return /^packages\//.test(x)
+      }))
+      return a
+    }, []))
+  )
+  console.log(changeFiles)
+})
