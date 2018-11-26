@@ -38,4 +38,9 @@ const gitCommitTest = async () => {
 }
 
 // 判断是否npm登录，判断
-git().log().then(data => console.log(data))
+git().raw([
+  'log',
+  'master',
+  '^origin/master',
+  '--name-only'
+]).then(data => console.log(data))
