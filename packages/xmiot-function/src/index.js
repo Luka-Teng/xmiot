@@ -190,6 +190,7 @@ export default {
       target.detachEvent('on' + type, fn, capture)
     }
   },
+
   /**
    *
    * @param {要移动的距离} number

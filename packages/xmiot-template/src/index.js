@@ -4,7 +4,7 @@ import React from 'react'
 window.env = process.env.NODE_ENV
 class Test extends React.Component {
   render () {
-    return <div>11</div>
+    return <div>11111</div>
   }
 }
 export default Test

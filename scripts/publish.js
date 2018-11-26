@@ -44,16 +44,23 @@ git().raw([
   '^origin/master',
   '--name-only'
 ]).then(data => {
-  const changeFiles = Array.from(
-    new Set(data
-    .split('commit')
-    .slice(1)
-    .reduce((a, b) => {
-      a.push(...b.split('\n').slice(6).filter(x => {
-        return /^packages\//.test(x)
-      }))
-      return a
-    }, []))
-  )
+  let changeFiles = []
+  if (data) {
+    changeFiles = Array.from(
+      new Set(data
+      .split('commit')
+      .slice(1)
+      .reduce((a, b) => {
+        a.push(...b.split('\n').slice(6).filter(x => {
+          return /^packages\//.test(x)
+        }))
+        return a
+      }, []))
+      .map(x => {
+        return x.match(/(?<=^packages\/).*(?=\/)/)[0]
+      })
+    )
+  }
+  
   console.log(changeFiles)
 })
