@@ -29,6 +29,13 @@ const gitConnectTest = async () => {
 const gitCommitTest = async () => {
   try {
     const {files, staged} = await git().status()
+    if (files.length > 0 || staged > 0) {
+      logger.fatal('还存在未提交文件')
+    }
+  } catch (e) {
+    throw e
   }
 }
-gitCommitTest()
+
+// 判断是否npm登录，判断
+git().log().then(data => console.log(data))
