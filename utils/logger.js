@@ -54,9 +54,12 @@ exports.warn = (...args) => {
  * @param {String} message
  */
 
-exports.load = (...args) => {
-  const msg = format.apply(format, args)
-  const spinner = ora(msg)
-  spinner.start()
-  return spinner.stop.bind(spinner)
-}
+exports.load = (() => {
+  const spinner = ora()
+  return (...args) => {
+    const msg = format.apply(format, args)
+    spinner.text = msg
+    spinner.start()
+    return spinner.stop.bind(spinner)
+  }
+})()

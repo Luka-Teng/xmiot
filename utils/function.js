@@ -36,18 +36,37 @@ const multiDeepAssign = (target = {}, ...source) => {
   })
 }
 
-// 异步方法遍历，每个方法有next交替权
+const getPromsise = () => {
+  let res, rej
+  const promise = new Promise((resolve, reject) => {
+    res = resolve
+    rej = reject
+  })
+  return {
+    promise,
+    rej,
+    res
+  }
+}
+
+/*
+ * 异步方法遍历，每个方法有next交替权
+ * 新增: 返回promise来表示是否遍历结束
+ */
 const eachWithNext = (items, handler, complete) => {
+  let promise = getPromsise()
   let i = 0
   const next = () => {
     const item = items[i++]
     if (!item) {
       if (complete && typeof complete === 'function') complete()
+      promise.res()
       return
     }
     handler(item, next)
   }
   next()
+  return promise
 }
 
 // 异步方法遍历，所有方法以Promise.all执行
@@ -70,5 +89,6 @@ module.exports = {
   isObject,
   eachWithAll,
   eachWithNext,
-  multiDeepAssign
+  multiDeepAssign,
+  getPromsise
 }
