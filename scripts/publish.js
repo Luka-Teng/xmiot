@@ -167,8 +167,11 @@ const run = async() => {
   stop()
 
   logger.success('开始发布')
+  // 发布前后的commit进行比较，如果发生改变，则记录最新的commit号
+  const beforeCommit = execCommand('git rev-parse HEAD')
   runCommand('lerna', ['publish']).then(() => {
-    setLastCommit()
+    const afterCommit = execCommand('git rev-parse HEAD')
+    if (beforeCommit !== afterCommit) setLastCommit()
   })
 }
 
