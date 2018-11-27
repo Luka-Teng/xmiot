@@ -18,7 +18,7 @@ const runCommand = (cmd, args, options) => {
       )
     )
 
-    spawn.on('SIGINT', function () {
+    spawn.on('SIGINT', () => {
       reject()
     })
 
