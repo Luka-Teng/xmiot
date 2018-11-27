@@ -4,7 +4,7 @@ const logger = require('./logger')
 
 const runCommand = (cmd, args, options) => {
   return new Promise((resolve, reject) => {
-    const spwan = spawn(
+    const spawn = spawn(
       cmd,
       args,
       Object.assign(
@@ -22,7 +22,7 @@ const runCommand = (cmd, args, options) => {
       reject()
     })
 
-    spwan.on('exit', () => {
+    spawn.on('exit', () => {
       resolve()
     })
   })
