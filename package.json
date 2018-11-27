@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "publish": "lerna publish",
+    "publish": "node scripts/publish.js",
     "prettier": "prettier-eslint --write \"packages/**/*.jsx\" \"packages/**/*.js\" --eslint-config-path \"./.eslintrc\"",
     "start-prod": "cross-env NODE_ENV=production node scripts/devServer.js",
     "start-dev": "cross-env NODE_ENV=development node scripts/devServer.js",
