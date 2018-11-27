@@ -4,7 +4,7 @@ const logger = require('./logger')
 
 const runCommand = (cmd, args, options) => {
   return new Promise((resolve, reject) => {
-    const spawn = spawn(
+    const _spawn = spawn(
       cmd,
       args,
       Object.assign(
@@ -18,11 +18,11 @@ const runCommand = (cmd, args, options) => {
       )
     )
 
-    spawn.on('SIGINT', () => {
+    _spawn.on('SIGINT', () => {
       reject()
     })
 
-    spawn.on('exit', () => {
+    _spawn.on('exit', () => {
       resolve()
     })
   })
