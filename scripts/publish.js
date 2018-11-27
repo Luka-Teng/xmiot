@@ -132,6 +132,7 @@ const getLastCommit = () => {
   } else {
     const json = require(packageJson)
     if (!json.lastCommit) {
+      console.log('aaaaaasss')
       json.lastCommit = execCommand('git rev-parse HEAD')
       fs.outputJson(packageJson, json, {spaces: 2})
     }
