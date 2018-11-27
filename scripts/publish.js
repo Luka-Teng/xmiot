@@ -55,7 +55,8 @@ const npmTest = async ({lastCommit}) => {
   try {
     changedDirs = await git().raw([
       'log',
-      `${lastCommit}..HEAD`,  
+      `${lastCommit}..HEAD`,
+      '--name-only'  
     ]).then(data => {
       let result = []
       if (data) {
@@ -132,7 +133,6 @@ const getLastCommit = () => {
   } else {
     const json = require(packageJson)
     if (!json.lastCommit) {
-      console.log('aaaaaasss')
       json.lastCommit = execCommand('git rev-parse HEAD')
       fs.outputJson(packageJson, json, {spaces: 2})
     }

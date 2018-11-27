@@ -66,7 +66,7 @@ const eachWithNext = (items, handler, complete) => {
     handler(item, next)
   }
   next()
-  return promise
+  return promise.promise
 }
 
 // 异步方法遍历，所有方法以Promise.all执行
