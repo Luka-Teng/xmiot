@@ -12,6 +12,7 @@ const git = require('simple-git/promise')
 const axios = require('axios')
 const path = require('path')
 const semver = require('semver')
+const fs = require('fs-extra')
 
 // 判断git地址是否有效
 const gitConnectTest = async () => {
@@ -39,7 +40,7 @@ const gitCommitTest = async () => {
 }
 
 // 判断是否npm登录，判断提交文件中
-const npmTest = async () => {
+const npmTest = async ({lastCommit}) => {
   let changedDirs = []
   let changedPkgs = []
   let user = null
@@ -54,9 +55,7 @@ const npmTest = async () => {
   try {
     changedDirs = await git().raw([
       'log',
-      'master',
-      '^origin/master',
-      '--name-only'
+      `${lastCommit}..HEAD`,  
     ]).then(data => {
       let result = []
       if (data) {
@@ -126,7 +125,34 @@ const npmTest = async () => {
   }
 }
 
+const getLastCommit = () => {
+  const packageJson = path.resolve('package.json')
+  if (!fs.existsSync(packageJson)) {
+    logger.fatal('为什么根目录连package.json都没有')
+  } else {
+    const json = require(packageJson)
+    if (!json.lastCommit) {
+      json.lastCommit = execCommand('git rev-parse HEAD')
+      fs.outputJson(packageJson, json, {spaces: 2})
+    }
+    return json.lastCommit
+  }
+}
+
+const setLastCommit = () => {
+  const packageJson = path.resolve('package.json')
+  if (!fs.existsSync(packageJson)) {
+    logger.fatal('为什么根目录连package.json都没有')
+  } else {
+    const json = require(packageJson)
+    json.lastCommit = execCommand('git rev-parse HEAD')
+    fs.outputJson(packageJson, json, {spaces: 2})
+  }
+}
+
 const run = async() => {
+  let lastCommit = getLastCommit()
+
   let stop = logger.load('进行git连接测试测试')
   await gitConnectTest()
   stop()
@@ -136,11 +162,13 @@ const run = async() => {
   stop()
 
   logger.load('进行npm用户和包检查')
-  await npmTest()
+  await npmTest({lastCommit})
   stop()
 
   logger.success('开始发布')
-  runCommand('lerna', ['publish'])
+  runCommand('lerna', ['publish']).then(() => {
+    setLastCommit()
+  })
 }
 
 run()
