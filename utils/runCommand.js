@@ -93,6 +93,7 @@ exports.git = {
     try {
       execCommand(`git push`)
     } catch (e) {
+      // aa
       logger.fatal(e)
     }
   },
