@@ -5,6 +5,7 @@
  * params: type: global, react
  */
 const babel = require('rollup-plugin-babel')
+const path = require('path')
 const resolve = require('rollup-plugin-node-resolve')
 const commonjs = require('rollup-plugin-commonjs')
 const postcss = require('rollup-plugin-postcss')
@@ -22,7 +23,8 @@ module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
        * eslint的插件包，preset包由lerna统一管理
        */
       eslint({
-        include: ['**/*.js'],
+        // 只允许eslint当前包
+        include: [path.resolve(packageDir, '**/*.js')],
         cwd: packageDir
       }),
 
