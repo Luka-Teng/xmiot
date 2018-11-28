@@ -1,5 +1,6 @@
 {
   "name": "root",
+  "version": "1.0.3",
   "private": true,
   "scripts": {
     "publish": "node scripts/publish.js",
