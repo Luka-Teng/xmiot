@@ -77,7 +77,9 @@ const run = ({ from, to, prompts }) => {
         logger.fatal('初始化失败')
       }
       logger.success('初始化成功')
+      const stop = logger.load('安装依赖中')
       lernaBoot(process.cwd())
+      stop()
     })
 }
 

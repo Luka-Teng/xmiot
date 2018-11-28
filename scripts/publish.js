@@ -151,7 +151,7 @@ const setLastCommit = () => {
   }
 }
 
-const run = async() => {
+const run = async () => {
   let lastCommit = getLastCommit()
 
   let stop = logger.load('进行git连接测试测试')
@@ -162,17 +162,32 @@ const run = async() => {
   await gitCommitTest()
   stop()
 
+  logger.load('拉取代码')
+  try {
+    await runCommand('git', ['pull'])
+  } catch (e) {
+    logger.fatal(e)
+  }
+  stop()
+
   logger.load('进行npm用户和包检查')
   await npmTest({lastCommit})
   stop()
 
   logger.success('开始发布')
+
   // 发布前后的commit进行比较，如果发生改变，则记录最新的commit号
   const beforeCommit = execCommand('git rev-parse HEAD')
-  runCommand('lerna', ['publish']).then(() => {
-    const afterCommit = execCommand('git rev-parse HEAD')
-    if (beforeCommit !== afterCommit) setLastCommit()
-  })
+  await runCommand('lerna', ['publish'], {stdio: 'inherit'})
+  const afterCommit = execCommand('git rev-parse HEAD')
+  if (beforeCommit !== afterCommit) setLastCommit()
+
+  // 重新提交代码
+  logger.load('提交commitID')
+  await runCommand('git', ['add', 'package.json'])
+  await runCommand('git', ['commit', '-m', 'reset commitID'])
+  await runCommand('git', ['push'])
+  stop()
 }
 
 run()

@@ -2,6 +2,7 @@ const spawn = require('child_process').spawn
 const exec = require('child_process').execSync
 const logger = require('./logger')
 
+// command使用pipe，以便返回错误
 const runCommand = (cmd, args, options) => {
   return new Promise((resolve, reject) => {
     const _spawn = spawn(
@@ -11,18 +12,20 @@ const runCommand = (cmd, args, options) => {
         {
           cwd: process.cwd(),
           // 直接输出到父进程的stdout，即控制台
-          stdio: 'inherit',
+          stdio: 'pipe',
           shell: true
         },
         options
       )
     )
 
-    _spawn.on('SIGINT', () => {
-      reject()
-    })
+    if (options.stdio === 'pipe') {
+      _spawn.stderr.on('data', (data) => {
+        reject(data.toString().trim())
+      })
+    }
 
-    _spawn.on('exit', () => {
+    _spawn.on('close', () => {
       resolve()
     })
   })
