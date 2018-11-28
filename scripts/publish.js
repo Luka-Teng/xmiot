@@ -213,7 +213,7 @@ const run = async () => {
   // 重新提交代码，提交内容为最新的npm push commitID
   await loadingProcess(
     '提交commitID',
-    '提交成功，发版完毕',
+    '执行完毕，请检查是否为有未提交文件，如有未提交文件请自行提交',
     async () => {
       git.add('package.json')
       git.commit('reset commitID')

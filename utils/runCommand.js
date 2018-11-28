@@ -20,7 +20,7 @@ const runCommand = (cmd, args, options = {}) => {
       mergeOptions
     )
 
-    // pipe模式下如果错误会reject错误信息, 不可行，部分非错误也会输出
+    // pipe模式下如果错误会reject错误信息, git不可行，部分非错误也会输出
     if (mergeOptions.stdio === 'pipe') {
       _spawn.stderr.on('data', (data) => {
         reject(data.toString().trim())
@@ -66,16 +66,17 @@ exports.lernaBoot = cwd => {
   })
 }
 
-// git的一些列操作
+/*
+ * git的一些列操作
+ * git spawn或者exec子进程都会将输出输出到stderr，所以无法监听错误
+ */
 exports.git = {
   // git的add操作，默认添加所有文件
   add (...files) {
     if (files.length === 0) files.push('.')
     try {
       execCommand(`git add ${files.join(' ')}`)
-    } catch (e) {
-      logger.fatal(e)
-    }
+    } catch (e) {}
   },
 
   // git的commit操作
@@ -83,27 +84,20 @@ exports.git = {
     m = m || 'Luka'
     try {
       execCommand(`git commit -m "${m}"`)
-    } catch (e) {
-      logger.fatal(e)
-    }
+    } catch (e) {}
   },
 
   // git的push操作
   push () {
     try {
       execCommand(`git push`)
-    } catch (e) {
-      // aa
-      logger.fatal(e)
-    }
+    } catch (e) {}
   },
 
   // git的pull操作
   pull () {
     try {
       execCommand(`git pull`)
-    } catch (e) {
-      logger.fatal(e)
-    }
+    } catch (e) {}
   }
 }
