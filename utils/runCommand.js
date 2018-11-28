@@ -79,7 +79,9 @@ exports.git = {
   // git的commit操作
   commit (m) {
     m = m || 'Luka'
-    return runCommand('git', ['commit', '-m', `"${m}"`])
+    return runCommand('git', ['commit', '-m', `"${m}"`]).catch(e => {
+      logger.fatal(e)
+    })
   },
 
   // git的push操作
