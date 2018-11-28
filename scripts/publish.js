@@ -169,6 +169,7 @@ const run = async () => {
     logger.fatal(e)
   }
   stop()
+  logger.success('代码拉取成功')
 
   logger.load('进行npm用户和包检查')
   await npmTest({lastCommit})
