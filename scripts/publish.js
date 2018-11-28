@@ -215,7 +215,6 @@ const run = async () => {
     '提交commitID',
     '执行完毕，请检查是否为有未提交文件，如有未提交文件请自行提交',
     async () => {
-      console.log(5)
       git.add('package.json')
       git.commit('reset commitID')
       git.push()
