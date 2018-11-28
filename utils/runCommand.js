@@ -29,8 +29,7 @@ const runCommand = (cmd, args, options = {}) => {
 
     // code不是1的情况下判断错误
     _spawn.on('close', (code) => {
-      console.log(code)
-      code !== 0 ? reject() : resolve()
+      resolve()
     })
   })
 }
@@ -72,18 +71,22 @@ exports.git = {
   // git的add操作，默认添加所有文件
   add (...files) {
     if (files.length === 0) files.push('.')
-    return runCommand('git', ['add', ...files], {stdio: 'inherit'})
+    return runCommand('git', ['add', ...files]).catch(e => {
+      logger.fatal(e)
+    })
   },
 
   // git的commit操作
   commit (m) {
     m = m || 'Luka'
-    return runCommand('git', ['commit', '-m', `"${m}"`], {stdio: 'inherit'})
+    return runCommand('git', ['commit', '-m', `"${m}"`])
   },
 
   // git的push操作
   push () {
-    return runCommand('git', ['push'], {stdio: 'inherit'})
+    return runCommand('git', ['push']).catch(e => {
+      logger.fatal(e)
+    })
   },
 
   // git的pull操作
