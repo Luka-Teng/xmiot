@@ -1,3 +1,8 @@
+/*
+ * spawn，返回process，能监听stdio
+ * exec，一次性完成命令，返回最后一次stdout
+ */
+
 const spawn = require('child_process').spawn
 const exec = require('child_process').execSync
 const logger = require('./logger')
@@ -41,7 +46,8 @@ const execCommand = (cmd, options) => {
     cmd,
     Object.assign(
       {
-        cwd: process.cwd()
+        cwd: process.cwd(),
+        stdio: 'pipe'
       },
       options
     )
