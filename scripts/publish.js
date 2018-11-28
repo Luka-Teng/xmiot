@@ -206,15 +206,20 @@ const run = async () => {
 
   // 发布前后的commit进行比较，如果发生改变，则记录最新的commit号
   const beforeCommit = execCommand('git rev-parse HEAD')
+  console.log(1)
   await runCommand('lerna', ['publish'], {stdio: 'inherit'})
+  console.log(2)
   const afterCommit = execCommand('git rev-parse HEAD')
+  console.log(3)
   if (beforeCommit !== afterCommit) setLastCommit()
+  console.log(4)
   
   // 重新提交代码，提交内容为最新的npm push commitID
   await loadingProcess(
     '提交commitID',
     '执行完毕，请检查是否为有未提交文件，如有未提交文件请自行提交',
     async () => {
+      console.log(5)
       git.add('package.json')
       git.commit('reset commitID')
       git.push()
