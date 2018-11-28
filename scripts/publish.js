@@ -215,9 +215,9 @@ const run = async () => {
     '提交commitID',
     '提交成功，发版完毕',
     async () => {
-      await git.add('package.json')
-      await git.commit('reset commitID')
-      await git.push()
+      git.add('package.json')
+      git.commit('reset commitID')
+      git.push()
     }
   )
 }

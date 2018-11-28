@@ -20,7 +20,7 @@ const runCommand = (cmd, args, options = {}) => {
       mergeOptions
     )
 
-    // pipe模式下如果错误会reject错误信息
+    // pipe模式下如果错误会reject错误信息, 不可行，部分非错误也会输出
     if (mergeOptions.stdio === 'pipe') {
       _spawn.stderr.on('data', (data) => {
         reject(data.toString().trim())
@@ -71,30 +71,38 @@ exports.git = {
   // git的add操作，默认添加所有文件
   add (...files) {
     if (files.length === 0) files.push('.')
-    return runCommand('git', ['add', ...files]).catch(e => {
+    try {
+      execCommand(`git add ${files.join(' ')}`)
+    } catch (e) {
       logger.fatal(e)
-    })
+    }
   },
 
   // git的commit操作
   commit (m) {
     m = m || 'Luka'
-    return runCommand('git', ['commit', '-m', `"${m}"`]).catch(e => {
+    try {
+      execCommand(`git commit -m "${m}"`)
+    } catch (e) {
       logger.fatal(e)
-    })
+    }
   },
 
   // git的push操作
   push () {
-    return runCommand('git', ['push']).catch(e => {
+    try {
+      execCommand(`git push`)
+    } catch (e) {
       logger.fatal(e)
-    })
+    }
   },
 
   // git的pull操作
   pull () {
-    return runCommand('git', ['pull']).catch(e => {
+    try {
+      execCommand(`git pull`)
+    } catch (e) {
       logger.fatal(e)
-    })
+    }
   }
 }
