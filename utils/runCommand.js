@@ -29,6 +29,7 @@ const runCommand = (cmd, args, options = {}) => {
 
     // code不是1的情况下判断错误
     _spawn.on('close', (code) => {
+      console.log(code)
       code !== 0 ? reject() : resolve()
     })
   })
