@@ -190,10 +190,11 @@ const run = async () => {
 
   // 重新提交代码，提交内容为最新的npm push commitID
   logger.load('提交commitID')
-  await runCommand('git', ['add', 'package.json'], {stdio: 'inherit'})
-  await runCommand('git', ['commit', '-m', '\"reset commitID\"'], {stdio: 'inherit'})
+  await runCommand('git', ['add', 'package.json'])
+  await runCommand('git', ['commit', '-m', '\"reset commitID\"'])
   await runCommand('git', ['push'], {stdio: 'inherit'})
   stop()
+  logger.success('提交成功，发版完毕')
 }
 
 run()

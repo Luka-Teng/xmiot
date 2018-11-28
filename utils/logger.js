@@ -58,7 +58,7 @@ exports.load = (() => {
   const spinner = ora()
   return (...args) => {
     const msg = format.apply(format, args)
-    spinner.text = msg
+    spinner.text = '\n' + msg
     spinner.start()
     return spinner.stop.bind(spinner)
   }
