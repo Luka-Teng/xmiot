@@ -199,7 +199,7 @@ const run = async () => {
   await loadingProcess(
     '进行npm用户和包检查',
     'npm检查成功',
-    npmTest
+    async () => {await npmTest({lastCommit})}
   )
 
   logger.success('开始发布')
