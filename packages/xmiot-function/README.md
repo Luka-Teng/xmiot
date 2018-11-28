@@ -30,7 +30,7 @@
      fn  方法
      capture 布尔
 
-  * removeEventHandle (target, type, fn, capture)
+ * removeEventHandle (target, type, fn, capture)
 
     > 移出监听事件
 

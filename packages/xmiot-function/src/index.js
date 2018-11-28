@@ -274,20 +274,75 @@ export default {
    *
    */
 
+  // 手机 验证 11为手机号
   isMobile (str) {
     if (str == null || str === '') return false
+    var result = str.match(/0?(13|14|15|18|17)[0-9]{9}/)
+    if (result == null) return false
+    return true
+  },
+
+  // 验证 固定电话
+  isTel (str) {
+    if (str == null || str === '') return false
+    var result = str.match(/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/)
+    if (result == null) return false
+    return true
+  },
+
+  // 身份证号 验证 15位
+
+  isIDCard1 (str) {
+    if (str == null || str === '') return false
     var result = str.match(
-      /^((\(\d{2,3}\))|(\d{3}\-))?((13\d{9})|(15\d{9})|(18\d{9}))$/
+      /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/
     )
     if (result == null) return false
     return true
   },
-  isPhone (str) {
+
+  /**
+   * 身份证号验证 18位
+   */
+
+  isIDCard2 (str) {
     if (str == null || str === '') return false
     var result = str.match(
-      /^((\(\d{2,3}\))|(\d{3}\-))?(\(0\d{2,3}\)|0\d{2,3}-)?[1-9]\d{6,7}(\-\d{1,4})?$/
+      /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$/
     )
     if (result == null) return false
+    return true
+  },
+
+  /**
+   *
+   * @param {*} str  输入 字符
+   * @param {*} minnum  输入字符的最小位数
+   * @param {*} maxnum  输入字符的最大位数
+   *
+   * 不能纯数字 ，不能纯字符串，不能纯特殊字符
+   *
+   * 如果 maxnum 为0 则是选择不显示 字符 长度的限制
+   *
+   */
+
+  CharacterVerify (str, minnum, maxnum) {
+    let reg = ''
+    if (str === null || str === '') return false
+    if (!maxnum) {
+      console.log(maxnum)
+      reg = '/^(?![d]+$)(?![a-zA-Z]+$)(?![^da-zA-Z]+$)/'
+      console.log(reg)
+    } else {
+      reg =
+        '/^(?![d]+$)(?![a-zA-Z]+$)(?![^da-zA-Z]+$).{' +
+        minnum +
+        ',' +
+        maxnum +
+        '}$/'
+    }
+    let result = str.match(eval(reg))
+    if (result === null) return false
     return true
   }
 }
