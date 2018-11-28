@@ -19,7 +19,7 @@ const runCommand = (cmd, args, options) => {
       )
     )
 
-    if (options.stdio === 'pipe') {
+    if (options && options.stdio === 'pipe') {
       _spawn.stderr.on('data', (data) => {
         reject(data.toString().trim())
       })
