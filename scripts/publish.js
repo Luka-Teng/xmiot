@@ -152,16 +152,20 @@ const setLastCommit = () => {
 }
 
 const run = async () => {
+  // 获取上次npm发布得到的commit
   let lastCommit = getLastCommit()
 
+  // 测试是否能连上git
   let stop = logger.load('进行git连接测试测试')
   await gitConnectTest()
   stop()
 
+  // 查看是否有文件未提交
   logger.load('查看本地提交')
   await gitCommitTest()
   stop()
 
+  // 拉取远程最新代码
   logger.load('拉取代码')
   try {
     await runCommand('git', ['pull'])
@@ -171,6 +175,7 @@ const run = async () => {
   stop()
   logger.success('代码拉取成功')
 
+  // 上次发布和这次发布之间所有commit进行遍历和包检查
   logger.load('进行npm用户和包检查')
   await npmTest({lastCommit})
   stop()
@@ -183,11 +188,11 @@ const run = async () => {
   const afterCommit = execCommand('git rev-parse HEAD')
   if (beforeCommit !== afterCommit) setLastCommit()
 
-  // 重新提交代码
+  // 重新提交代码，提交内容为最新的npm push commitID
   logger.load('提交commitID')
-  await runCommand('git', ['add', 'package.json'])
-  await runCommand('git', ['commit', '-m', 'reset commitID'])
-  await runCommand('git', ['push'])
+  await runCommand('git', ['add', 'package.json'], {stdio: 'inherit'})
+  await runCommand('git', ['commit', '-m', '\"reset commitID\"'], {stdio: 'inherit'})
+  await runCommand('git', ['push'], {stdio: 'inherit'})
   stop()
 }
 
