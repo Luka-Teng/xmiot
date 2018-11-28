@@ -211,12 +211,15 @@ const run = async () => {
   if (beforeCommit !== afterCommit) setLastCommit()
 
   // 重新提交代码，提交内容为最新的npm push commitID
-  logger.load('提交commitID')
-  await git.add('package.json')
-  await git.commit('reset commitID')
-  await git.push()
-  stop()
-  logger.success('提交成功，发版完毕')
+  await loadingProcess(
+    '提交commitID',
+    '提交成功，发版完毕',
+    async () => {
+      await git.add('package.json')
+      await git.commit('reset commitID')
+      await git.push()
+    }
+  )
 }
 
 run()
