@@ -135,7 +135,7 @@ const npmTest = async ({lastCommit}) => {
   }
 }
 
-const getLastCommit = () => {
+const getLastCommit = async () => {
   const packageJson = path.resolve('package.json')
   if (!fs.existsSync(packageJson)) {
     logger.fatal('为什么根目录连package.json都没有')
@@ -143,20 +143,20 @@ const getLastCommit = () => {
     const json = require(packageJson)
     if (!json.lastCommit) {
       json.lastCommit = execCommand('git rev-parse HEAD')
-      fs.outputJson(packageJson, json, {spaces: 2})
+      await fs.outputJson(packageJson, json, {spaces: 2})
     }
     return json.lastCommit
   }
 }
 
-const setLastCommit = () => {
+const setLastCommit = async () => {
   const packageJson = path.resolve('package.json')
   if (!fs.existsSync(packageJson)) {
     logger.fatal('为什么根目录连package.json都没有')
   } else {
     const json = require(packageJson)
     json.lastCommit = execCommand('git rev-parse HEAD')
-    fs.outputJson(packageJson, json, {spaces: 2})
+    await fs.outputJson(packageJson, json, {spaces: 2})
   }
 }
 
@@ -172,7 +172,7 @@ const loadingProcess = async (loadingMsg, completedMsg, cb) => {
 
 const run = async () => {
   // 获取上次npm发布得到的commit
-  let lastCommit = getLastCommit()
+  let lastCommit = await getLastCommit()
 
   // 测试是否能连上git
   await loadingProcess(
@@ -206,13 +206,9 @@ const run = async () => {
 
   // 发布前后的commit进行比较，如果发生改变，则记录最新的commit号
   const beforeCommit = execCommand('git rev-parse HEAD')
-  console.log(1)
   await runCommand('lerna', ['publish'], {stdio: 'inherit'})
-  console.log(2)
   const afterCommit = execCommand('git rev-parse HEAD')
-  console.log(3)
-  if (beforeCommit !== afterCommit) setLastCommit()
-  console.log(4)
+  if (beforeCommit !== afterCommit) await setLastCommit()
   
   // 重新提交代码，提交内容为最新的npm push commitID
   await loadingProcess(
