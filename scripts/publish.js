@@ -174,26 +174,26 @@ const run = async () => {
   // 获取上次npm发布得到的commit
   let lastCommit = getLastCommit()
 
-  // // 测试是否能连上git
-  // await loadingProcess(
-  //   '进行git连接测试测试',
-  //   'git连接成功',
-  //   gitConnectTest
-  // )
+  // 测试是否能连上git
+  await loadingProcess(
+    '进行git连接测试测试',
+    'git连接成功',
+    gitConnectTest
+  )
 
-  // // 查看是否有文件未提交
-  // await loadingProcess(
-  //   '查看本地提交',
-  //   '文件已提交',
-  //   gitCommitTest
-  // )
+  // 查看是否有文件未提交
+  await loadingProcess(
+    '查看本地提交',
+    '文件已提交',
+    gitCommitTest
+  )
 
-  // // 拉取远程最新代码
-  // await loadingProcess(
-  //   '拉取代码',
-  //   '代码拉取成功',
-  //   gitPull
-  // )
+  // 拉取远程最新代码
+  await loadingProcess(
+    '拉取代码',
+    '代码拉取成功',
+    gitPull
+  )
 
   // 上次发布和这次发布之间所有commit进行遍历和包检查
   await loadingProcess(
@@ -209,7 +209,7 @@ const run = async () => {
   await runCommand('lerna', ['publish'], {stdio: 'inherit'})
   const afterCommit = execCommand('git rev-parse HEAD')
   if (beforeCommit !== afterCommit) setLastCommit()
-
+  
   // 重新提交代码，提交内容为最新的npm push commitID
   await loadingProcess(
     '提交commitID',
