@@ -23,7 +23,8 @@ const runCommand = (cmd, args, options = {}) => {
     // pipe模式下如果错误会reject错误信息
     if (mergeOptions.stdio === 'pipe') {
       _spawn.stderr.on('data', (data) => {
-        reject(data.toString().trim())
+        console.log(data.toString())
+        // reject(data.toString().trim())
       })
     }
 
