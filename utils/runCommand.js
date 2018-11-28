@@ -23,8 +23,7 @@ const runCommand = (cmd, args, options = {}) => {
     // pipe模式下如果错误会reject错误信息
     if (mergeOptions.stdio === 'pipe') {
       _spawn.stderr.on('data', (data) => {
-        console.log(data.toString())
-        // reject(data.toString().trim())
+        reject(data.toString().trim())
       })
     }
 
@@ -80,9 +79,7 @@ exports.git = {
   // git的commit操作
   commit (m) {
     m = m || 'Luka'
-    return runCommand('git', ['commit', '-m', `"${m}"`]).catch(e => {
-      logger.fatal(e)
-    })
+    return runCommand('git', ['commit', '-m', `"${m}"`], {stdio: 'inherit'})
   },
 
   // git的push操作
