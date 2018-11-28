@@ -72,9 +72,7 @@ exports.git = {
   // git的add操作，默认添加所有文件
   add (...files) {
     if (files.length === 0) files.push('.')
-    return runCommand('git', ['add', ...files]).catch(e => {
-      logger.fatal(e)
-    })
+    return runCommand('git', ['add', ...files], {stdio: 'inherit'})
   },
 
   // git的commit操作
@@ -85,9 +83,7 @@ exports.git = {
 
   // git的push操作
   push () {
-    return runCommand('git', ['push']).catch(e => {
-      logger.fatal(e)
-    })
+    return runCommand('git', ['push'], {stdio: 'inherit'})
   },
 
   // git的pull操作
