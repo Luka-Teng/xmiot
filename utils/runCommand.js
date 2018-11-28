@@ -82,7 +82,9 @@ exports.git = {
     if (files.length === 0) files.push('.')
     try {
       execCommand(`git add ${files.join(' ')}`)
-    } catch (e) {}
+    } catch (e) {
+      console.log(e)
+    }
   },
 
   // git的commit操作
