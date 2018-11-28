@@ -2,6 +2,7 @@ const spawn = require('child_process').spawn
 const exec = require('child_process').execSync
 const logger = require('./logger')
 
+// command默认使用pipe，以便返回错误，spawn一般用于处理非返回性的
 const runCommand = (cmd, args, options) => {
   return new Promise((resolve, reject) => {
     const _spawn = spawn(
@@ -10,25 +11,30 @@ const runCommand = (cmd, args, options) => {
       Object.assign(
         {
           cwd: process.cwd(),
-          // 直接输出到父进程的stdout，即控制台
-          stdio: 'inherit',
+          // 输出，错误不直接返回父进程，而是直接自己接管
+          stdio: 'pipe',
           shell: true
         },
         options
       )
     )
 
-    _spawn.on('SIGINT', () => {
-      reject()
-    })
+    // pipe模式下如果错误会reject错误信息
+    if (options && options.stdio === 'pipe') {
+      _spawn.stderr.on('data', (data) => {
+        reject(data.toString().trim())
+      })
+    }
 
-    _spawn.on('exit', () => {
+    // 退出会resolve
+    _spawn.on('close', () => {
       resolve()
     })
   })
 }
 exports.runCommand = runCommand
 
+// 用于处理简单返回的，同步返回
 const execCommand = (cmd, options) => {
   const result = exec(
     cmd,
@@ -57,4 +63,29 @@ exports.lernaBoot = cwd => {
   }).then(() => {
     logger.success('依赖安装成功')
   })
+}
+
+// git的一些列操作
+exports.git = {
+  // git的add操作，默认添加所有文件
+  add (...files) {
+    if (files.length === 0) files.push('.')
+    return runCommand('git', ['add', ...files])
+  },
+
+  // git的commit操作
+  commit (m) {
+    m = m || 'Luka'
+    return runCommand('git', ['commit', '-m', `"${m}"`])
+  },
+
+  // git的push操作
+  push () {
+    return runCommand('git', ['push'])
+  },
+
+  // git的pull操作
+  pull () {
+    return runCommand('git', ['pull'])
+  }
 }
