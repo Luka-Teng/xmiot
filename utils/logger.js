@@ -10,7 +10,7 @@ const ora = require('ora')
 
 exports.log = (...args) => {
   const msg = format.apply(format, args)
-  console.log('\n', chalk.white('LOG'), msg)
+  console.log(chalk.white('LOG'), msg, '\n')
 }
 
 /**
@@ -22,7 +22,7 @@ exports.log = (...args) => {
 exports.fatal = (...args) => {
   if (args[0] instanceof Error) args[0] = args[0].message.trim()
   const msg = format.apply(format, args)
-  console.error('\n', chalk.red('ERROR'), msg)
+  console.error(chalk.red('ERROR'), msg, '\n')
   process.exit(1)
 }
 
@@ -34,7 +34,7 @@ exports.fatal = (...args) => {
 
 exports.success = (...args) => {
   const msg = format.apply(format, args)
-  console.log('\n', chalk.green('SUCCESS'), msg)
+  console.log(chalk.green('SUCCESS'), msg, '\n')
 }
 
 /**
@@ -45,7 +45,7 @@ exports.success = (...args) => {
 
 exports.warn = (...args) => {
   const msg = format.apply(format, args)
-  console.log('\n', chalk.yellow('WARNING'), msg)
+  console.log(chalk.yellow('WARNING'), msg, '\n')
 }
 
 /**
