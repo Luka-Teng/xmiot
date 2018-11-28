@@ -5,10 +5,10 @@
  * 4. 判断该包是否存在，存在的话是否是包的所有者，是的话判断版本增加
  */
 
-const {execCommand, runCommand} = require('../utils/runCommand')
+const {execCommand, runCommand, git} = require('../utils/runCommand')
 const logger = require('../utils/logger')
 const {eachWithNext} = require('../utils/function')
-const git = require('simple-git/promise')
+const simpletGit = require('simple-git/promise')
 const axios = require('axios')
 const path = require('path')
 const semver = require('semver')
@@ -30,12 +30,21 @@ const gitConnectTest = async () => {
 // 判断是否还有未提交文件
 const gitCommitTest = async () => {
   try {
-    const {files, staged} = await git().status()
+    const {files, staged} = await simpletGit().status()
     if (files.length > 0 || staged > 0) {
       logger.fatal('还存在未提交文件')
     }
   } catch (e) {
     throw e
+  }
+}
+
+// 拉取代码
+const gitPull = async () => {
+  try {
+    await git.pull()
+  } catch (e) {
+    logger.fatal(e)
   }
 }
 
@@ -53,7 +62,7 @@ const npmTest = async ({lastCommit}) => {
 
   // 获取需要被发布的包，返回包名数组
   try {
-    changedDirs = await git().raw([
+    changedDirs = await simpletGit().raw([
       'log',
       `${lastCommit}..HEAD`,
       '--name-only'  
@@ -151,34 +160,47 @@ const setLastCommit = () => {
   }
 }
 
+/*
+ * cb一定要是async方法或者返回promise方法
+ */
+const loadingProcess = async (loadingMsg, completedMsg, cb) => {
+  let stop = logger.load(loadingMsg)
+  await cb()
+  stop()
+  logger.success(completedMsg)
+}
+
 const run = async () => {
   // 获取上次npm发布得到的commit
   let lastCommit = getLastCommit()
 
   // 测试是否能连上git
-  let stop = logger.load('进行git连接测试测试')
-  await gitConnectTest()
-  stop()
+  await loadingProcess(
+    '进行git连接测试测试',
+    'git连接成功',
+    gitConnectTest
+  )
 
   // 查看是否有文件未提交
-  logger.load('查看本地提交')
-  await gitCommitTest()
-  stop()
+  await loadingProcess(
+    '查看本地提交',
+    '文件已提交',
+    gitCommitTest
+  )
 
   // 拉取远程最新代码
-  logger.load('拉取代码')
-  try {
-    await runCommand('git', ['pull'])
-  } catch (e) {
-    logger.fatal(e)
-  }
-  stop()
-  logger.success('代码拉取成功')
+  await loadingProcess(
+    '拉取代码',
+    '代码拉取成功',
+    gitPull
+  )
 
   // 上次发布和这次发布之间所有commit进行遍历和包检查
-  logger.load('进行npm用户和包检查')
-  await npmTest({lastCommit})
-  stop()
+  await loadingProcess(
+    '进行npm用户和包检查',
+    'npm检查成功',
+    npmTest
+  )
 
   logger.success('开始发布')
 
@@ -190,9 +212,9 @@ const run = async () => {
 
   // 重新提交代码，提交内容为最新的npm push commitID
   logger.load('提交commitID')
-  await runCommand('git', ['add', 'package.json'])
-  await runCommand('git', ['commit', '-m', '\"reset commitID\"'])
-  await runCommand('git', ['push'], {stdio: 'inherit'})
+  await git.add('package.json')
+  await git.commit('reset commitID')
+  await git.push()
   stop()
   logger.success('提交成功，发版完毕')
 }
