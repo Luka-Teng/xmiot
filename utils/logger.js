@@ -10,7 +10,7 @@ const ora = require('ora')
 
 exports.log = (...args) => {
   const msg = format.apply(format, args)
-  console.log(chalk.white('LOG'), msg, '\n')
+  console.log(chalk.white('LOG'), msg, '\n ')
 }
 
 /**
@@ -22,7 +22,7 @@ exports.log = (...args) => {
 exports.fatal = (...args) => {
   if (args[0] instanceof Error) args[0] = args[0].message.trim()
   const msg = format.apply(format, args)
-  console.error(chalk.red('ERROR'), msg, '\n')
+  console.error(chalk.red('ERROR'), msg, '\n ')
   process.exit(1)
 }
 
@@ -34,7 +34,7 @@ exports.fatal = (...args) => {
 
 exports.success = (...args) => {
   const msg = format.apply(format, args)
-  console.log(chalk.green('SUCCESS'), msg, '\n')
+  console.log(chalk.green('SUCCESS'), msg, '\n ')
 }
 
 /**
@@ -45,7 +45,7 @@ exports.success = (...args) => {
 
 exports.warn = (...args) => {
   const msg = format.apply(format, args)
-  console.log(chalk.yellow('WARNING'), msg, '\n')
+  console.log(chalk.yellow('WARNING'), msg, '\n ')
 }
 
 /**
@@ -58,7 +58,7 @@ exports.load = (() => {
   const spinner = ora()
   return (...args) => {
     const msg = format.apply(format, args)
-    spinner.text = msg + '\n'
+    spinner.text = msg + '\n '
     spinner.start()
     return spinner.stop.bind(spinner)
   }
