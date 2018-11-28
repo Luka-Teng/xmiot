@@ -60,12 +60,12 @@ const npmTest = async ({lastCommit}) => {
     logger.fatal('请先登录npm')
   }
 
-  // 获取需要被发布的包，返回包名数组
+  // 获取需要被发布的包，返回包名数组，不含被删除的包
   try {
     changedDirs = await simpletGit().raw([
       'log',
       `${lastCommit}..HEAD`,
-      '--name-only'  
+      '--name-status'  
     ]).then(data => {
       let result = []
       if (data) {
@@ -75,13 +75,13 @@ const npmTest = async ({lastCommit}) => {
           .slice(1)
           .reduce((a, b) => {
             a.push(...b.split('\n').slice(6).filter(x => {
-              return /^packages\//.test(x)
+              return x[0] !== 'D' && /^packages\//.test(x.substr(1).trim())
             }))
             return a
           }, [])
           .map(x => {
             // 包地址由字母数字，-，@组成
-            return x.match(/(?<=^packages\/)[\w\d\-@]*(?=\/)/)[0]
+            return x.substr(1).trim().match(/(?<=^packages\/)[\w\d\-@]*(?=\/)/)[0]
           }))
         )
       }
