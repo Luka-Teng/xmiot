@@ -58,7 +58,8 @@ exports.execCommand = execCommand
 
 exports.npmInstall = cwd => {
   return runCommand('npm', ['install'], {
-    cwd
+    cwd,
+    stdio: 'inherit'
   }).then(() => {
     logger.success('安装依赖成功')
   })

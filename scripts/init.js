@@ -11,7 +11,7 @@ const logger = require('../utils/logger')
 const path = require('path')
 const exists = require('fs').existsSync
 const { eachWithNext, eachWithAll } = require('../utils/function')
-const { lernaBoot } = require('../utils/runCommand')
+const { npmInstall } = require('../utils/runCommand')
 
 // 注册handlebars的helper
 Handlebars.registerHelper('if_eq', function (a, b, opts) {
@@ -78,7 +78,7 @@ const run = ({ from, to, prompts }) => {
       }
       logger.success('初始化成功')
       const stop = logger.load('安装依赖中')
-      lernaBoot(process.cwd())
+      npmInstall(to)
       stop()
     })
 }
