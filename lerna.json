@@ -4,7 +4,7 @@
   ],
   "publishConfig": {
     "ignoreChanges": [
-      "package-lock.json"
+      "packages/xmiot-cli/package-lock.json"
     ]
   },
   "version": "independent"
