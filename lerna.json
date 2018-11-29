@@ -4,7 +4,7 @@
   ],
   "publishConfig": {
     "ignoreChanges": [
-      "**/package-lock.json"
+      "package-lock.json"
     ]
   },
   "version": "independent"
