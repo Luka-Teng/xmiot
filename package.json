@@ -7,6 +7,7 @@
     "prettier": "prettier-eslint --write \"packages/**/*.jsx\" \"packages/**/*.js\" --eslint-config-path \"./.eslintrc\"",
     "start-prod": "cross-env NODE_ENV=production node scripts/devServer.js",
     "start-dev": "cross-env NODE_ENV=development node scripts/devServer.js",
+    "bootstrap": "lerna exec npm i",
     "init": "node scripts/init.js"
   },
   "husky": {
@@ -22,10 +23,12 @@
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "axios": "^0.18.0",
     "babel-eslint": "^10.0.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
     "consolidate": "^0.15.1",
@@ -65,5 +68,5 @@
     "semver": "^5.6.0"
   },
   "dependencies": {},
-  "lastCommit": "e5fa076f297223689bc5728ad482c0f20dfdf8c3"
+  "lastCommit": "624af82c4ebfc265416e10fc17e489581d60ab80"
 }

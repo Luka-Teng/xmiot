@@ -1,0 +1,24 @@
+{
+  "name": "xmiot-popup",
+  "version": "1.0.1",
+  "description": "react 项目 居中弹窗",
+  "main": "entry/index.common.js",
+  "module": "entry/index.esm.js",
+  "scripts": {
+    "prepublishOnly": "rollup -c"
+  },
+  "author": "lyan",
+  "license": "ISC",
+  "devTestType": "react",
+  "files": [
+    "entry"
+  ],
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

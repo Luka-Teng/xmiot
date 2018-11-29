@@ -1,0 +1,100 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.xmiot-popup-wrap{
+    width:100%;
+    height:100%;
+    position: fixed;
+    bottom:0;
+    left:0;
+    height:0;
+    overflow:hidden;
+    z-index: 201;
+    .mask {
+      width:100%;
+      height:100%;
+      background: rgba(0, 0, 0, 0);
+      -webkit-transition: background .1s;
+      transition: background .1s;
+    }
+    .xmiot-popup-container{
+        overflow: hidden;
+        position: absolute;
+        width:100%;
+        top: 50%;
+        left: 50%;
+        width: 50%;
+        padding: 20px;
+        -webkit-transform: translate(-50%,-50%);
+        transform:translate(-50%,-50%);
+        -webkit-transition: -webkit-transform .2s;
+        transition: transform .2s;
+        background: #fff; // 弹窗的背景色是可以修改的 默认白色
+        .content-container {
+            width:100%;
+            height: 100%;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            // header 
+            .header-wrap{
+                display: none;
+                &.showheader{
+                    display: block;
+                }
+                &.onlyLeft{
+                    display: block;
+                    .header-item{
+                        justify-content: flex-end;
+                    }
+                }        
+            }
+            .header-item{
+                position: relative;
+                display: flex;
+                justify-content: space-around;
+                .header-title{
+                    text-align: center;
+                    flex: 1;
+                    .subtitle{
+                        font-size: 12px;
+                    }
+                }
+                .right-icon{
+                    cursor: pointer;
+                }
+               
+            }
+            // footer 弹窗 底部显示
+            .footer-item{
+                position: relative;
+                display: flex;
+                justify-content: space-between;
+                text-align: center;
+                margin: 0 auto;
+                width: 50%;
+                .btn{
+                    width: 50%;
+                    height: 40px;
+                    border: 1px solid #ccc;
+                    cursor: pointer;   
+                    line-height: 40px;
+                    border-radius: 8px; 
+                    &.confirm{
+                        background-color: #409eff;
+                        border: 1px solid #409eff;
+                        color: #fff;
+                        margin-left: 10%;
+                    }
+                }  
+          }
+        }
+    }
+    &.show {
+        height: 100%;
+        .mask {
+            background: rgba(0, 0, 0, .6);
+        }
+    }
+    
+}

@@ -69,13 +69,24 @@ const npmTest = async ({lastCommit}) => {
     ]).then(data => {
       let result = []
       if (data) {
+
+        // 获取lerna.json中ingnore文件
+        const lerna= require(path.resolve('lerna.json'))
+        let lernaIgnore = []
+        if (lerna.command && lerna.command.publish && lerna.command.publish.ignoreChanges) {
+          lernaIgnore = lerna.command.publish.ignoreChanges
+        }
+
         result = Array.from(
           new Set(data
           .split('commit')
           .slice(1)
           .reduce((a, b) => {
             a.push(...b.split('\n').slice(6).filter(x => {
-              return x[0] !== 'D' && /^packages\//.test(x.substr(1).trim())
+              const file = x.substr(1).trim()
+              return x[0] !== 'D'
+                && /^packages\//.test(file)
+                && lernaIgnore.every(e => file.indexOf(e) < 0)
             }))
             return a
           }, [])

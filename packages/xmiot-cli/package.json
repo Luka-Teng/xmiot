@@ -1,11 +1,9 @@
 {
   "name": "xmiot-cli",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "xmiot-cli for ximalaya",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "keywords": [
     "iot-cli"
   ],

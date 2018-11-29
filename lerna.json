@@ -2,5 +2,13 @@
   "packages": [
     "packages/*"
   ],
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "package-lock.json",
+        "README.md"
+      ]
+    }
+  },
   "version": "independent"
 }

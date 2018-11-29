@@ -58,7 +58,8 @@ exports.execCommand = execCommand
 
 exports.npmInstall = cwd => {
   return runCommand('npm', ['install'], {
-    cwd
+    cwd,
+    stdio: 'inherit'
   }).then(() => {
     logger.success('安装依赖成功')
   })
@@ -66,9 +67,10 @@ exports.npmInstall = cwd => {
 
 exports.lernaBoot = cwd => {
   return runCommand('lerna', ['bootstrap'], {
-    cwd
+    cwd,
+    stdio: 'inherit'
   }).then(() => {
-    logger.success('依赖安装成功')
+    logger.success('安装依赖成功')
   })
 }
 
