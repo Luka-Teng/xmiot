@@ -86,7 +86,7 @@ const npmTest = async ({lastCommit}) => {
               const file = x.substr(1).trim()
               return x[0] !== 'D'
                 && /^packages\//.test(file)
-                && lernaIgnore.every(e => file.indexOf(e) !== 0)
+                && lernaIgnore.every(e => file.indexOf(e) < 0)
             }))
             return a
           }, [])
