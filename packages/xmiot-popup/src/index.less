@@ -24,6 +24,8 @@
         width:100%;
         top: 50%;
         left: 50%;
+        width: 50%;
+        padding: 20px;
         -webkit-transform: translate(-50%,-50%);
         transform:translate(-50%,-50%);
         -webkit-transition: -webkit-transform .2s;
@@ -35,6 +37,18 @@
             overflow-y: scroll;
             -webkit-overflow-scrolling: touch;
             // header 
+            .header-wrap{
+                display: none;
+                &.showheader{
+                    display: block;
+                }
+                &.onlyLeft{
+                    display: block;
+                    .header-item{
+                        justify-content: flex-end;
+                    }
+                }        
+            }
             .header-item{
                 position: relative;
                 display: flex;
@@ -57,10 +71,21 @@
                 display: flex;
                 justify-content: space-between;
                 text-align: center;
+                margin: 0 auto;
+                width: 50%;
                 .btn{
                     width: 50%;
-                    border: 1px solid #999;
-                    cursor: pointer;    
+                    height: 40px;
+                    border: 1px solid #ccc;
+                    cursor: pointer;   
+                    line-height: 40px;
+                    border-radius: 8px; 
+                    &.confirm{
+                        background-color: #409eff;
+                        border: 1px solid #409eff;
+                        color: #fff;
+                        margin-left: 10%;
+                    }
                 }  
           }
         }
