@@ -1,0 +1,24 @@
+{
+  "name": "xmiot-record",
+  "version": "1.0.0",
+  "description": "",
+  "main": "entry/index.common.js",
+  "module": "entry/index.esm.js",
+  "scripts": {
+    "prepublishOnly": "rollup -c"
+  },
+  "author": "zhaoqihui",
+  "license": "ISC",
+  "devTestType": "react",
+  "files": [
+    "entry"
+  ],
+  "dependencies": {
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "recorder-js": "^1.0.7"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
