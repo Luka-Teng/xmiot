@@ -3,7 +3,7 @@
     "packages/*"
   ],
   "publishConfig": {
-    "ignore": [
+    "ignoreChanges": [
       "**/package-lock.json"
     ]
   },
