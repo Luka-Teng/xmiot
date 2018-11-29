@@ -60,12 +60,12 @@ const npmTest = async ({lastCommit}) => {
     logger.fatal('请先登录npm')
   }
 
-  // 获取需要被发布的包，返回包名数组
+  // 获取需要被发布的包，返回包名数组，不含被删除的包
   try {
     changedDirs = await simpletGit().raw([
       'log',
       `${lastCommit}..HEAD`,
-      '--name-only'  
+      '--name-status'  
     ]).then(data => {
       let result = []
       if (data) {
@@ -75,13 +75,13 @@ const npmTest = async ({lastCommit}) => {
           .slice(1)
           .reduce((a, b) => {
             a.push(...b.split('\n').slice(6).filter(x => {
-              return /^packages\//.test(x)
+              return x[0] !== 'D' && /^packages\//.test(x.substr(1).trim())
             }))
             return a
           }, [])
           .map(x => {
             // 包地址由字母数字，-，@组成
-            return x.match(/(?<=^packages\/)[\w\d\-@]*(?=\/)/)[0]
+            return x.substr(1).trim().match(/(?<=^packages\/)[\w\d\-@]*(?=\/)/)[0]
           }))
         )
       }
@@ -128,14 +128,14 @@ const npmTest = async ({lastCommit}) => {
         if (data && data.response && data.response.data.error === 'Not found') {
           return logger.success(`${pkg.name}为新包`)
         }
-        throw new Error('验证npm时候发生未知网络错误')
+        logger.fatal('验证npm时候发生未知网络错误')
       })
       next()
     })
   }
 }
 
-const getLastCommit = () => {
+const getLastCommit = async () => {
   const packageJson = path.resolve('package.json')
   if (!fs.existsSync(packageJson)) {
     logger.fatal('为什么根目录连package.json都没有')
@@ -143,20 +143,20 @@ const getLastCommit = () => {
     const json = require(packageJson)
     if (!json.lastCommit) {
       json.lastCommit = execCommand('git rev-parse HEAD')
-      fs.outputJson(packageJson, json, {spaces: 2})
+      await fs.outputJson(packageJson, json, {spaces: 2})
     }
     return json.lastCommit
   }
 }
 
-const setLastCommit = () => {
+const setLastCommit = async () => {
   const packageJson = path.resolve('package.json')
   if (!fs.existsSync(packageJson)) {
     logger.fatal('为什么根目录连package.json都没有')
   } else {
     const json = require(packageJson)
     json.lastCommit = execCommand('git rev-parse HEAD')
-    fs.outputJson(packageJson, json, {spaces: 2})
+    await fs.outputJson(packageJson, json, {spaces: 2})
   }
 }
 
@@ -172,7 +172,7 @@ const loadingProcess = async (loadingMsg, completedMsg, cb) => {
 
 const run = async () => {
   // 获取上次npm发布得到的commit
-  let lastCommit = getLastCommit()
+  let lastCommit = await getLastCommit()
 
   // 测试是否能连上git
   await loadingProcess(
@@ -208,16 +208,16 @@ const run = async () => {
   const beforeCommit = execCommand('git rev-parse HEAD')
   await runCommand('lerna', ['publish'], {stdio: 'inherit'})
   const afterCommit = execCommand('git rev-parse HEAD')
-  if (beforeCommit !== afterCommit) setLastCommit()
-
+  if (beforeCommit !== afterCommit) await setLastCommit()
+  
   // 重新提交代码，提交内容为最新的npm push commitID
   await loadingProcess(
     '提交commitID',
-    '提交成功，发版完毕',
+    '执行完毕，请检查是否为有未提交文件，如有未提交文件请自行提交',
     async () => {
-      await git.add('package.json')
-      await git.commit('reset commitID')
-      await git.push()
+      git.add('package.json')
+      git.commit('reset commitID')
+      git.push()
     }
   )
 }

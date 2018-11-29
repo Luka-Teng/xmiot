@@ -1,5 +1,6 @@
 {
   "name": "root",
+  "version": "1.0.4",
   "private": true,
   "scripts": {
     "publish": "node scripts/publish.js",
@@ -67,5 +68,5 @@
     "simple-git": "^1.107.0"
   },
   "dependencies": {},
-  "lastCommit": "7e6a47c439649628567038242e03d91761cc190f"
+  "lastCommit": "e5fa076f297223689bc5728ad482c0f20dfdf8c3"
 }

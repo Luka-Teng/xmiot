@@ -1,33 +1,39 @@
+/*
+ * spawn，返回process，能监听stdio
+ * exec，一次性完成命令，返回最后一次stdout
+ */
+
 const spawn = require('child_process').spawn
 const exec = require('child_process').execSync
 const logger = require('./logger')
 
 // command默认使用pipe，以便返回错误，spawn一般用于处理非返回性的
-const runCommand = (cmd, args, options) => {
+const runCommand = (cmd, args, options = {}) => {
   return new Promise((resolve, reject) => {
+    const mergeOptions = Object.assign(
+      {
+        cwd: process.cwd(),
+        // 输出，错误不直接返回父进程，而是直接自己接管
+        stdio: 'pipe',
+        shell: true
+      },
+      options
+    )
     const _spawn = spawn(
       cmd,
       args,
-      Object.assign(
-        {
-          cwd: process.cwd(),
-          // 输出，错误不直接返回父进程，而是直接自己接管
-          stdio: 'pipe',
-          shell: true
-        },
-        options
-      )
+      mergeOptions
     )
 
-    // pipe模式下如果错误会reject错误信息
-    if (options && options.stdio === 'pipe') {
+    // pipe模式下如果错误会reject错误信息, git不可行，部分非错误也会输出
+    if (mergeOptions.stdio === 'pipe') {
       _spawn.stderr.on('data', (data) => {
         reject(data.toString().trim())
       })
     }
 
-    // 退出会resolve
-    _spawn.on('close', () => {
+    // code不是1的情况下判断错误
+    _spawn.on('close', (code) => {
       resolve()
     })
   })
@@ -40,7 +46,8 @@ const execCommand = (cmd, options) => {
     cmd,
     Object.assign(
       {
-        cwd: process.cwd()
+        cwd: process.cwd(),
+        stdio: 'pipe'
       },
       options
     )
@@ -65,27 +72,40 @@ exports.lernaBoot = cwd => {
   })
 }
 
-// git的一些列操作
+/*
+ * git的一些列操作
+ * git spawn或者exec子进程都会将输出输出到stderr，所以无法监听错误
+ */
 exports.git = {
   // git的add操作，默认添加所有文件
   add (...files) {
     if (files.length === 0) files.push('.')
-    return runCommand('git', ['add', ...files])
+    try {
+      execCommand(`git add ${files.join(' ')}`)
+    } catch (e) {
+      console.log(e)
+    }
   },
 
   // git的commit操作
   commit (m) {
     m = m || 'Luka'
-    return runCommand('git', ['commit', '-m', `"${m}"`])
+    try {
+      execCommand(`git commit -m "${m}"`)
+    } catch (e) {}
   },
 
   // git的push操作
   push () {
-    return runCommand('git', ['push'])
+    try {
+      execCommand(`git push`)
+    } catch (e) {}
   },
 
   // git的pull操作
   pull () {
-    return runCommand('git', ['pull'])
+    try {
+      execCommand(`git pull`)
+    } catch (e) {}
   }
 }
