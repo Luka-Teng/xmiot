@@ -65,11 +65,12 @@ exports.npmInstall = cwd => {
 }
 
 exports.lernaBoot = cwd => {
-  return runCommand('lerna', ['bootstrap'], {
-    cwd
-  }).then(() => {
-    logger.success('依赖安装成功')
-  })
+  try {
+    execCommand('lerna bootstrap')
+    logger.success('安装依赖成功')
+  } catch (e) {
+    logger.fatal(e)
+  }
 }
 
 /*
