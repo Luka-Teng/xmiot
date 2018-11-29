@@ -2,10 +2,13 @@
   "packages": [
     "packages/*"
   ],
-  "publishConfig": {
-    "ignoreChanges": [
-      "packages/xmiot-cli/package-lock.json"
-    ]
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "package.json",
+        "README.md"
+      ]
+    }
   },
   "version": "independent"
 }
