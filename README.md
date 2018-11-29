@@ -40,6 +40,7 @@
 
 #### 注意事项
 -> 最好不要再各个项目内添加eslint-ignore，防止提交代码时候的优化遗漏
+-> 运行start时候，如果有依赖包最好先运行一遍 npm run bootstrap 来更新
 -> lerna发布分为两步
   1. 给本次commit打上对应tag，并提交到仓库。
   2. 将对应本次commit的包发布至npm
