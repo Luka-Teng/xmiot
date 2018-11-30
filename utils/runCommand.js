@@ -109,5 +109,30 @@ exports.git = {
     try {
       execCommand(`git pull`)
     } catch (e) {}
+  },
+
+  // 两次commit之间改变的文件, 默认只列出增加和修改的
+  getChangedFiles (
+    lastCommit = 'HEAD',
+    currenCommit = 'HEAD',
+    {types = ['A', 'M']} = {}
+  ) {
+    try {
+      const result = execCommand(`git diff ${lastCommit} ${currenCommit} --name-status`)
+      const files = result
+        .split('\n')
+        .reduce((a, b) => {
+          const isInTypes = types.some((type) => {
+            return type === b[0]
+          })
+          if (isInTypes) {
+            a.push(b.substr(1).trim())
+          }
+          return a
+        }, [])
+      return files
+    } catch (e) {
+      logger.fatal(e)
+    }
   }
 }
