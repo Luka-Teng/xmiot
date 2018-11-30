@@ -62,42 +62,24 @@ const npmTest = async ({lastCommit}) => {
 
   // 获取需要被发布的包，返回包名数组，不含被删除的包
   try {
-    changedDirs = await simpletGit().raw([
-      'log',
-      `${lastCommit}..HEAD`,
-      '--name-status'  
-    ]).then(data => {
-      let result = []
-      if (data) {
+    // 获取lerna.json中ingnore文件
+    const lerna= require(path.resolve('lerna.json'))
+    let lernaIgnore = []
+    if (lerna.command && lerna.command.publish && lerna.command.publish.ignoreChanges) {
+      lernaIgnore = lerna.command.publish.ignoreChanges
+    }
 
-        // 获取lerna.json中ingnore文件
-        const lerna= require(path.resolve('lerna.json'))
-        let lernaIgnore = []
-        if (lerna.command && lerna.command.publish && lerna.command.publish.ignoreChanges) {
-          lernaIgnore = lerna.command.publish.ignoreChanges
-        }
-
-        result = Array.from(
-          new Set(data
-          .split('commit')
-          .slice(1)
-          .reduce((a, b) => {
-            a.push(...b.split('\n').slice(6).filter(x => {
-              const file = x.substr(1).trim()
-              return x[0] !== 'D'
-                && /^packages\//.test(file)
-                && lernaIgnore.every(e => file.indexOf(e) < 0)
-            }))
-            return a
-          }, [])
-          .map(x => {
-            // 包地址由字母数字，-，@组成
-            return x.substr(1).trim().match(/(?<=^packages\/)[\w\d\-@]*(?=\/)/)[0]
-          }))
-        )
-      }
-      return result
-    })
+    changedDirs = Array.from(
+      new Set(
+        git.getChangedFiles(lastCommit).reduce((a, b) => {
+          const isInIgnore = lernaIgnore.some((e) => {
+            return b.indexOf(e) >= 0
+          })
+          if (isInIgnore || !/^packages\//.test(b)) return a
+          return a.push(b.match(/(?<=^packages\/)[\w\d\-@]*(?=\/)/)[0])
+        }, [])
+      )
+    )
   } catch (e) {
     logger.log(e)
     logger.fatal('获取需要被发布的包失败')
