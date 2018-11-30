@@ -7,7 +7,7 @@
       "ignoreChanges": [
         "package-lock.json",
         "README.md",
-        "xmiot-record/"
+        "xmiot-record/**/*"
       ]
     }
   },
