@@ -48,7 +48,10 @@ module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
           babelrc: false,
           presets: ['@babel/preset-react'],
           exclude: 'node_modules/**',
-          plugins: ['@babel/plugin-proposal-class-properties']
+          plugins: [
+            '@babel/plugin-proposal-class-properties',
+            '@babel/plugin-proposal-object-rest-spread'
+          ]
         })
         : '',
 
