@@ -24,7 +24,7 @@ module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
        */
       eslint({
         // 只允许eslint当前包
-        include: [path.resolve(packageDir, '**/*.js')],
+        include: [path.resolve(packageDir, 'src/*.js')],
         cwd: packageDir
       }),
 
