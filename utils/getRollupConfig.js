@@ -16,6 +16,7 @@ const { getClientEnvironment } = require('./env')
 const { multiDeepAssign } = require('./function')
 
 module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
+  console.log(path.resolve(packageDir, 'src/**/*.js'))
   const defaultOptions = {
     plugins: [
       /*
@@ -24,7 +25,7 @@ module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
        */
       eslint({
         // 只允许eslint当前包
-        include: [path.resolve(packageDir, 'src/*.js')],
+        include: path.resolve(packageDir, 'src/**/*.js'),
         cwd: packageDir
       }),
 
