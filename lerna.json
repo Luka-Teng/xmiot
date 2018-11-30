@@ -6,8 +6,7 @@
     "publish": {
       "ignoreChanges": [
         "package-lock.json",
-        "README.md",
-        "xmiot-record/**/*"
+        "README.md"
       ]
     }
   },

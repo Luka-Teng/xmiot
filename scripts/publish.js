@@ -75,8 +75,10 @@ const npmTest = async ({lastCommit}) => {
           const isInIgnore = lernaIgnore.some((e) => {
             return b.indexOf(e) >= 0
           })
-          if (isInIgnore || !/^packages\//.test(b)) return a
-          return a.push(b.match(/(?<=^packages\/)[\w\d\-@]*(?=\/)/)[0])
+          if (!isInIgnore && /^packages\//.test(b)) {
+            a.push(b.match(/(?<=^packages\/)[\w\d\-@]*(?=\/)/)[0])
+          }
+          return a
         }, [])
       )
     )
