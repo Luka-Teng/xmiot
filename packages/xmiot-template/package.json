@@ -1,6 +1,6 @@
 {
   "name": "xmiot-template",
-  "version": "1.1.19",
+  "version": "1.1.20",
   "description": "A template for xmiot npm-package",
   "main": "entry/index.common.js",
   "module": "entry/index.esm.js",
