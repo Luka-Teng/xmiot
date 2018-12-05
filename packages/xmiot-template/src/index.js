@@ -9,7 +9,7 @@ class Test extends React.Component {
     console.log(fn)
     console.log(a)
     console.log(t)
-    return <div>11111111211</div>
+    return <div>11111121111</div>
   }
 }
 export default Test
