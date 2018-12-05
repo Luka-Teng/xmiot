@@ -50,3 +50,63 @@
 ---
 ### xmiot-function 
 > 集成了 常用的方法 比如：获取参数，本地存储，日期格式转换 等等。具体的方法 详情参考 包里面的使用说明
+
+### xmiot-net
+用法：
+、、、
+  import axios from 'axios'
+  import Net from 'xmiot-net'
+  const axiosInstance = axios.create()
+
+  /*
+   * 第一个参数为axios实例
+   * 第二个参数为布尔值，表示请求锁
+   */
+  const net = new Net(axiosInstance, true)
+
+  /*
+   * 请求拦截
+   * config: axios配置信息
+   * stop: 跳出链式调用，使用会取消后面的回调
+   * 必须返回config
+   */ 
+  net.pre((config, stop) => {
+    // your code here
+    return config
+  })
+
+  /*
+   * 成功响应拦截
+   * response: axios响应信息
+   * stop: 跳出链式调用，使用会取消后面的回调
+   * 必须返回response
+   */ 
+  net.postSuccess((response, stop) => {
+    // your code here
+    return response
+  })
+
+  /*
+   * 失败响应拦截
+   * err: axios错误信息
+   * stop: 跳出链式调用，使用会取消后面的回调
+   * 必须返回err
+   */ 
+  net.postError((err, stop) => {
+    // your code here
+    return err
+  })
+
+  /*
+   * 注意
+   * 拦截支持链式调用
+   */
+  net.pre().postSuccess().postError()
+
+  /*
+   * 缓存
+   * url: 要缓存的地址
+   * method: 方法
+   */
+  net.onCache({url, method})
+、、、

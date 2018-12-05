@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { promiseSequence, getOriginWithPath } from './utils'
 import { cancelResponse } from './mockResponse'
 import adapters from './adapters'
@@ -27,7 +26,6 @@ class Net {
 
   /*
    * 针对于adapters的委托
-   * {adapter, config}
    */
   adapterHandlers = {}
 
@@ -166,7 +164,3 @@ class Net {
 }
 
 export default Net
-
-const net = new Net(axios, true)
-window.net = net
-window.axios = axios
