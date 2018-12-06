@@ -1,4 +1,4 @@
-import { promiseSequence, getOriginWithPath } from './utils'
+import { promiseSequence, getUrlFlag } from './utils'
 import { cancelResponse } from './mockResponse'
 import adapters from './adapters'
 import axios from 'axios'
@@ -49,7 +49,7 @@ class Net {
       async config => {
         const result = await promiseSequence(
           this.requestHandlers,
-          (handler, stop) => handler(config, stop)
+          (handler, stop, _config = config) => handler(_config, stop)
         )
         return result || config
       },
@@ -63,14 +63,14 @@ class Net {
       async response => {
         const result = await promiseSequence(
           this.responseHandlers.success,
-          (handler, stop) => handler(response, stop)
+          (handler, stop, _response = response) => handler(_response, stop)
         )
         return result || response
       },
       async err => {
         const result = await promiseSequence(
           this.responseHandlers.err,
-          (handler, stop) => handler(err, stop)
+          (handler, stop, _err = err) => handler(_err, stop)
         )
         if (!result) return Promise.reject(err)
         return result
@@ -100,7 +100,7 @@ class Net {
   preventRepeat = () => {
     const pending = []
     const handleQueues = (config, cancel = false) => {
-      const flagUrl = getOriginWithPath(config.url) + '&' + config.method
+      const flagUrl = getUrlFlag(config)
       const flagIndex = pending.indexOf(flagUrl)
       if (flagIndex >= 0) {
         if (cancel) {
@@ -141,17 +141,17 @@ class Net {
    * 调度向adapter传递参数，统一使用config.needParams
    */
   handleAdapter = () => {
-    this.pre(config => {
-      const flagUrl = getOriginWithPath(config.url) + '&' + config.method
+    this.pre((config, stop) => {
+      const flagUrl = getUrlFlag(config)
       const handler = this.adapterHandlers[flagUrl]
       if (handler) {
         switch (handler.type) {
           case 'cache':
+            stop()
             config.adapter = adapters.cacheAdapter
             config.needParams = { timeout: handler.timeout }
         }
       }
-      return config
     })
   }
 
@@ -160,7 +160,7 @@ class Net {
     if (!url || !method) {
       throw new Error('缺少参数url或method')
     }
-    const urlFlag = url + '&' + method
+    const urlFlag = getUrlFlag({ url, method })
     const options = {
       timeout,
       type: 'cache'

@@ -5,6 +5,7 @@ import parse from 'url-parse'
  * handler可以是普通函数和promise
  * 整个sequence的状态是由handler返回值决定的
  * stop: 用于打断队列
+ * passedData表示上一个handler的返回值
  */
 export const promiseSequence = (arr, handler) => {
   let sequence = Promise.resolve()
@@ -13,10 +14,15 @@ export const promiseSequence = (arr, handler) => {
     _stop = true
   }
   for (let i in arr) {
-    sequence = sequence.then(() => handler(arr[i], stop))
-    if (_stop) {
-      break
-    }
+    sequence = sequence.then(passedData => {
+      if (!_stop) {
+        return passedData
+          ? handler(arr[i], stop, passedData)
+          : handler(arr[i], stop)
+      } else {
+        return passedData
+      }
+    })
   }
   return sequence
 }
@@ -38,4 +44,11 @@ export const isOverTime = (beginning, timeout) => {
     return true
   }
   return false
+}
+
+/*
+ * 用于返回urlFlag
+ */
+export const getUrlFlag = ({ url, method }) => {
+  return getOriginWithPath(url) + '&' + method
 }
