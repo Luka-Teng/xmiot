@@ -1,5 +1,4 @@
 import React from 'react'
-// import Recorder from 'recorder-js'
 import Recorder from './recorder.min'
 class RecordComponent extends React.Component {
   render () {
