@@ -94,7 +94,7 @@
    */ 
   net.postError((err, stop) => {
     // your code here
-    return err
+    return Promise,reject(err)
   })
 
   /*

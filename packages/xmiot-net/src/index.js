@@ -1,6 +1,7 @@
 import { promiseSequence, getOriginWithPath } from './utils'
 import { cancelResponse } from './mockResponse'
 import adapters from './adapters'
+import axios from 'axios'
 
 /*
  * pre(config): 提供请求发送前的钩子函数
@@ -71,7 +72,8 @@ class Net {
           this.responseHandlers.err,
           (handler, stop) => handler(err, stop)
         )
-        return Promise.reject(result || err)
+        if (!result) return Promise.reject(err)
+        return result
       }
     )
 
@@ -130,7 +132,7 @@ class Net {
         if (err.statusText !== 'cancel') {
           handleQueues(err.config)
         }
-        return err
+        return Promise.reject(err)
       })
   }
 
@@ -164,3 +166,6 @@ class Net {
 }
 
 export default Net
+
+const net = new Net(axios, false)
+window.axios = axios
