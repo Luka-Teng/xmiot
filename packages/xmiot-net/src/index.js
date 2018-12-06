@@ -136,7 +136,10 @@ class Net {
       })
   }
 
-  // 用于处理不同adapters的调度策略
+  /*
+   * 用于处理不同adapters的调度策略
+   * 调度向adapter传递参数，统一使用config.needParams
+   */
   handleAdapter = () => {
     this.pre(config => {
       const flagUrl = getOriginWithPath(config.url) + '&' + config.method
@@ -145,6 +148,7 @@ class Net {
         switch (handler.type) {
           case 'cache':
             config.adapter = adapters.cacheAdapter
+            config.needParams = { timeout: handler.timeout }
         }
       }
       return config
@@ -168,4 +172,5 @@ class Net {
 export default Net
 
 const net = new Net(axios, false)
+window.net = net
 window.axios = axios
