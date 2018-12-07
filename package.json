@@ -66,8 +66,9 @@
     "rollup-plugin-replace": "^2.1.0",
     "rollup-plugin-serve": "^0.6.0",
     "rollup-plugin-terser": "^3.0.0",
-    "semver": "^5.6.0"
+    "semver": "^5.6.0",
+    "simple-git": "^1.107.0"
   },
   "dependencies": {},
-  "lastCommit": "0b67a81f43a5420813f126220598bd378c83d17a"
+  "lastCommit": "2b1e0359a9192a09e64b4506af37840d76968186"
 }

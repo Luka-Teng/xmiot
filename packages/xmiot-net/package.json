@@ -1,0 +1,23 @@
+{
+  "name": "xmiot-net",
+  "version": "1.0.3",
+  "description": "喜马声联网net封装",
+  "main": "entry/index.common.js",
+  "module": "entry/index.esm.js",
+  "scripts": {
+    "prepublishOnly": "rollup -c"
+  },
+  "author": "Luka &lt;luka.teng@ximalaya.com&gt;",
+  "license": "ISC",
+  "devTestType": "global",
+  "files": [
+    "entry"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "url-parse": "^1.4.4"
+  }
+}

@@ -16,6 +16,7 @@ const { getClientEnvironment } = require('./env')
 const { multiDeepAssign } = require('./function')
 
 module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
+  console.log(path.resolve(packageDir, 'src/**/*.js'))
   const defaultOptions = {
     plugins: [
       /*
@@ -24,7 +25,7 @@ module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
        */
       eslint({
         // 只允许eslint当前包
-        include: [path.resolve(packageDir, '**/*.js')],
+        include: path.resolve(packageDir, 'src/**/*.js'),
         cwd: packageDir
       }),
 
@@ -43,17 +44,17 @@ module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
       }),
 
       // babel先对react进行转义,只有在react环境中执行
-      type === 'react'
-        ? babel({
-          babelrc: false,
-          presets: ['@babel/preset-react'],
-          exclude: 'node_modules/**',
-          plugins: [
-            '@babel/plugin-proposal-class-properties',
-            '@babel/plugin-proposal-object-rest-spread'
-          ]
-        })
-        : '',
+      babel({
+        babelrc: false,
+        presets: [
+          ['@babel/preset-react']
+        ],
+        exclude: 'node_modules/**',
+        plugins: [
+          '@babel/plugin-proposal-class-properties',
+          '@babel/plugin-proposal-object-rest-spread'
+        ]
+      }),
 
       // Convert CommonJS modules to ES6
       commonjs(),
@@ -67,13 +68,6 @@ module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
       // 引入的图片统一用base64输出，后期要做大小限制
       fileAsBlob({
         include: '**/**.png'
-      }),
-
-      // babel进行es6转义
-      babel({
-        babelrc: false,
-        presets: [['@babel/preset-env', { modules: false }]],
-        exclude: 'node_modules/**'
       })
     ].filter(e => e !== '')
   }

@@ -1,7 +1,7 @@
 {
-  "name": "xmiot-record",
-  "version": "1.0.4",
-  "description": "",
+  "name": "xmiot-pagination",
+  "version": "1.0.1",
+  "description": "a react pagination component",
   "main": "entry/index.common.js",
   "module": "entry/index.esm.js",
   "scripts": {
@@ -15,8 +15,7 @@
   ],
   "dependencies": {
     "react": "^16.6.3",
-    "react-dom": "^16.6.3",
-    "recorder-js": "^1.0.7"
+    "react-dom": "^16.6.3"
   },
   "publishConfig": {
     "access": "public"
