@@ -1,6 +1,6 @@
 {
   "name": "xmiot-net",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "喜马声联网net封装",
   "main": "entry/index.common.js",
   "module": "entry/index.esm.js",
