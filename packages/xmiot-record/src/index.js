@@ -18,8 +18,11 @@ function EnhancedAudio (Component, autoStop) {
       this.recorder = ''
       this.context = ''
       this.stream = ''
-      this.isRecording = false
+      // this.isRecording = false
       // this.audio = React.createRef()
+      this.state = {
+        isRecording: false
+      }
     }
 
     onFail = e => {
@@ -44,7 +47,7 @@ function EnhancedAudio (Component, autoStop) {
           }
           console.log('maxVal', maxVal)
           //显示音量值
-          if (maxVal < 0.2 && this.isRecording) {
+          if (maxVal < 0.2 && this.state.isRecording) {
             if (!this.startTime) {
               this.startTime = +new Date()
             }
@@ -61,7 +64,8 @@ function EnhancedAudio (Component, autoStop) {
     }
 
     startRecording = () => {
-      this.isRecording = true
+      // this.isRecording = true
+      this.setState({ isRecording: true })
       if (navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices
           .getUserMedia({ audio: true })
@@ -77,15 +81,15 @@ function EnhancedAudio (Component, autoStop) {
       }
     }
     stopRecording = () => {
-      this.isRecording = false
+      this.setState({ isRecording: false })
+      // this.isRecording = false
       this.startTime = 0
       this.context.close()
       // this.recorder.stop()
       this.recorder.exportWAV(s => {
         // this.audio.current.src = window.URL.createObjectURL(s)
-        // api是父组件的接口请求的方法
-        // this.props.api(s)
-        console.log('ssssss', s)
+        // uploadData是父组件的接口请求的方法
+        this.props.uploadData(s)
       })
       // this.stream.getAudioTracks()[0].stop()
     }
@@ -100,6 +104,7 @@ function EnhancedAudio (Component, autoStop) {
           {...this.props}
           startRecording={this.startRecording}
           stopRecording={this.stopRecording}
+          isRecording={this.state.isRecording}
         />
       )
     }
