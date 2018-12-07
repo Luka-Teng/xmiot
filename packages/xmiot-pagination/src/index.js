@@ -7,8 +7,8 @@ class Pagination extends React.Component {
     this.state = {
       pageCurr: 1, // 当前页
       groupCount: 7, // ...前页码tap数
-      startPage: 1, // 左侧第一个页码
-      pageCount: 10, // 一排tap的总数
+      startPage: 2, // 左侧第一个页码
+      pageCount: 7, // 一排tap的总数
       hide: true, // 是否显示每页条数的下拉框
       perPageNum: 10, // 选中的下拉框的内容
       inputPage: ''
@@ -45,7 +45,7 @@ class Pagination extends React.Component {
     const { pageCurr, groupCount, startPage } = this.state
 
     let pages = []
-    if (totalPage <= 10) {
+    if (totalPage <= 7) {
       pages.push(
         <li
           onClick={this.goPrev.bind(this)}
@@ -84,10 +84,24 @@ class Pagination extends React.Component {
           onClick={this.goPrev.bind(this)}
         >
           &lt;
+        </li>,
+        <li
+          className={this.state.pageCurr === 1 ? style.active : ''}
+          key={1}
+          onClick={this.go.bind(this, 1)}
+        >
+          {1}
+        </li>,
+        <li
+          className={style.ellipsis}
+          key={-1}
+          style={{ display: this.state.pageCurr > 4 ? 'block' : 'none' }}
+        >
+          ···
         </li>
       )
       for (let i = startPage; i < groupCount + startPage; i++) {
-        if (i <= totalPage - 2) {
+        if (i <= totalPage - 1) {
           pages.push(
             <li
               className={this.state.pageCurr === i ? style.active : ''}
@@ -101,23 +115,23 @@ class Pagination extends React.Component {
       }
 
       // 分页中间的省略号
-      if (totalPage - startPage >= 9) {
+      if (totalPage - startPage >= 2) {
         pages.push(
-          <li className={style.ellipsis} key={-1}>
+          <li className={style.ellipsis} key={-2}>
             ···
           </li>
         )
       }
-      // 倒数第一、第二页
-      pages.push(
-        <li
-          className={this.state.pageCurr === totalPage - 1 ? style.active : ''}
-          key={totalPage - 1}
-          onClick={this.go.bind(this, totalPage - 1)}
-        >
-          {totalPage - 1}
-        </li>
-      )
+      // 倒数第一页
+      // pages.push(
+      //   <li
+      //     className={this.state.pageCurr === totalPage - 1 ? style.active : ''}
+      //     key={totalPage - 1}
+      //     onClick={this.go.bind(this, totalPage - 1)}
+      //   >
+      //     {totalPage - 1}
+      //   </li>
+      // )
       pages.push(
         <li
           className={this.state.pageCurr === totalPage ? style.active : ''}
@@ -154,31 +168,31 @@ class Pagination extends React.Component {
     // if (click) {
 
     // }
-    // 处理下一页的情况
-    if (pageCurr % groupCount === 1) {
-      this.setState({
-        startPage: pageCurr
-      })
-    } else if (pageCurr % groupCount === 0) {
-      // 处理上一页的情况
-      this.setState({
-        startPage: pageCurr - groupCount + 1
-      })
-    } else if (totalPage - pageCurr < 2) {
-      // 点击最后两页的情况
-      this.setState({
-        startPage: totalPage - groupCount
-      })
-    }
+    // // 处理下一页的情况
+    // if (pageCurr % groupCount === 1) {
+    //   this.setState({
+    //     startPage: pageCurr
+    //   })
+    // } else if (pageCurr % groupCount === 0) {
+    //   // 处理上一页的情况
+    //   this.setState({
+    //     startPage: pageCurr - groupCount + 1
+    //   })
+    // } else if (totalPage - pageCurr < 2) {
+    //   // 点击最后两页的情况
+    //   this.setState({
+    //     startPage: totalPage - groupCount
+    //   })
+    // }
 
     // 选择每页条数后重新分页
 
-    setTimeout(() => {
-      paging({
-        pageCurr: this.state.pageCurr,
-        pageCount: this.state.pageCount
-      })
-    })
+    // setTimeout(() => {
+    //   paging({
+    //     pageCurr: this.state.pageCurr,
+    //     pageCount: this.state.pageCount
+    //   })
+    // })
   }
 
   // 页面向前
@@ -226,6 +240,7 @@ class Pagination extends React.Component {
 
   render () {
     const Pages = this.create.bind(this)()
+    console.log('pages', Pages)
     return (
       <div className={style.main}>
         <div className={style.bar}>
@@ -248,13 +263,13 @@ class Pagination extends React.Component {
         </div>
         <ul className={style.page}>{Pages}</ul>
         <div>
-          前往{' '}
+          前往
           <input
             type="text"
             value={this.inputPage}
             onChange={this.handleChange}
             onBlur={this.handleBlur}
-          />{' '}
+          />
           页
         </div>
       </div>
@@ -283,7 +298,7 @@ export default class App extends React.Component {
   render () {
     let data = {
       pageCurr: 1,
-      totalPage: 32,
+      totalPage: 8,
       paging (obj) {
         console.log(obj)
       }
