@@ -90,3 +90,6 @@ lerna发布分为两步
 
 ### xmiot-net
 > axios的增强包，用于扩展axios的功能。
+
+### xmiot-record
+> react高阶录音组件

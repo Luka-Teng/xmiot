@@ -1,16 +1,12 @@
 import React from 'react'
 import Recorder from './recorder.min'
-class RecordComponent extends React.Component {
-  render () {
-    return <div onClick={this.props.startRecording}>aaa</div>
-  }
-}
 /**
  *
  * @param {*} Component  react组件
  * @param {*} autoStop  是否为自动停止，true为自动停止，false为非自动停止
  */
 function EnhancedAudio (Component, autoStop) {
+  if (!Component) return null
   return class Record extends React.Component {
     constructor (props) {
       super(props)
@@ -18,8 +14,6 @@ function EnhancedAudio (Component, autoStop) {
       this.recorder = ''
       this.context = ''
       this.stream = ''
-      // this.isRecording = false
-      // this.audio = React.createRef()
       this.state = {
         isRecording: false
       }
@@ -82,24 +76,16 @@ function EnhancedAudio (Component, autoStop) {
     }
     stopRecording = () => {
       this.setState({ isRecording: false })
-      // this.isRecording = false
       this.startTime = 0
       this.context.close()
-      // this.recorder.stop()
       this.recorder.exportWAV(s => {
-        // this.audio.current.src = window.URL.createObjectURL(s)
-        // uploadData是父组件的接口请求的方法
-        this.props.uploadData(s)
+        this.finishHandler(s)
+        // getData是父组件的接口请求的方法
+        this.props.getData(s)
       })
-      // this.stream.getAudioTracks()[0].stop()
     }
     render () {
       return (
-        // <div>
-        //   <audio ref={this.audio} autoPlay controls />
-        //   <button onClick={this.startRecording} > 开始录音 </button>
-        //   <button onClick={this.stopRecording}>停止录音</button>
-        // </div>
         <Component
           {...this.props}
           startRecording={this.startRecording}
@@ -110,4 +96,4 @@ function EnhancedAudio (Component, autoStop) {
     }
   }
 }
-export default EnhancedAudio(RecordComponent, true)
+export default EnhancedAudio
