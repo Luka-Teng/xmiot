@@ -23,7 +23,7 @@ export default {
     const hashContent = decodeURI(window.location.hash.slice(2))
     const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
     const r = hashContent.slice(hashContent.indexOf('?') + 1).match(reg)
-    console.log(r)
+
     if (r != null) {
       return unescape(r[2])
     }
@@ -330,9 +330,7 @@ export default {
     let reg = ''
     if (str === null || str === '') return false
     if (!maxnum) {
-      console.log(maxnum)
       reg = '/^(?![d]+$)(?![a-zA-Z]+$)(?![^da-zA-Z]+$)/'
-      console.log(reg)
     } else {
       reg =
         '/^(?![d]+$)(?![a-zA-Z]+$)(?![^da-zA-Z]+$).{' +
