@@ -41,6 +41,7 @@ class Net {
     if (preventRepeat) {
       this.preventRepeat()
     }
+    this.addingResend()
   }
 
   init = () => {
@@ -128,12 +129,29 @@ class Net {
         handleQueues(response.config)
         return response
       })
-      .postError(err => {
+      .postError((err, stop) => {
         if (err.statusText !== 'cancel') {
           handleQueues(err.config)
         }
         return Promise.reject(err)
       })
+  }
+
+  // 为每个response的config挂载重发方法
+  addingResend = () => {
+    this.postSuccess(response => {
+      const { config } = response
+      config.resend = () => publicAxios(config)
+      console.log(config)
+      return response
+    }).postError(err => {
+      if (err.statusText !== 'cancel') {
+        handleQueues(err.config)
+      }
+      const { config } = err
+      config.resend = () => publicAxios(config)
+      return Promise.reject(err)
+    })
   }
 
   /*
@@ -171,6 +189,8 @@ class Net {
 
 export default Net
 
-const net = new Net(axios, false)
-window.net = net
-window.axios = axios
+export const publicAxios = axios.create()
+
+// const net = new Net(axios, false)
+// window.net = net
+// window.axios = axios

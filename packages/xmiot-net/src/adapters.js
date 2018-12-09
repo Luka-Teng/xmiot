@@ -1,7 +1,5 @@
-import axios from 'axios'
+import { publicAxios } from './'
 import { getOriginWithPath, isOverTime } from './utils'
-
-const commonInstance = axios.create()
 
 // 对http请求的缓存
 const cacheAdapter = () => {
@@ -20,9 +18,9 @@ const cacheAdapter = () => {
 
     // 如果不存在缓存或者过期则重新请求，并且记入缓存初始时间
     return new Promise((resolve, reject) => {
-      config.adapter = commonInstance.defaults.adapter
+      config.adapter = publicAxios.defaults.adapter
       resolve(
-        commonInstance(config).then(data => {
+        publicAxios(config).then(data => {
           cache[flagUrl] = {
             data,
             timeout: config.needParams.timeout,
