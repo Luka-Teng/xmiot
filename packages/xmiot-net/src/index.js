@@ -1,7 +1,7 @@
 import { promiseSequence, getUrlFlag } from './utils'
 import { cancelResponse } from './mockResponse'
-import adapters from './adapters'
-import axios from 'axios'
+import { cacheAdapter, publicAxios } from './adapters'
+// import axios from 'axios'
 
 /*
  * pre(config): 提供请求发送前的钩子函数
@@ -142,12 +142,8 @@ class Net {
     this.postSuccess(response => {
       const { config } = response
       config.resend = () => publicAxios(config)
-      console.log(config)
       return response
     }).postError(err => {
-      if (err.statusText !== 'cancel') {
-        handleQueues(err.config)
-      }
       const { config } = err
       config.resend = () => publicAxios(config)
       return Promise.reject(err)
@@ -166,7 +162,7 @@ class Net {
         switch (handler.type) {
           case 'cache':
             stop()
-            config.adapter = adapters.cacheAdapter
+            config.adapter = cacheAdapter
             config.needParams = { timeout: handler.timeout }
         }
       }
@@ -188,8 +184,6 @@ class Net {
 }
 
 export default Net
-
-export const publicAxios = axios.create()
 
 // const net = new Net(axios, false)
 // window.net = net

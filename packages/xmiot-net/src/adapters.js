@@ -1,5 +1,7 @@
-import { publicAxios } from './'
 import { getOriginWithPath, isOverTime } from './utils'
+import axios from 'axios'
+
+const publicAxios = axios.create()
 
 // 对http请求的缓存
 const cacheAdapter = () => {
@@ -33,6 +35,6 @@ const cacheAdapter = () => {
   }
 }
 
-export default {
-  cacheAdapter: cacheAdapter()
-}
+const _cacheAdapter = cacheAdapter()
+
+export { _cacheAdapter as cacheAdapter, publicAxios }
