@@ -6,16 +6,22 @@ class Pagination extends React.Component {
     // 设置当前页码，默认为第一页
     this.state = {
       pageCurr: 1, // 当前页
-      groupCount: 7, // ...前页码tap数
+      groupCount: 7,
       startPage: 2, // 左侧第一个页码
-      pageCount: 7, // 一排tap的总数
+      pageCount: 10, // 一排tap的总数
       hide: true, // 是否显示每页条数的下拉框
-      perPageNum: 10, // 选中的下拉框的内容
-      inputPage: ''
+      inputPage: '',
+      ellipsisAhead: false,
+      ellipsisBehind: false,
+      pages: []
     }
   }
 
   componentDidMount () {
+    const { totalPage, groupCount } = this.props.config
+    this.setState({ totalPage: totalPage, groupCount: groupCount || 7 }, () => {
+      this.go(1)
+    })
     document.addEventListener(
       'click',
       e => {
@@ -36,167 +42,76 @@ class Pagination extends React.Component {
     this.setState({ inputPage: page })
   }
   handleBlur = () => {
-    console.log('fffffff', this.state.inputPage)
     this.go(this.state.inputPage)
   }
   create () {
-    const { totalPage } = this.props.config
-
-    const { pageCurr, groupCount, startPage } = this.state
-
-    let pages = []
-    if (totalPage <= 7) {
-      pages.push(
-        <li
-          onClick={this.goPrev.bind(this)}
-          className={this.state.pageCurr === 1 ? style.nomore : ''}
-          key={0}
-        >
-          &lt;
-        </li>
-      )
-      for (let i = 1; i <= totalPage; i++) {
-        // 点击页码时调用 go 方法，根据 state 判断是否应用 active 样式
-        pages.push(
-          <li
-            onClick={this.go.bind(this, i)}
-            className={pageCurr === i ? style.active : ''}
-            key={i}
-          >
-            {i}
-          </li>
-        )
-      }
-      pages.push(
-        <li
-          onClick={this.goNext.bind(this)}
-          className={this.state.pageCurr === totalPage ? style.nomore : ''}
-          key={totalPage + 1}
-        >
-          &gt;
-        </li>
-      )
+    const { pageCurr, groupCount, startPage, totalPage } = this.state
+    let start = startPage
+    let maxPage = groupCount - 1
+    let bigMiddlePage = Math.ceil((groupCount - 2) / 2)
+    let smallMiddlePage = Math.floor((groupCount - 2) / 2)
+    if (pageCurr - bigMiddlePage >= 2) {
+      this.setState({ ellipsisAhead: true })
+      start = pageCurr - smallMiddlePage
+      maxPage = pageCurr + smallMiddlePage
     } else {
+      this.setState({ ellipsisAhead: false })
+    }
+    if (totalPage - pageCurr <= bigMiddlePage) {
+      this.setState({ ellipsisBehind: false })
+      start = totalPage - groupCount + 2
+      maxPage = totalPage - 1
+    } else {
+      this.setState({ ellipsisBehind: true })
+    }
+    let pages = []
+    for (let i = start; i <= maxPage; i++) {
+      console.log('i', i)
       pages.push(
         <li
-          className={this.state.pageCurr === 1 ? style.nomore : ''}
-          key={0}
-          onClick={this.goPrev.bind(this)}
+          className={pageCurr === i ? style.active : ''}
+          key={i}
+          onClick={this.go.bind(this, i)}
         >
-          &lt;
-        </li>,
-        <li
-          className={this.state.pageCurr === 1 ? style.active : ''}
-          key={1}
-          onClick={this.go.bind(this, 1)}
-        >
-          {1}
-        </li>,
-        <li
-          className={style.ellipsis}
-          key={-1}
-          style={{ display: this.state.pageCurr > 4 ? 'block' : 'none' }}
-        >
-          ···
-        </li>
-      )
-      for (let i = startPage; i < groupCount + startPage; i++) {
-        if (i <= totalPage - 1) {
-          pages.push(
-            <li
-              className={this.state.pageCurr === i ? style.active : ''}
-              key={i}
-              onClick={this.go.bind(this, i)}
-            >
-              {i}
-            </li>
-          )
-        }
-      }
-
-      // 分页中间的省略号
-      if (totalPage - startPage >= 2) {
-        pages.push(
-          <li className={style.ellipsis} key={-2}>
-            ···
-          </li>
-        )
-      }
-      // 倒数第一页
-      // pages.push(
-      //   <li
-      //     className={this.state.pageCurr === totalPage - 1 ? style.active : ''}
-      //     key={totalPage - 1}
-      //     onClick={this.go.bind(this, totalPage - 1)}
-      //   >
-      //     {totalPage - 1}
-      //   </li>
-      // )
-      pages.push(
-        <li
-          className={this.state.pageCurr === totalPage ? style.active : ''}
-          key={totalPage}
-          onClick={this.go.bind(this, totalPage)}
-        >
-          {totalPage}
-        </li>
-      )
-
-      // 下一页
-      pages.push(
-        <li
-          className={this.state.pageCurr === totalPage ? style.nomore : ''}
-          key={totalPage + 1}
-          onClick={this.goNext.bind(this)}
-        >
-          &gt;
+          {i}
         </li>
       )
     }
-    return pages
+    this.setState({ pages })
   }
 
   // 更新 state
-  go (pageCurr, click = true) {
-    const { groupCount } = this.state
-
-    const { totalPage, paging } = this.props.config
-
-    this.setState({
-      pageCurr
-    })
-    // if (click) {
-
-    // }
-    // // 处理下一页的情况
-    // if (pageCurr % groupCount === 1) {
-    //   this.setState({
-    //     startPage: pageCurr
-    //   })
-    // } else if (pageCurr % groupCount === 0) {
-    //   // 处理上一页的情况
-    //   this.setState({
-    //     startPage: pageCurr - groupCount + 1
-    //   })
-    // } else if (totalPage - pageCurr < 2) {
-    //   // 点击最后两页的情况
-    //   this.setState({
-    //     startPage: totalPage - groupCount
-    //   })
-    // }
-
-    // 选择每页条数后重新分页
-
-    // setTimeout(() => {
-    //   paging({
-    //     pageCurr: this.state.pageCurr,
-    //     pageCount: this.state.pageCount
-    //   })
-    // })
+  go (pageCurr) {
+    const { paging } = this.props.config
+    this.setState(
+      {
+        pageCurr
+      },
+      () => {
+        this.create()
+        // 选择每页条数后重新分页
+        paging({
+          pageCurr: this.state.pageCurr,
+          pageCount: this.state.pageCount
+        })
+      }
+    )
+  }
+  // 点击向左
+  goLeft = () => {
+    let jumpNum = this.state.pageCurr - this.state.groupCount + 2
+    if (jumpNum <= 1) jumpNum = 1
+    this.go(jumpNum)
+  }
+  // 点击向右
+  goRight = () => {
+    let jumpNum = this.state.pageCurr + this.state.groupCount - 2
+    if (jumpNum >= this.state.totalPage) jumpNum = this.state.totalPage
+    this.go(jumpNum)
   }
 
   // 页面向前
-  goPrev () {
+  goPrev = () => {
     let { pageCurr } = this.state
 
     if (--pageCurr === 0) {
@@ -206,7 +121,7 @@ class Pagination extends React.Component {
     this.go(pageCurr)
   }
   // 页面向后
-  goNext () {
+  goNext = () => {
     let { pageCurr } = this.state
 
     const { totalPage } = this.props.config
@@ -219,7 +134,7 @@ class Pagination extends React.Component {
   }
 
   // 选择每页条数
-  choosePageCount (e) {
+  choosePageCount = e => {
     this.setState({
       hide: !this.state.hide
     })
@@ -231,38 +146,82 @@ class Pagination extends React.Component {
     this.setState({
       pageCount,
       hide: true,
-      perPageNum: pageCount,
       pageCurr: 1,
-      startPage: 1
+      startPage: 2
     })
     this.go(1)
   }
 
   render () {
-    const Pages = this.create.bind(this)()
-    console.log('pages', Pages)
+    const {
+      totalPage,
+      pageCurr,
+      ellipsisAhead,
+      ellipsisBehind,
+      hide,
+      pageCount
+    } = this.state
     return (
       <div className={style.main}>
-        <div className={style.bar}>
-          <span>每页显示</span>
-          <div className={style.select}>
-            <ul className={this.state.hide ? style.hide : ''}>
-              <li
-                ref={this.pageCountEle}
-                id="pageCount"
-                onClick={this.choosePageCount.bind(this)}
-              >
-                {this.state.perPageNum}
-              </li>
-              <li onClick={this.confirmPageCount.bind(this, 10)}>10</li>
-              <li onClick={this.confirmPageCount.bind(this, 20)}>20</li>
-              <li onClick={this.confirmPageCount.bind(this, 30)}>30</li>
-              <li onClick={this.confirmPageCount.bind(this, 50)}>50</li>
-            </ul>
-          </div>
+        <div
+          className={style.select}
+          id="pageCount"
+          onClick={this.choosePageCount}
+        >
+          {pageCount}
+          条/页
+          <ul className={hide ? style.hide : ''}>
+            <li onClick={this.confirmPageCount.bind(this, 10)}>10条/页</li>
+            <li onClick={this.confirmPageCount.bind(this, 20)}>20条/页</li>
+            <li onClick={this.confirmPageCount.bind(this, 30)}>30条/页</li>
+            <li onClick={this.confirmPageCount.bind(this, 40)}>40条/页</li>
+            <li onClick={this.confirmPageCount.bind(this, 50)}>50条/页</li>
+          </ul>
         </div>
-        <ul className={style.page}>{Pages}</ul>
-        <div>
+        <ul className={style.page}>
+          <li
+            className={pageCurr === 1 ? style.nomore : ''}
+            key={0}
+            onClick={this.goPrev}
+          >
+            &lt;
+          </li>
+          <li
+            className={pageCurr === 1 ? style.active : ''}
+            key={1}
+            onClick={this.go.bind(this, 1)}
+          >
+            {1}
+          </li>
+          <li
+            className={style.ellipsis + ' ' + style.left}
+            key={-1}
+            style={{ display: ellipsisAhead ? 'block' : 'none' }}
+            onClick={this.goLeft}
+          />
+          {this.state.pages}
+          <li
+            className={style.ellipsis + ' ' + style.right}
+            key={-2}
+            style={{ display: ellipsisBehind ? 'block' : 'none' }}
+            onClick={this.goRight}
+          />
+          <li
+            className={pageCurr === totalPage ? style.active : ''}
+            key={totalPage}
+            onClick={this.go.bind(this, totalPage)}
+          >
+            {totalPage}
+          </li>
+          <li
+            className={pageCurr === totalPage ? style.nomore : ''}
+            key={totalPage + 1}
+            onClick={this.goNext}
+          >
+            &gt;
+          </li>
+        </ul>
+        <div className={style.jump}>
           前往
           <input
             type="text"
@@ -278,27 +237,10 @@ class Pagination extends React.Component {
 }
 
 export default class App extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      renderPage: false
-    }
-  }
-  async componentDidMount () {
-    await setTimeout(() => {
-      new Promise(res => {
-        this.setState({
-          renderPage: true
-        })
-      })
-    }, 500)
-  }
-
   render () {
     let data = {
-      pageCurr: 1,
-      totalPage: 8,
+      totalPage: 20,
+      groupCount: 7,
       paging (obj) {
         console.log(obj)
       }
