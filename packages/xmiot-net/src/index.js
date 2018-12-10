@@ -17,6 +17,11 @@ import { cacheAdapter, publicAxios } from './adapters'
  * adapter: 是请求的处理中心，可以根据更换adapter来实现mock
  */
 
+/*
+  * 目前整理逻辑比较乱，需要在后续做个梳理改进，包扩加入拦截层概念。
+  * 拦截层包括可跳过拦截层，不可跳过拦截层。
+  */
+
 class Net {
   // 针对于拦截器
   requestHandlers = []
@@ -37,11 +42,17 @@ class Net {
       throw new Error('需要axios实例')
     }
     this.axiosInstance = instance
-    this.init()
+
+    // 第一道拦截，请求锁
     if (preventRepeat) {
       this.preventRepeat()
     }
+
+    // 第二道拦截，请求重发挂载
     this.addingResend()
+
+    // 初始化，并挂载adapter拦截
+    this.init()
   }
 
   init = () => {
@@ -166,6 +177,7 @@ class Net {
             config.needParams = { timeout: handler.timeout }
         }
       }
+      return config
     })
   }
 
