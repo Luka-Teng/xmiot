@@ -76,3 +76,8 @@ net.pre().postSuccess().postError()
  */
 net.onCache({url, method, timeout})
 ```
+
+4. config
+config参数挂在新的参数和方法。
+* config.resend(): 对当前请求进行重发。
+* err.statusText = 'cancel': 表示重复请求被取消。
