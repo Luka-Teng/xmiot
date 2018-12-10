@@ -1,18 +1,18 @@
 import React from 'react'
 import style from './index.module.less'
-class Pagination extends React.Component {
+export default class Pagination extends React.Component {
   constructor (props) {
     super(props)
     // 设置当前页码，默认为第一页
     this.state = {
       pageCurr: 1, // 当前页
       groupCount: 7,
-      startPage: 2, // 左侧第一个页码
-      pageCount: 10, // 一排tap的总数
+      startPage: 2, // 从第二页开始
+      pageCount: 10, // 一排页码tap的总数
       hide: true, // 是否显示每页条数的下拉框
       inputPage: '',
-      ellipsisAhead: false,
-      ellipsisBehind: false,
+      ellipsisAhead: false, // 前省略号
+      ellipsisBehind: false, // 后省略后
       pages: []
     }
   }
@@ -66,7 +66,6 @@ class Pagination extends React.Component {
     }
     let pages = []
     for (let i = start; i <= maxPage; i++) {
-      console.log('i', i)
       pages.push(
         <li
           className={pageCurr === i ? style.active : ''}
@@ -232,23 +231,6 @@ class Pagination extends React.Component {
           页
         </div>
       </div>
-    )
-  }
-}
-
-export default class App extends React.Component {
-  render () {
-    let data = {
-      totalPage: 20,
-      groupCount: 7,
-      paging (obj) {
-        console.log(obj)
-      }
-    }
-    return (
-      <article className={style.main}>
-        <Pagination config={data} />
-      </article>
     )
   }
 }
