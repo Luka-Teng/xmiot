@@ -93,3 +93,5 @@ lerna发布分为两步
 
 ### xmiot-record
 > react高阶录音组件
+### xmiot-pagination
+> react 分页组件
