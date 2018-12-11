@@ -1,7 +1,7 @@
 import { promiseSequence, getUrlFlag } from './utils'
 import { cancelResponse } from './mockResponse'
 import { cacheAdapter, publicAxios } from './adapters'
-// import axios from 'axios'
+import axios from 'axios'
 
 /*
  * pre(config): 提供请求发送前的钩子函数
@@ -203,6 +203,6 @@ class Net {
 
 export default Net
 
-// const net = new Net(axios, false)
-// window.net = net
-// window.axios = axios
+const net = new Net(axios, true)
+window.net = net
+window.axios = axios

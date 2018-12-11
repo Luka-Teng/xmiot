@@ -1,5 +1,4 @@
 import parse from 'url-parse'
-import path from 'path'
 /*
  * 顺序执行promise
  * handler可以是普通函数和promise
@@ -31,6 +30,7 @@ export const promiseSequence = (arr, handler) => {
  * 用于处理从url拼接origin和pathname
  */
 export const getOriginWithPath = url => {
+  // console.log(parse(url))
   const { origin, pathname } = parse(url)
   return origin + pathname
 }
@@ -51,7 +51,10 @@ export const isOverTime = (beginning, timeout) => {
  */
 export const getUrlFlag = ({ baseURL, url, method }) => {
   if (baseURL) {
-    url = url.indexOf(baseURL) === 0 ? url : path.join(baseURL, url)
+    url =
+      url.indexOf(baseURL) === 0
+        ? url
+        : (baseURL + url).replace(/(?<!:)\/\//g, '/')
   }
   return getOriginWithPath(url) + '&' + method
 }
