@@ -1,5 +1,5 @@
 import parse from 'url-parse'
-
+import path from 'path'
 /*
  * 顺序执行promise
  * handler可以是普通函数和promise
@@ -49,6 +49,9 @@ export const isOverTime = (beginning, timeout) => {
 /*
  * 用于返回urlFlag
  */
-export const getUrlFlag = ({ url, method }) => {
+export const getUrlFlag = ({ baseURL, url, method }) => {
+  if (baseURL) {
+    url = url.indexOf(baseURL) === 0 ? url : path.join(baseURL, url)
+  }
   return getOriginWithPath(url) + '&' + method
 }

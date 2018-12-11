@@ -12,6 +12,7 @@ const postcss = require('rollup-plugin-postcss')
 const fileAsBlob = require('rollup-plugin-file-as-blob')
 const replace = require('rollup-plugin-replace')
 const { eslint } = require('rollup-plugin-eslint')
+const builtins = require('rollup-plugin-node-builtins')
 const { getClientEnvironment } = require('./env')
 const { multiDeepAssign } = require('./function')
 
@@ -19,6 +20,7 @@ module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
   console.log(path.resolve(packageDir, 'src/**/*.js'))
   const defaultOptions = {
     plugins: [
+      builtins(),
       /*
        * eslint的配置在每个包中，由包主人自行管理
        * eslint的插件包，preset包由lerna统一管理
