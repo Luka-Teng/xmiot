@@ -51,10 +51,47 @@ export const isOverTime = (beginning, timeout) => {
  */
 export const getUrlFlag = ({ baseURL, url, method }) => {
   if (baseURL) {
-    url =
-      url.indexOf(baseURL) === 0
-        ? url
-        : (baseURL + url).replace(/(?<!:)\/\//g, '/')
+    url = url.indexOf(baseURL) === 0 ? url : handlePath(baseURL).join(url).url
   }
   return getOriginWithPath(url) + '&' + method
+}
+
+/*
+ * 串接地址
+ */
+export const handlePath = (base = '') => {
+  let obj = {}
+
+  const join = (path = '') => {
+    const { url } = obj
+    const lastCharOfBase = url[url.length - 1]
+    const firstCharOfPath = path[0]
+    if (lastCharOfBase !== '/' && firstCharOfPath !== '/') {
+      obj.url = url + '/' + path
+    } else if (lastCharOfBase === '/' && firstCharOfPath === '/') {
+      obj.url = url + path.slice(1)
+    } else {
+      obj.url = url + path
+    }
+    return obj
+  }
+
+  const addParam = (paramName, value) => {
+    if (paramName === undefined || value === undefined) {
+      return obj
+    }
+    const { url } = obj
+    if (/\?/g.test(url)) {
+      obj.url += `&${paramName}=${value}`
+    } else {
+      obj.url += `?${paramName}=${value}`
+    }
+    return obj
+  }
+
+  return (obj = {
+    join,
+    addParam,
+    url: base
+  })
 }
