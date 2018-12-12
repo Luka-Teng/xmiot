@@ -147,7 +147,7 @@ class Net {
         return response
       })
       .postError((err, stop) => {
-        if (err.statusText !== 'cancel') {
+        if (err && err.response && err.response.statusText !== 'cancel') {
           handleQueues(err.config)
         }
         return Promise.reject(err)
