@@ -3,9 +3,7 @@ export const cancelResponse = _response => {
     config: {
       ..._response
     },
-    response: {
-      statusText: 'cancel',
-      data: null
-    }
+    statusText: 'cancel',
+    data: null
   }
 }

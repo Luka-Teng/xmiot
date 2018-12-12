@@ -50,12 +50,13 @@ net.postSuccess((response, stop) => {
 /*
  * 失败响应拦截
  * err: axios错误信息
+ * err.notAErrorInError 表示这不是一个错误，会被后面的覆盖
  * stop: 跳出链式调用，使用会取消后面的回调
  * 必须返回err
  */ 
 net.postError((err, stop) => {
   // your code here
-  return Promise,reject(err)
+  return err
 })
 
 /*

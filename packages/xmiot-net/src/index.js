@@ -86,12 +86,18 @@ class Net {
         return result || response
       },
       async err => {
+        // err.notError 来判断是否是错误的
+        err.notAErrorInError = false
         const result = await promiseSequence(
           this.responseHandlers.err,
           (handler, stop, _err = err) => handler(_err, stop)
         )
-        if (!result) return Promise.reject(err)
-        return result
+        if (result) {
+          if (result.notAErrorInError) return result
+          return Promise.reject(result)
+        }
+        if (err.notAErrorInError) return err
+        return Promise.reject(err)
       }
     )
 
@@ -147,10 +153,10 @@ class Net {
         return response
       })
       .postError((err, stop) => {
-        if (err && err.response && err.response.statusText !== 'cancel') {
+        if (err.statusText !== 'cancel') {
           handleQueues(err.config)
         }
-        return Promise.reject(err)
+        return err
       })
   }
 
@@ -163,7 +169,7 @@ class Net {
     }).postError(err => {
       const { config } = err
       config.resend = () => publicAxios(config)
-      return Promise.reject(err)
+      return err
     })
   }
 

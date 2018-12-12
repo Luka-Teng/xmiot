@@ -15,9 +15,12 @@ export const promiseSequence = (arr, handler) => {
   for (let i in arr) {
     sequence = sequence.then(passedData => {
       if (!_stop) {
-        return passedData
-          ? handler(arr[i], stop, passedData)
-          : handler(arr[i], stop)
+        if (passedData) {
+          // 每次进来都要重置notAErrorInError，表示在postError回调中不抛出错误
+          passedData.notAErrorInError = false
+          return handler(arr[i], stop, passedData)
+        }
+        return handler(arr[i], stop)
       } else {
         return passedData
       }
