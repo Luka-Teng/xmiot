@@ -24,6 +24,7 @@ import axios from 'axios'
  * 每个拦截层可以分为可跳过拦截层和不可跳过拦截层
  * pre中调用stop，过滤栈：可跳过拦截层 -> 请求拦截层 -> 请求响应拦截层
  * post中调用stop，过滤栈：可跳过拦截层 -> 响应拦截层 -> 请求响应拦截层
+ * mockResponse优化，针对无响应条件
  * TODO... v1.2.0
  * 加入mock
  */
