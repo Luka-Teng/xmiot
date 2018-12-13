@@ -11,6 +11,7 @@
     height:0;
     overflow:hidden;
     z-index: 201;
+    // padding-bottom: 30px;
     .mask {
       width:100%;
       height:100%;
@@ -25,12 +26,12 @@
         top: 50%;
         left: 50%;
         width: 50%;
-        padding: 20px;
         -webkit-transform: translate(-50%,-50%);
         transform:translate(-50%,-50%);
         -webkit-transition: -webkit-transform .2s;
         transition: transform .2s;
         background: #fff; // 弹窗的背景色是可以修改的 默认白色
+        box-shadow: 0 0 6px 0 rgba(0,0,0,0.20);
         .content-container {
             width:100%;
             height: 100%;
@@ -39,8 +40,13 @@
             // header 
             .header-wrap{
                 display: none;
+                
                 &.showheader{
                     display: block;
+                    padding: 16px 26px;
+                    border-bottom: 1px solid #f7f7f7;
+                    text-align: left;
+                    color: #1E4D79;
                 }
                 &.onlyLeft{
                     display: block;
@@ -54,13 +60,17 @@
                 display: flex;
                 justify-content: space-around;
                 .header-title{
-                    text-align: center;
+                    font-size: 16px;
                     flex: 1;
                     .subtitle{
                         font-size: 12px;
                     }
                 }
                 .right-icon{
+                    width: 20px;
+                    height: 20px;
+                    background:url(./image/close.png) no-repeat center center;
+                    background-size: 100%;
                     cursor: pointer;
                 }
                
@@ -75,11 +85,12 @@
                 width: 50%;
                 .btn{
                     width: 50%;
-                    height: 40px;
-                    border: 1px solid #ccc;
+                    height: 50px;
+                    border: 1px solid #eee;
                     cursor: pointer;   
-                    line-height: 40px;
-                    border-radius: 8px; 
+                    line-height: 50px;
+                    border-radius: 20px; 
+                    font-size: 14px;
                     &.confirm{
                         background-color: #409eff;
                         border: 1px solid #409eff;
