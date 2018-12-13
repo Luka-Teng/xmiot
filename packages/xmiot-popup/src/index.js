@@ -5,16 +5,17 @@ class Popup extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      //   show: true,
-      //   title: '这是一个title', // 头部title
-      //   subtitle: '这是一个副标题', // 头部副标题
-      //   isShowLeft: true, // 是否显示 header 左边
-      //   isShowRight: true,
-      //   isShowHeader: false, // 是否显示 弹窗的头部 如果传了 title 默认显示title
-      //   cancleTxt: '取消',
-      //   confirmTxt: '确定',
-      //   btnWidth: '120px',
-      //   btnBorderRadius: '7px'
+      show: true,
+      title: '这是一个title', // 头部title
+      subtitle: '这是一个副标题', // 头部副标题
+      isShowLeft: true, // 是否显示 header 左边
+      isShowRight: true,
+      isShowHeader: false, // 是否显示 弹窗的头部 如果传了 title 默认显示title
+      cancleTxt: '取消',
+      confirmTxt: '确定',
+      btnWidth: '120px',
+      headerBorder: true,
+      btnBorderRadius: '7px'
     }
   }
 
@@ -48,7 +49,8 @@ class Popup extends React.Component {
     let headerClass = classnames(
       'header-wrap',
       { showheader: props.isShowHeader || props.title },
-      { onlyLeft: !props.title && props.isShowRight }
+      { onlyLeft: !props.title && props.isShowRight },
+      { borderBottom: !props.headerBorder }
     )
 
     return (
@@ -72,12 +74,7 @@ class Popup extends React.Component {
                 )}
               </div>
             </div>
-            <div
-              className="content-item"
-              style={{ height: '300px', textAlign: 'center' }}
-            >
-              {this.props.children}
-            </div>
+            <div className="content-item">{this.props.children}</div>
 
             <div className="footer-item" style={props.footerStyle}>
               {props.cancleTxt && (
