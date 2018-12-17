@@ -261,6 +261,14 @@ export default {
 
   /**
    *
+   * @param {*} key
+   */
+  removeData (key) {
+    return JSON.parse(localStorage.removeItem(key))
+  },
+
+  /**
+   *
    * @param {缓存 的key值} key
    * @param {本地存储的 value} item
    */
