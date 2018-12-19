@@ -264,7 +264,7 @@ export default {
    * @param {*} key
    */
   removeData (key) {
-    return JSON.parse(localStorage.removeItem(key))
+    localStorage.removeItem(key)
   },
 
   /**
