@@ -18,7 +18,8 @@ export default class Pagination extends React.Component {
   }
 
   componentDidMount () {
-    const { totalPage, groupCount } = this.props.config
+    // console.log('tag', this.props.config)
+    const { totalPage, groupCount } = this.props.config || {}
     this.setState({ totalPage: totalPage, groupCount: groupCount || 7 }, () => {
       this.go(1)
     })
@@ -123,7 +124,7 @@ export default class Pagination extends React.Component {
   goNext = () => {
     let { pageCurr } = this.state
 
-    const { totalPage } = this.props.config
+    const { totalPage } = this.props.config || 0
 
     if (++pageCurr > totalPage) {
       return
