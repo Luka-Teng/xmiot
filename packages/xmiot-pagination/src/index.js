@@ -1,5 +1,5 @@
 import React from 'react'
-import style from './index.module.less'
+import './index.less'
 export default class Pagination extends React.Component {
   constructor (props) {
     super(props)
@@ -68,7 +68,7 @@ export default class Pagination extends React.Component {
     for (let i = start; i <= maxPage; i++) {
       pages.push(
         <li
-          className={pageCurr === i ? style.active : ''}
+          className={pageCurr === i ? 'active' : ''}
           key={i}
           onClick={this.go.bind(this, i)}
         >
@@ -161,15 +161,16 @@ export default class Pagination extends React.Component {
       pageCount
     } = this.state
     return (
-      <div className={style.main}>
+      <div className={'main'}>
         <div
-          className={style.select}
+          style={{ display: this.props.display ? 'block' : 'none' }}
+          className={'select'}
           id="pageCount"
           onClick={this.choosePageCount}
         >
           {pageCount}
           条/页
-          <ul className={hide ? style.hide : ''}>
+          <ul className={hide ? 'hide' : ''}>
             <li onClick={this.confirmPageCount.bind(this, 10)}>10条/页</li>
             <li onClick={this.confirmPageCount.bind(this, 20)}>20条/页</li>
             <li onClick={this.confirmPageCount.bind(this, 30)}>30条/页</li>
@@ -177,50 +178,50 @@ export default class Pagination extends React.Component {
             <li onClick={this.confirmPageCount.bind(this, 50)}>50条/页</li>
           </ul>
         </div>
-        <ul className={style.page}>
+        <ul className={'page'}>
           <li
-            className={pageCurr === 1 ? style.nomore : ''}
+            className={pageCurr === 1 ? 'nomore' : ''}
             key={0}
             onClick={this.goPrev}
           >
             &lt;
           </li>
           <li
-            className={pageCurr === 1 ? style.active : ''}
+            className={pageCurr === 1 ? 'active' : ''}
             key={1}
             onClick={this.go.bind(this, 1)}
           >
             {1}
           </li>
           <li
-            className={style.ellipsis + ' ' + style.left}
+            className="ellipsis left"
             key={-1}
             style={{ display: ellipsisAhead ? 'block' : 'none' }}
             onClick={this.goLeft}
           />
           {this.state.pages}
           <li
-            className={style.ellipsis + ' ' + style.right}
+            className="ellipsis right"
             key={-2}
             style={{ display: ellipsisBehind ? 'block' : 'none' }}
             onClick={this.goRight}
           />
           <li
-            className={pageCurr === totalPage ? style.active : ''}
+            className={pageCurr === totalPage ? 'active' : ''}
             key={totalPage}
             onClick={this.go.bind(this, totalPage)}
           >
             {totalPage}
           </li>
           <li
-            className={pageCurr === totalPage ? style.nomore : ''}
+            className={pageCurr === totalPage ? 'nomore' : ''}
             key={totalPage + 1}
             onClick={this.goNext}
           >
             &gt;
           </li>
         </ul>
-        <div className={style.jump}>
+        <div className={'jump'}>
           前往
           <input
             type="text"
