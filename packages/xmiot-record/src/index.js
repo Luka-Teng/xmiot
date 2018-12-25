@@ -79,7 +79,6 @@ function EnhancedAudio (Component, autoStop) {
       this.startTime = 0
       this.context.close()
       this.recorder.exportWAV(s => {
-        this.finishHandler(s)
         // getData是父组件的接口请求的方法
         this.props.getData(s)
       })
