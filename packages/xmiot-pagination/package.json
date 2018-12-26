@@ -1,6 +1,6 @@
 {
   "name": "xmiot-pagination",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "a react pagination component",
   "main": "entry/index.common.js",
   "module": "entry/index.esm.js",
