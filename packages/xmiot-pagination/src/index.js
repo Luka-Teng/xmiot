@@ -1,5 +1,6 @@
 import React from 'react'
 import './index.less'
+
 export default class Pagination extends React.Component {
   constructor (props) {
     super(props)
@@ -13,7 +14,8 @@ export default class Pagination extends React.Component {
       inputPage: '',
       ellipsisAhead: false, // 前省略号
       ellipsisBehind: false, // 后省略后
-      pages: []
+      pages: [],
+      totalPage: 1
     }
   }
 
@@ -53,10 +55,27 @@ export default class Pagination extends React.Component {
   }
   create () {
     const { pageCurr, groupCount, startPage, totalPage } = this.state
+    let pages = []
     let start = startPage
     let maxPage = groupCount - 1
     let bigMiddlePage = Math.ceil((groupCount - 2) / 2)
     let smallMiddlePage = Math.floor((groupCount - 2) / 2)
+    if (totalPage === 1) return
+    if (totalPage <= groupCount) {
+      for (let i = 2; i < totalPage; i++) {
+        pages.push(
+          <li
+            className={pageCurr === i ? 'active' : ''}
+            key={i}
+            onClick={this.go.bind(this, i)}
+          >
+            {i}
+          </li>
+        )
+      }
+      this.setState({ pages })
+      return
+    }
     if (pageCurr - bigMiddlePage >= 2) {
       this.setState({ ellipsisAhead: true })
       start = pageCurr - smallMiddlePage
@@ -71,7 +90,7 @@ export default class Pagination extends React.Component {
     } else {
       this.setState({ ellipsisBehind: true })
     }
-    let pages = []
+
     for (let i = start; i <= maxPage; i++) {
       pages.push(
         <li
@@ -214,15 +233,16 @@ export default class Pagination extends React.Component {
             onClick={this.goRight}
           />
           <li
+            style={{ display: totalPage === 1 ? 'none' : 'block' }}
             className={pageCurr === totalPage ? 'active' : ''}
-            key={totalPage}
+            key={totalPage + 1}
             onClick={this.go.bind(this, totalPage)}
           >
             {totalPage}
           </li>
           <li
             className={pageCurr === totalPage ? 'nomore' : ''}
-            key={totalPage + 1}
+            key={totalPage + 2}
             onClick={this.goNext}
           >
             &gt;
