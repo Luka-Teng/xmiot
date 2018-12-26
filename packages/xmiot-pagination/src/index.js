@@ -1,7 +1,6 @@
 import React from 'react'
 import './index.less'
-
-export default class Pagination extends React.Component {
+class Pagination extends React.Component {
   constructor (props) {
     super(props)
     // 设置当前页码，默认为第一页
@@ -22,7 +21,7 @@ export default class Pagination extends React.Component {
   componentDidMount () {
     const { totalPage, groupCount } = this.props.config || {}
     this.setState({ totalPage: totalPage, groupCount: groupCount || 7 }, () => {
-      this.go(1)
+      this.go(1, false)
     })
     document.addEventListener(
       'click',
@@ -35,6 +34,11 @@ export default class Pagination extends React.Component {
       },
       false
     )
+  }
+  componentWillReceiveProps (props, old) {
+    const { totalPage, pageCurr } = props.config
+    this.setState({ totalPage, pageCurr })
+    this.go(1, false)
   }
   componentWillUnmount () {
     this.setState = (state, callback) => {
@@ -106,7 +110,7 @@ export default class Pagination extends React.Component {
   }
 
   // 更新 state
-  go (pageCurr) {
+  go (pageCurr, isGet = true) {
     const { paging } = this.props.config
     this.setState(
       {
@@ -114,6 +118,7 @@ export default class Pagination extends React.Component {
       },
       () => {
         this.create()
+        if (!isGet) return
         // 选择每页条数后重新分页
         paging({
           pageCurr: this.state.pageCurr,
@@ -262,6 +267,27 @@ export default class Pagination extends React.Component {
           页
         </div>
       </div>
+    )
+  }
+}
+
+export default class Test extends React.Component {
+  state = {
+    totalPage: 1
+  }
+  componentDidMount () {}
+  paging = (a, b) => {
+    console.log(a, b)
+  }
+  render () {
+    return (
+      <Pagination
+        config={{
+          paging: this.paging,
+          totalPage: this.state.totalPage,
+          groupCount: 7
+        }}
+      />
     )
   }
 }
