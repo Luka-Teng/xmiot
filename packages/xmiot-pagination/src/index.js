@@ -18,7 +18,6 @@ export default class Pagination extends React.Component {
   }
 
   componentDidMount () {
-    // console.log('tag', this.props.config)
     const { totalPage, groupCount } = this.props.config || {}
     this.setState({ totalPage: totalPage, groupCount: groupCount || 7 }, () => {
       this.go(1)
@@ -35,9 +34,16 @@ export default class Pagination extends React.Component {
       false
     )
   }
+  componentWillUnmount () {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
   handleChange = event => {
-    let page = Number(+event.target.value)
-    if (!page) return
+    let value = event.target.value
+    let page = null
+    if (!isNaN(value)) return
+    page = +value
     if (page < 1) page = 1
     if (page > this.state.totalPage) page = this.state.totalPage
     this.setState({ inputPage: page })
@@ -164,7 +170,7 @@ export default class Pagination extends React.Component {
     return (
       <div className={'main'}>
         <div
-          style={{ display: this.props.display ? 'block' : 'none' }}
+          style={{ display: this.props.config.hasPageCount ? 'block' : 'none' }}
           className={'select'}
           id="pageCount"
           onClick={this.choosePageCount}
@@ -222,7 +228,10 @@ export default class Pagination extends React.Component {
             &gt;
           </li>
         </ul>
-        <div className={'jump'}>
+        <div
+          className={'jump'}
+          style={{ display: this.props.config.hasJumper ? 'block' : 'none' }}
+        >
           前往
           <input
             type="text"

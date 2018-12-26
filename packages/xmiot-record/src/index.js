@@ -83,6 +83,11 @@ function EnhancedAudio (Component, autoStop) {
         this.props.getData(s)
       })
     }
+    componentWillUnmount () {
+      this.setState = (state, callback) => {
+        return
+      }
+    }
     render () {
       return (
         <Component
