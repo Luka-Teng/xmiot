@@ -5,7 +5,7 @@ import Recorder from './recorder.min'
  * @param {*} Component  react组件
  * @param {*} autoStop  是否为自动停止，true为自动停止，false为非自动停止
  */
-export default function EnhancedAudio (Component, autoStop) {
+function EnhancedAudio (Component, autoStop) {
   if (!Component) return null
   return class Record extends React.Component {
     constructor (props) {
@@ -98,3 +98,27 @@ export default function EnhancedAudio (Component, autoStop) {
     }
   }
 }
+
+class Test extends React.Component {
+  start = () => {
+    this.props.startRecording()
+    this.props.changeAnimation()
+  }
+  render () {
+    return <button onClick={this.start}>录音</button>
+  }
+}
+export default EnhancedAudio(Test, true)
+
+// export default class Parent extends React.Component{
+//   start = () => {
+//     this.props.startRecording()
+//   }
+//   render () {
+//     return (
+//       <p style={{width:'200px', height:'100px',backgroundColor: 'red'}}>
+
+//       </p>
+//     )
+//   }
+// }
