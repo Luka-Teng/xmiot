@@ -2,7 +2,7 @@
 
 #### 随手
 1. lerna层不需要做eslint的检查，但是要做prettier的格式化。
-2. eslit在各个包中做检查。1
+2. eslit在各个包中做检查。
 
 ---
 
@@ -21,6 +21,8 @@
 检测git连接，检测是否有未提交文件
 
 检测npm是否登录，并将上次发布的commitid之后所有的修改过得包进行发版检测
+
+##### TODO：鉴别本地版本号和npm库版本号是否一致，本地高则提醒手动发布，本地低则提醒版本号处理 
 
 lerna publish 发布
 
@@ -93,5 +95,9 @@ lerna发布分为两步
 
 ### xmiot-record
 > react高阶录音组件
+
 ### xmiot-pagination
 > react 分页组件
+
+### xmiot-cli
+> react项目脚手架搭建
