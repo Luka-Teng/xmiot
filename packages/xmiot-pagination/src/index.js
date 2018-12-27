@@ -1,6 +1,6 @@
 import React from 'react'
 import './index.less'
-class Pagination extends React.Component {
+export default class Pagination extends React.Component {
   constructor (props) {
     super(props)
     // 设置当前页码，默认为第一页
@@ -267,27 +267,6 @@ class Pagination extends React.Component {
           页
         </div>
       </div>
-    )
-  }
-}
-
-export default class Test extends React.Component {
-  state = {
-    totalPage: 1
-  }
-  componentDidMount () {}
-  paging = (a, b) => {
-    console.log(a, b)
-  }
-  render () {
-    return (
-      <Pagination
-        config={{
-          paging: this.paging,
-          totalPage: this.state.totalPage,
-          groupCount: 7
-        }}
-      />
     )
   }
 }
