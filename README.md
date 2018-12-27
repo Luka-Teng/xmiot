@@ -93,5 +93,9 @@ lerna发布分为两步
 
 ### xmiot-record
 > react高阶录音组件
+
 ### xmiot-pagination
 > react 分页组件
+
+### xmiot-cli
+> react项目脚手架搭建
