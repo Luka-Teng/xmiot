@@ -48,7 +48,7 @@ class Popup extends React.Component {
     this.setState = (state, callback) => {
       return
     }
-    ReactDOM.unmountComponentAtNode(document.getElementById('xmiot-popup-wrap'))
+    // ReactDOM.unmountComponentAtNode(document.getElementById('xmiot-popup-wrap'))
   }
 
   render () {
