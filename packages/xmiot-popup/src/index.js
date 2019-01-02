@@ -1,5 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
+import ReactDOM from 'react-dom'
 import './index.less'
 class Popup extends React.Component {
   constructor (props) {
@@ -43,6 +44,13 @@ class Popup extends React.Component {
     console.log('挂在完成')
   }
 
+  componentWillUnmount () {
+    this.setState = (state, callback) => {
+      return
+    }
+    ReactDOM.unmountComponentAtNode(document.getElementById('xmiot-popup-wrap'))
+  }
+
   render () {
     let props = this.props
     let classes = classnames('xmiot-popup-wrap', { show: props.show })
@@ -54,7 +62,7 @@ class Popup extends React.Component {
     )
 
     return (
-      <div className={classes}>
+      <div className={classes} id="xmiot-popup-wrap">
         <div className="mask" onClick={props.onClose} />
         <div className="xmiot-popup-container" style={props.style}>
           <div className="content-container">
@@ -68,9 +76,7 @@ class Popup extends React.Component {
                   </div>
                 )}
                 {props.isShowRight && (
-                  <span className="right-icon" onClick={props.onClose}>
-                    X
-                  </span>
+                  <span className="right-icon" onClick={props.onClose} />
                 )}
               </div>
             </div>
