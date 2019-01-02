@@ -19,6 +19,7 @@ export default class Pagination extends React.Component {
   }
 
   componentDidMount () {
+    console.log('mount')
     const { totalPage, groupCount } = this.props.config || {}
     this.setState({ totalPage: totalPage, groupCount: groupCount || 7 }, () => {
       this.go(1, false)
@@ -35,9 +36,10 @@ export default class Pagination extends React.Component {
       false
     )
   }
-  componentWillReceiveProps (props, old) {
-    const { totalPage, pageCurr } = props.config
-    this.setState({ totalPage, pageCurr })
+  componentWillReceiveProps (props) {
+    const { totalPage } = props.config
+    if (props.config.totalPage === this.state.totalPage) return
+    this.setState({ totalPage })
     this.go(1, false)
   }
   componentWillUnmount () {
