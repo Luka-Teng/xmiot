@@ -1,6 +1,5 @@
 import React from 'react'
 import classnames from 'classnames'
-import ReactDOM from 'react-dom'
 import './index.less'
 class Popup extends React.Component {
   constructor (props) {

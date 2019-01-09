@@ -70,6 +70,8 @@
     "semver": "^5.6.0",
     "simple-git": "^1.107.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "postcss-url": "^8.0.0"
+  },
   "lastCommit": "727991a9251b1bd79386c050b208bd4f547da2af"
 }

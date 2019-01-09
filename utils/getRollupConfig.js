@@ -9,6 +9,7 @@ const path = require('path')
 const resolve = require('rollup-plugin-node-resolve')
 const commonjs = require('rollup-plugin-commonjs')
 const postcss = require('rollup-plugin-postcss')
+const url = require("postcss-url")
 const fileAsBlob = require('rollup-plugin-file-as-blob')
 const replace = require('rollup-plugin-replace')
 const { eslint } = require('rollup-plugin-eslint')
@@ -65,7 +66,9 @@ module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
        * JS方式引入less
        * 后期最好将css独立分割出来维护
        */
-      postcss(),
+      postcss({
+        plugins: [url({url: 'inline'})]
+      }),
 
       // 引入的图片统一用base64输出，后期要做大小限制
       fileAsBlob({

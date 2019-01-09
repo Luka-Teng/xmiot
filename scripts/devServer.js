@@ -92,6 +92,9 @@ const run = () => {
       case 'react':
         template = 'react.template.html'
         break
+
+      default:
+        break
     }
     fs.copyFileSync(
       path.resolve(__dirname, `devTemplates/${template}`),
@@ -152,6 +155,8 @@ const run = () => {
       case 'FATAL':
         console.log(JSON.stringify(event))
         logger.fatal('构建失败')
+        break
+      default:
         break
     }
   })
