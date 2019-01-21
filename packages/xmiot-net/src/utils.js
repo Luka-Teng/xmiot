@@ -12,6 +12,7 @@ export const promiseSequence = (arr, handler) => {
   const stop = () => {
     _stop = true
   }
+
   for (let i in arr) {
     sequence = sequence.then(passedData => {
       if (!_stop) {
