@@ -85,12 +85,13 @@ class WaterfallHook extends Hook {
       if (_stop) {
         delete readyHandlers[i]
       } else {
+        let _result
         if (result === undefined) {
-          result = await readyHandlers[i](...params, stop)
+          _result = await readyHandlers[i](...params, stop)
         } else {
-          const _result = await readyHandlers[i](result, stop)
-          result = _result === undefined ? result : _result
+          _result = await readyHandlers[i](result, stop)
         }
+        result = _result === undefined ? result : _result
       }
     }
 
