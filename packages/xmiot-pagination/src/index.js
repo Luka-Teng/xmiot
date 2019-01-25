@@ -1,6 +1,6 @@
 import React from 'react'
 import './index.less'
-export default class Pagination extends React.Component {
+class Pagination extends React.Component {
   constructor (props) {
     super(props)
     // 设置当前页码，默认为第一页
@@ -8,22 +8,25 @@ export default class Pagination extends React.Component {
       pageCurr: 1, // 当前页
       groupCount: 7,
       startPage: 2, // 从第二页开始
-      pageCount: 10, // 一排页码tap的总数
+      pageCount: 10,
       hide: true, // 是否显示每页条数的下拉框
       inputPage: '',
       ellipsisAhead: false, // 前省略号
       ellipsisBehind: false, // 后省略后
       pages: [],
-      totalPage: 1
+      totalPage: 1,
+      parentCurr: 1
     }
   }
 
   componentDidMount () {
-    console.log('mount')
     const { totalPage, groupCount } = this.props.config || {}
-    this.setState({ totalPage: totalPage, groupCount: groupCount || 7 }, () => {
-      this.go(1, false)
-    })
+    this.setState(
+      { totalPage: totalPage, groupCount: groupCount || this.state.groupCount },
+      () => {
+        this.go(1, false)
+      }
+    )
     document.addEventListener(
       'click',
       e => {
@@ -37,10 +40,31 @@ export default class Pagination extends React.Component {
     )
   }
   componentWillReceiveProps (props) {
-    const { totalPage } = props.config
-    if (props.config.totalPage === this.state.totalPage) return
-    this.setState({ totalPage })
-    this.go(1, false)
+    const { totalPage, pageCurr } = props.config
+    console.log(totalPage, pageCurr, this.state.totalPage, this.state.pageCurr)
+    if (
+      totalPage !== this.state.totalPage &&
+      pageCurr !== this.state.parentCurr
+    ) {
+      this.setState({
+        pageCurr,
+        totalPage: totalPage > 0 ? totalPage : 1,
+        parentCurr: pageCurr
+      })
+      this.go(pageCurr, false)
+      return
+    }
+    if (totalPage !== this.state.totalPage) {
+      this.setState({ totalPage: totalPage > 0 ? totalPage : 1, pageCurr: 1 })
+      this.go(1, false)
+      return
+    }
+
+    if (pageCurr !== this.state.pageCurr) {
+      this.setState({ pageCurr })
+      this.go(pageCurr, false)
+      return
+    }
   }
   componentWillUnmount () {
     this.setState = (state, callback) => {
@@ -59,6 +83,7 @@ export default class Pagination extends React.Component {
   handleBlur = () => {
     this.go(this.state.inputPage)
   }
+
   create () {
     const { pageCurr, groupCount, startPage, totalPage } = this.state
     let pages = []
@@ -79,7 +104,7 @@ export default class Pagination extends React.Component {
           </li>
         )
       }
-      this.setState({ pages })
+      this.setState({ pages, ellipsisAhead: false, ellipsisBehind: false })
       return
     }
     if (pageCurr - bigMiddlePage >= 2) {
@@ -115,8 +140,14 @@ export default class Pagination extends React.Component {
   go (pageCurr, isGet = true) {
     const { paging } = this.props.config
     this.setState(
-      {
-        pageCurr
+      prev => {
+        if (isNaN(pageCurr)) return
+        pageCurr = +pageCurr
+        if (pageCurr < 1) pageCurr = 1
+        if (pageCurr > this.state.totalPage) pageCurr = this.state.totalPage
+        return {
+          pageCurr
+        }
       },
       () => {
         this.create()
@@ -272,3 +303,38 @@ export default class Pagination extends React.Component {
     )
   }
 }
+
+// class Test extends React.Component{
+//   state = {
+//     totalPage: 15,
+//     curr: 1
+//   }
+//   paging = ({pageCurr, pageCount}) => {
+//     // console.log(pageCurr, pageCount)
+//   }
+//   changePage = () => {
+//     let page  = this.state.totalPage
+//     let curr = this.state.curr
+//     this.setState({curr: ++curr, totalPage: --page})
+//   }
+//   changeTotal = () => {
+//     let page  = this.state.totalPage
+//     this.setState({totalPage: --page})
+//   }
+//   render () {
+//     return (
+//       <div>
+//         <Pagination
+//           config={{
+//             totalPage: this.state.totalPage,
+//             paging: this.paging,
+//             pageCurr: this.state.curr,
+//           }}
+//         />
+//         <button onClick={this.changePage}>change</button>
+//         <button onClick={this.changeTotal}>total</button>
+//       </div>
+//     )
+//   }
+// }
+export default Pagination
