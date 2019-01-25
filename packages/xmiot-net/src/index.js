@@ -1,7 +1,6 @@
 import { getUrlFlag } from './utils'
 import { cacheAdapter } from './adapters'
 import WaterfallHook from './netHook/waterfallHook'
-import axios from 'axios'
 
 import preventRepeat from './middlewares/preventRepeat'
 import addResend from './middlewares/addResend'
@@ -183,7 +182,3 @@ class Net {
 }
 
 export default Net
-
-const net = new Net(axios, true)
-window.net = net
-window.axios = axios
