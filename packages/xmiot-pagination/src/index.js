@@ -41,7 +41,7 @@ class Pagination extends React.Component {
   }
   componentWillReceiveProps (props) {
     const { totalPage, pageCurr } = props.config
-    console.log(totalPage, pageCurr, this.state.totalPage, this.state.pageCurr)
+    // console.log(totalPage, pageCurr, this.state.totalPage, this.state.pageCurr)
     if (
       totalPage !== this.state.totalPage &&
       pageCurr !== this.state.parentCurr
