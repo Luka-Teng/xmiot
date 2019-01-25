@@ -22,15 +22,9 @@ import unexpectedError from './middlewares/unexpectedError'
  */
 
 /*
- * TODO... v1.1.0
- * 目前整理逻辑比较乱，需要在后续做个梳理改进，包扩加入拦截层概念。
- * 拦截层请求拦截层，响应拦截层，请求响应拦截层
- * 每个拦截层可以分为可跳过拦截层和不可跳过拦截层
- * pre中调用stop，过滤栈：可跳过拦截层 -> 请求拦截层 -> 请求响应拦截层
- * post中调用stop，过滤栈：可跳过拦截层 -> 响应拦截层 -> 请求响应拦截层
- * mockResponse优化，针对无响应条件
  * 增加一层错误拦截，去处理是否是网络请求的错误还是什么其他错误
  * TODO... v1.2.0
+ * mockResponse优化，针对无响应条件
  * 加入mock
  * 加入parallehook 来作用于业务无关的逻辑 log类的
  */
@@ -58,29 +52,29 @@ class Net {
     this.init(preventRepeat)
   }
 
-  init = _preventRepeat => {
-    // 为后续parallel hooks做基础
-    const run = (type, params) => {
-      const handlers =
-        type === 'pre'
-          ? this.requestHandlers
-          : type === 'postSuccess'
-            ? this.responseHandlers.success
-            : this.responseHandlers.error
+  // 为后续parallel hooks做基础
+  run = (type, params) => {
+    const handlers =
+      type === 'pre'
+        ? this.requestHandlers
+        : type === 'postSuccess'
+          ? this.responseHandlers.success
+          : this.responseHandlers.error
 
-      try {
-        return handlers.run(params)
-      } catch (e) {
-        throw e
-      } finally {
-        // 平行钩子
-      }
+    try {
+      return handlers.run(params)
+    } catch (e) {
+      throw e
+    } finally {
+      // 平行钩子
     }
+  }
 
+  init = _preventRepeat => {
     // 依次执行前置拦截中间函数
     this.axiosInstance.interceptors.request.use(
       async config => {
-        const result = await run('pre', config)
+        const result = await this.run('pre', config)
         return result
       },
       async error => {
@@ -91,14 +85,17 @@ class Net {
     // 依次执行后置拦截中间函数
     this.axiosInstance.interceptors.response.use(
       async response => {
-        const result = await run('postSuccess', response)
+        const result = await this.run('postSuccess', response)
         return result
       },
       async error => {
-        const result = await run('postError', error)
-        return result.notError ? result : Promise.reject(result)
+        const result = await this.run('postError', error)
+        return Promise.reject(result)
       }
     )
+
+    // 处理非网络/意外错误
+    unexpectedError(this)
 
     // 开启请求锁
     if (_preventRepeat) {
@@ -113,9 +110,6 @@ class Net {
   }
 
   applyMiddlewares = () => {
-    // 处理非网络错误
-    unexpectedError(this)
-
     // 增加重发属性
     addResend(this)
   }

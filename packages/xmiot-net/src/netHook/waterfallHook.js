@@ -2,6 +2,7 @@ import Hook from './hook'
 
 /**
  * @description 瀑布式串联钩子
+ * @description 每个事件的返回都会带给下一个做参数，如果不返回则默认返回上一个
  * 创建实例：
  * hook = new WaterfallHook(args: any[])
  * **

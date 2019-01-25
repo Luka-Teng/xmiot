@@ -22,14 +22,43 @@ const axiosInstance = axios.create()
 const net = new Net(axiosInstance, true)
 ```
 
-2. 拦截
+2. Hook
+
+xmiot-net的事件流机制参考tapable的Hook事件机制，事件支持异步和同步
+
+waterfallHook：
 
 ```
+const hook = new WaterfallHook('name')
+
+hook.listen((name, stop) => { console.log(name) })
+
+hook.listen(async (name, stop) => {
+    console.log(name + 'test')
+    stop()
+    return name + 'test'
+})
+
+hook.listen((name) => {console.log('can not be printed')})
+
+hook.run('luka')
+
+print: luka lukatest
+```
+
+3. 拦截
+
+```
+拦截队列：
+1. pre队列：请求发起前的拦截队列
+2. postSuccess：响应成功的拦截队列
+3. postError：响应失败的拦截队列
+
 /*
- * 请求拦截
+ * 请求拦截层
  * config: axios配置信息
- * stop: 跳出链式调用，使用会取消后面的回调
- * 必须返回config
+ * stop: 跳出链式调用，使用会取消后面的pre回调，以及和与该事件绑定的post回调
+ * 返回的config会传递给下一个事件，如果返回undefined，则返回之前的传递值
  */ 
 net.pre((config, stop) => {
   // your code here
@@ -37,10 +66,10 @@ net.pre((config, stop) => {
 })
 
 /*
- * 成功响应拦截
+ * 成功响应拦截层
  * response: axios响应信息
- * stop: 跳出链式调用，使用会取消后面的回调
- * 必须返回response
+ * stop: 跳出链式调用，使用会取消后面postSuccess的回调
+ * 返回的response会传递给下一个事件，如果返回undefined，则返回之前的传递值
  */ 
 net.postSuccess((response, stop) => {
   // your code here
@@ -48,15 +77,38 @@ net.postSuccess((response, stop) => {
 })
 
 /*
- * 失败响应拦截
+ * 失败响应拦截层
  * err: axios错误信息
- * err.notAErrorInError 表示这不是一个错误，会被后面的覆盖
- * stop: 跳出链式调用，使用会取消后面的回调
- * 必须返回err
+ * stop: 跳出链式调用，使用会取消后面postError的回调
+ * 返回的err会传递给下一个事件，如果返回undefined，则返回之前的传递值
  */ 
 net.postError((err, stop) => {
   // your code here
   return err
+})
+
+/*
+ * 请求&成功响应拦截层
+ * 两个拦截事件互相绑定，pre被取消也会导致对应postSuceess事件被取消
+ */ 
+net.preAndPostSuccess((config, stop) => {
+  // your code here
+  return config
+}, (response, stop) => {
+   // your code here
+  return response 
+})
+
+/*
+ * 请求&失败响应拦截层
+ * 两个拦截事件互相绑定，pre被取消也会导致对应postError事件被取消
+ */ 
+net.preAndPostError((config, stop) => {
+  // your code here
+  return config
+}, (err, stop) => {
+   // your code here
+  return err 
 })
 
 /*
@@ -78,7 +130,14 @@ net.pre().postSuccess().postError()
 net.onCache({url, method, timeout})
 ```
 
-4. config
-config参数挂在新的参数和方法。
-* config.resend(): 对当前请求进行重发。
-* err.statusText = 'cancel': 表示重复请求被取消。
+4. 请求重发配置
+
+如果需要对某个接口的失败做重发，可以使用重发配置
+```
+/*
+ * url: 要重发的地址
+ * method: 方法
+ * times: 如果失败需要尝试几次
+ */
+ net.onResend({url, method, times})
+```
