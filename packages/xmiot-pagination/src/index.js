@@ -51,7 +51,7 @@ class Pagination extends React.Component {
         totalPage: totalPage > 0 ? totalPage : 1,
         parentCurr: pageCurr
       })
-      this.go(pageCurr, false)
+      this.go(pageCurr)
       return
     }
     if (totalPage !== this.state.totalPage) {
@@ -62,7 +62,7 @@ class Pagination extends React.Component {
 
     if (pageCurr !== this.state.pageCurr) {
       this.setState({ pageCurr })
-      this.go(pageCurr, false)
+      this.go(pageCurr)
       return
     }
   }
@@ -310,7 +310,7 @@ class Pagination extends React.Component {
 //     curr: 1
 //   }
 //   paging = ({pageCurr, pageCount}) => {
-//     // console.log(pageCurr, pageCount)
+//     console.log(pageCurr, pageCount)
 //   }
 //   changePage = () => {
 //     let page  = this.state.totalPage
