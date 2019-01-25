@@ -1,5 +1,36 @@
 import parse from 'url-parse'
 /*
+ * 顺序执行promise
+ * handler可以是普通函数和promise
+ * 整个sequence的状态是由handler返回值决定的
+ * stop: 用于打断队列
+ * passedData表示上一个handler的返回值
+ */
+export const promiseSequence = (arr, handler) => {
+  let sequence = Promise.resolve()
+  let _stop = false
+  const stop = () => {
+    _stop = true
+  }
+
+  for (let i in arr) {
+    sequence = sequence.then(passedData => {
+      if (!_stop) {
+        if (passedData) {
+          // 每次进来都要重置notAErrorInError，表示在postError回调中不抛出错误
+          passedData.notAErrorInError = false
+          return handler(arr[i], stop, passedData)
+        }
+        return handler(arr[i], stop)
+      } else {
+        return passedData
+      }
+    })
+  }
+  return sequence
+}
+
+/*
  * 用于处理从url拼接origin和pathname
  */
 export const getOriginWithPath = url => {

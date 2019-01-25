@@ -43,35 +43,22 @@ class Net {
     error: new WaterfallHook('error')
   }
 
-  /*
-   * 针对于adapters的委托
-   */
+  // 针对于adapters的委托
   adapterOptions = {}
 
   axiosInstance = null
 
-  constructor (instance, _preventRepeat = false) {
+  constructor (instance, preventRepeat = false) {
     if (instance === undefined) {
       throw new Error('需要axios实例')
     }
     this.axiosInstance = instance
 
     // 初始化，并挂载adapter拦截
-    this.init()
-
-    // 处理非网络错误
-    unexpectedError(this)
-
-    // 开启请求锁
-    if (_preventRepeat) {
-      preventRepeat(this)
-    }
-
-    // 增加重发属性
-    addResend(this)
+    this.init(preventRepeat)
   }
 
-  init = () => {
+  init = _preventRepeat => {
     // 为后续parallel hooks做基础
     const run = (type, params) => {
       const handlers =
@@ -109,13 +96,28 @@ class Net {
       },
       async error => {
         const result = await run('postError', error)
-        // 如果返回promise，则需要接管状态
         return result.notError ? result : Promise.reject(result)
       }
     )
 
+    // 开启请求锁
+    if (_preventRepeat) {
+      preventRepeat(this)
+    }
+
     // adapters配置
     this.handleAdapter()
+
+    // 添加默认配置
+    this.applyMiddlewares()
+  }
+
+  applyMiddlewares = () => {
+    // 处理非网络错误
+    unexpectedError(this)
+
+    // 增加重发属性
+    addResend(this)
   }
 
   /* 请求拦截层 */
