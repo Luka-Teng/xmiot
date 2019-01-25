@@ -1,13 +1,14 @@
 import { promiseSequence, getUrlFlag } from './utils'
 import { cancelResponse } from './mockResponse'
 import { cacheAdapter, publicAxios } from './adapters'
+import WaterfallHook from './netHook/waterfallHook'
 import axios from 'axios'
 
 /*
  * pre(config): 提供请求发送前的钩子函数
  * postSuccess(response): 提供响应成功后的钩子函数
  * postError(err): 提供响应失败后的钩子函数
- * 以上三个方法需要返回对应值
+ * 以上三个方法需要返回对应值（借鉴tapable的waterfall模式，没有返回值的是否返回上一个返回值）
  * 用法:
  * let net = new Net(axiosInstance, preventRepeat)
  * axiosInstance: axios实例
@@ -140,7 +141,7 @@ class Net {
       const flagIndex = pending.indexOf(flagUrl)
       if (flagIndex >= 0) {
         if (cancel) {
-          console.log(flagUrl + ' : ' + 'cancel')
+          console.log(flagUrl + ' : cancel')
           // 仿造response返回类型，返回取消的错误
           throw cancelResponse({
             url: config.url,
@@ -148,10 +149,10 @@ class Net {
           })
         } else {
           pending.splice(flagIndex, 1)
-          console.log(flagUrl + ' : ' + 'removed')
+          console.log(flagUrl + ' : removed')
         }
       } else {
-        console.log(flagUrl + ' : ' + 'add')
+        console.log(flagUrl + ' : add')
         pending.push(flagUrl)
       }
     }
