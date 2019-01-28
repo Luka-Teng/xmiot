@@ -20,11 +20,15 @@ class Pagination extends React.Component {
   }
 
   componentDidMount () {
-    const { totalPage, groupCount } = this.props.config || {}
+    const { totalPage, groupCount, pageCurr } = this.props.config || {}
     this.setState(
-      { totalPage: totalPage, groupCount: groupCount || this.state.groupCount },
+      {
+        totalPage: totalPage,
+        groupCount: groupCount || this.state.groupCount,
+        parentCurr: pageCurr || this.state.parentCurr
+      },
       () => {
-        this.go(1, false)
+        this.go(this.state.parentCurr, false)
       }
     )
     document.addEventListener(
@@ -41,29 +45,22 @@ class Pagination extends React.Component {
   }
   componentWillReceiveProps (props) {
     const { totalPage, pageCurr } = props.config
-    // console.log(totalPage, pageCurr, this.state.totalPage, this.state.pageCurr)
+    console.log(
+      totalPage,
+      pageCurr,
+      this.state.totalPage,
+      this.state.parentCurr
+    )
     if (
-      totalPage !== this.state.totalPage &&
+      totalPage !== this.state.totalPage ||
       pageCurr !== this.state.parentCurr
     ) {
       this.setState({
-        pageCurr,
+        pageCurr: pageCurr || this.state.pageCurr,
         totalPage: totalPage > 0 ? totalPage : 1,
-        parentCurr: pageCurr
+        parentCurr: pageCurr || this.state.parentCurr
       })
-      this.go(pageCurr)
-      return
-    }
-    if (totalPage !== this.state.totalPage) {
-      this.setState({ totalPage: totalPage > 0 ? totalPage : 1, pageCurr: 1 })
-      this.go(1, false)
-      return
-    }
-
-    if (pageCurr !== this.state.pageCurr) {
-      this.setState({ pageCurr })
-      this.go(pageCurr)
-      return
+      this.go(pageCurr, false)
     }
   }
   componentWillUnmount () {
@@ -144,7 +141,7 @@ class Pagination extends React.Component {
         if (isNaN(pageCurr)) return
         pageCurr = +pageCurr
         if (pageCurr < 1) pageCurr = 1
-        if (pageCurr > this.state.totalPage) pageCurr = this.state.totalPage
+        if (pageCurr > prev.totalPage) pageCurr = prev.totalPage
         return {
           pageCurr
         }
@@ -304,37 +301,4 @@ class Pagination extends React.Component {
   }
 }
 
-// class Test extends React.Component{
-//   state = {
-//     totalPage: 15,
-//     curr: 1
-//   }
-//   paging = ({pageCurr, pageCount}) => {
-//     console.log(pageCurr, pageCount)
-//   }
-//   changePage = () => {
-//     let page  = this.state.totalPage
-//     let curr = this.state.curr
-//     this.setState({curr: ++curr, totalPage: --page})
-//   }
-//   changeTotal = () => {
-//     let page  = this.state.totalPage
-//     this.setState({totalPage: --page})
-//   }
-//   render () {
-//     return (
-//       <div>
-//         <Pagination
-//           config={{
-//             totalPage: this.state.totalPage,
-//             paging: this.paging,
-//             pageCurr: this.state.curr,
-//           }}
-//         />
-//         <button onClick={this.changePage}>change</button>
-//         <button onClick={this.changeTotal}>total</button>
-//       </div>
-//     )
-//   }
-// }
 export default Pagination
