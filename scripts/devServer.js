@@ -77,13 +77,11 @@ const run = () => {
   // 使用的模板，默认为global
   let template = 'global.template.html'
 
-  const config = getRollupConfig(
-    {},
-    {
-      type,
-      packageDir
-    }
-  )
+  const config = getRollupConfig({
+  },{
+    type,
+    packageDir
+  })
 
   if (!fs.existsSync(serverTemp)) {
     fs.mkdirSync(serverTemp)
