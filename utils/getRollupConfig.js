@@ -16,6 +16,7 @@ const { eslint } = require('rollup-plugin-eslint')
 const builtins = require('rollup-plugin-node-builtins')
 const { getClientEnvironment } = require('./env')
 const { multiDeepAssign } = require('./function')
+const pkg = require('../package.json')
 
 module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
   console.log(path.resolve(packageDir, 'src/**/*.js'))
@@ -50,15 +51,14 @@ module.exports = (options = {}, { type = 'global', packageDir = '' } = {}) => {
       babel({
         babelrc: false,
         presets: [
-          ['@babel/preset-react']
+          "@babel/preset-react"
         ],
-        exclude: 'node_modules/**',
+        exclude: "node_modules/**",
         plugins: [
-          '@babel/plugin-proposal-class-properties',
-          '@babel/plugin-proposal-object-rest-spread'
+          "@babel/plugin-proposal-class-properties",
+          "@babel/plugin-proposal-object-rest-spread"
         ]
       }),
-
       // Convert CommonJS modules to ES6
       commonjs(),
 

@@ -6,6 +6,8 @@ import preventRepeat from './middlewares/preventRepeat'
 import addResend from './middlewares/addResend'
 import unexpectedError from './middlewares/unexpectedError'
 
+window.hook = WaterfallHook
+
 /*
  * pre(config): 提供请求发送前的钩子函数
  * postSuccess(response): 提供响应成功后的钩子函数
@@ -73,6 +75,10 @@ class Net {
     // 依次执行前置拦截中间函数
     this.axiosInstance.interceptors.request.use(
       async config => {
+        // 每次请求重新开始，都要对响应拦截刷新
+        this.responseHandlers.success.resetReady()
+        this.responseHandlers.error.resetReady()
+
         const result = await this.run('pre', config)
         return result
       },

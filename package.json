@@ -8,7 +8,9 @@
     "start-prod": "cross-env NODE_ENV=production node scripts/devServer.js",
     "start-dev": "cross-env NODE_ENV=development node scripts/devServer.js",
     "bootstrap": "lerna exec npm i",
-    "init": "node scripts/init.js"
+    "init": "node scripts/init.js",
+    "test": "cross-env NODE_ENV=testing jest --no-cache",
+    "debug-test": "node --inspect-brk $(npm bin)/jest --no-cache"
   },
   "husky": {
     "hooks": {
@@ -21,19 +23,71 @@
       "git add"
     ]
   },
+  "jest": {
+    "verbose": true,
+    "collectCoverageFrom": [
+      "packages/xmiot-net/src/**/*.js"
+    ],
+    "collectCoverage": true,
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/packages/$1"
+    },
+    "setupFiles": [
+      "<rootDir>/tests/setup.js"
+    ],
+    "testRegex": "/__tests__/.*\\.test\\.js$",
+    "testEnvironment": "jsdom",
+    "testURL": "http://localhost",
+    "transform": {
+      "\\.js$": "<rootDir>/tests/codeTransform.js",
+      "^.+\\.css$": "<rootDir>/tests/cssTransform.js",
+      "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/tests/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$",
+      "^.+\\.module\\.(css|sass|scss)$",
+      "node_modules/[^/]+?/(?!(es|node_modules)/)"
+    ],
+    "globals": {
+      "ts-config": "temp"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ]
+  },
   "devDependencies": {
     "@babel/core": "^7.1.2",
-    "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/plugin-proposal-decorators": "^7.3.0",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.1",
+    "@babel/plugin-transform-member-expression-literals": "^7.2.0",
+    "@babel/plugin-transform-object-assign": "^7.2.0",
+    "@babel/plugin-transform-property-literals": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/plugin-transform-spread": "^7.2.2",
+    "@babel/plugin-transform-template-literals": "^7.2.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "@babel/runtime": "^7.3.1",
     "axios": "^0.18.0",
     "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.0.0",
+    "babel-plugin-inline-import-data-uri": "^1.0.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
     "consolidate": "^0.15.1",
     "cross-env": "^5.2.0",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-15": "^1.3.0",
+    "enzyme-adapter-react-16": "^1.8.0",
     "eslint-config-react-app": "^3.0.5",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-flowtype": "^3.2.0",
@@ -47,6 +101,7 @@
     "handlebars": "^4.0.12",
     "husky": "^1.1.2",
     "inquirer": "^6.2.0",
+    "jest": "^24.0.0",
     "lerna": "^3.4.3",
     "less": "^3.8.1",
     "lint-staged": "^7.3.0",
@@ -54,6 +109,8 @@
     "ora": "^3.0.0",
     "prettier": "1.14.3",
     "prettier-eslint-cli": "^4.7.1",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
     "rollup": "^0.66.6",
     "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-commonjs": "^9.2.0",
