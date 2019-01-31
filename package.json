@@ -26,9 +26,9 @@
   "jest": {
     "verbose": true,
     "collectCoverageFrom": [
-      "packages/xmiot-net/src/**/*.js"
+      "packages/*/src/**/*.js"
     ],
-    "collectCoverage": true,
+    "collectCoverage": false,
     "testPathIgnorePatterns": [
       "/node_modules/"
     ],

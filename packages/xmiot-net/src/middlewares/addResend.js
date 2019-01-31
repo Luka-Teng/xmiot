@@ -11,7 +11,7 @@ export default (() => {
       let times = options[urlFlag]
 
       // 网络原因再重新加载
-      if (times && err.response) {
+      if (times && !err.response) {
         while (true) {
           try {
             const result = await publicAxios(config)

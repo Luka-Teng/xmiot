@@ -6,6 +6,8 @@ import preventRepeat from './middlewares/preventRepeat'
 import addResend from './middlewares/addResend'
 import unexpectedError from './middlewares/unexpectedError'
 
+import axios from 'axios'
+
 window.hook = WaterfallHook
 
 /*
@@ -23,7 +25,6 @@ window.hook = WaterfallHook
  */
 
 /*
- * 增加一层错误拦截，去处理是否是网络请求的错误还是什么其他错误
  * TODO... v1.2.0
  * mockResponse优化，针对无响应条件
  * 加入mock
@@ -188,3 +189,6 @@ class Net {
 }
 
 export default Net
+
+window.net = new Net(axios, true)
+window.axios = axios

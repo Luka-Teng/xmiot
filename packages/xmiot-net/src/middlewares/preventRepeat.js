@@ -11,10 +11,7 @@ export default net => {
     if (flagIndex >= 0) {
       console.log(flagUrl + ' : cancel')
       // 仿造response返回类型，返回取消的错误
-      throw cancelResponse({
-        url: config.url,
-        method: config.method
-      })
+      throw cancelResponse(config)
     } else {
       console.log(flagUrl + ' : add')
       pending.push(flagUrl)
@@ -40,7 +37,7 @@ export default net => {
       return response
     })
     .postError(error => {
-      if (error.statusText !== 'cancel') {
+      if (error.statusText !== 'CANCEL') {
         handlePost(error.config)
       }
       return error
