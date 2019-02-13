@@ -1,3 +1,7 @@
+const fs = require('fs')
+const path = require('path')
+
+// js编译
 const babelConfig = {
   presets: [
     '@babel/preset-env',
@@ -30,6 +34,22 @@ const babelConfig = {
   ]
 }
 
+// ts编译
+let tsConfig = {}
+const tsConfigPath = path.resolve(process.cwd(), 'tsconfig.json')
+if (fs.existsSync(tsConfigPath)) {
+  tsConfig = require(tsConfigPath)
+}
+tsConfig.compilerOptions = Object.assign(
+  tsConfig.compilerOptions,
+  {
+    target: 'es6',
+    jsx: 'preserve',
+    allowSyntheticDefaultImports: true,
+  }
+)
+
 module.exports = {
-  babelConfig
+  babelConfig,
+  tsConfig
 }
