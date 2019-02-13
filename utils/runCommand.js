@@ -19,21 +19,17 @@ const runCommand = (cmd, args, options = {}) => {
       },
       options
     )
-    const _spawn = spawn(
-      cmd,
-      args,
-      mergeOptions
-    )
+    const _spawn = spawn(cmd, args, mergeOptions)
 
     // pipe模式下如果错误会reject错误信息, git不可行，部分非错误也会输出
     if (mergeOptions.stdio === 'pipe') {
-      _spawn.stderr.on('data', (data) => {
+      _spawn.stderr.on('data', data => {
         reject(data.toString().trim())
       })
     }
 
     // code不是1的情况下判断错误
-    _spawn.on('close', (code) => {
+    _spawn.on('close', code => {
       resolve()
     })
   })
@@ -115,21 +111,21 @@ exports.git = {
   getChangedFiles (
     lastCommit = 'HEAD',
     currenCommit = 'HEAD',
-    {types = ['A', 'M']} = {}
+    { types = ['A', 'M'] } = {}
   ) {
     try {
-      const result = execCommand(`git diff ${lastCommit} ${currenCommit} --name-status`)
-      const files = result
-        .split('\n')
-        .reduce((a, b) => {
-          const isInTypes = types.some((type) => {
-            return type === b[0]
-          })
-          if (isInTypes) {
-            a.push(b.substr(1).trim())
-          }
-          return a
-        }, [])
+      const result = execCommand(
+        `git diff ${lastCommit} ${currenCommit} --name-status`
+      )
+      const files = result.split('\n').reduce((a, b) => {
+        const isInTypes = types.some(type => {
+          return type === b[0]
+        })
+        if (isInTypes) {
+          a.push(b.substr(1).trim())
+        }
+        return a
+      }, [])
       return files
     } catch (e) {
       logger.fatal(e)

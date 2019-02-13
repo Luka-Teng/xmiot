@@ -3,10 +3,7 @@ const path = require('path')
 
 // js编译
 const babelConfig = {
-  presets: [
-    '@babel/preset-env',
-    '@babel/preset-react'
-  ],
+  presets: ['@babel/preset-env', '@babel/preset-react'],
   exclude: 'node_modules/**',
   plugins: [
     'babel-plugin-inline-import-data-uri',
@@ -16,7 +13,7 @@ const babelConfig = {
     [
       '@babel/plugin-transform-runtime',
       {
-        'helpers': false
+        helpers: false
       }
     ],
     '@babel/plugin-transform-spread',
@@ -28,7 +25,7 @@ const babelConfig = {
     [
       '@babel/plugin-proposal-decorators',
       {
-        'decoratorsBeforeExport': true
+        decoratorsBeforeExport: true
       }
     ]
   ]
@@ -40,14 +37,11 @@ const tsConfigPath = path.resolve(process.cwd(), 'tsconfig.json')
 if (fs.existsSync(tsConfigPath)) {
   tsConfig = require(tsConfigPath)
 }
-tsConfig.compilerOptions = Object.assign(
-  tsConfig.compilerOptions,
-  {
-    target: 'es6',
-    jsx: 'preserve',
-    allowSyntheticDefaultImports: true,
-  }
-)
+tsConfig.compilerOptions = Object.assign(tsConfig.compilerOptions, {
+  target: 'es6',
+  jsx: 'preserve',
+  allowSyntheticDefaultImports: true
+})
 
 module.exports = {
   babelConfig,

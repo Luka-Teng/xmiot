@@ -1,7 +1,7 @@
 // import 'babel-polyfill'
-const Enzyme = require('enzyme');
+const Enzyme = require('enzyme')
 
-let Adapter;
+let Adapter
 if (process.env.REACT === '15') {
   Adapter = require('enzyme-adapter-react-15')
 } else {

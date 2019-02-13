@@ -16,16 +16,13 @@ const { eslint } = require('rollup-plugin-eslint')
 const builtins = require('rollup-plugin-node-builtins')
 const { getClientEnvironment } = require('./env')
 const { multiDeepAssign } = require('./function')
-
 const typescript = require('rollup-plugin-typescript2')
-
-const pkg = require('../package.json')
 
 /*
  * eslint的配置在每个包中，由包主人自行管理
  * eslint的插件包，preset包由lerna统一管理
  */
-function esLintConfig(packageDir) {
+function esLintConfig (packageDir) {
   return eslint({
     // 只允许eslint当前包
     include: path.resolve(packageDir, 'src/**/*.js'),
@@ -36,7 +33,7 @@ function esLintConfig(packageDir) {
 /**
  * rollup引入node_modules模块
  */
-function rosolveNodeModulesConfig() {
+function rosolveNodeModulesConfig () {
   return resolve({
     jsnext: true,
     main: true,
@@ -58,8 +55,8 @@ module.exports = (
       ...getClientEnvironment().stringified
       // 不包括除了react之外的包
       // exclude: /node_modules\/(?!react\/).*/
-    }),
-  ];
+    })
+  ]
 
   if (!isTypeScript) {
     // 不是 TypeScript 就是 JavaScript
@@ -69,7 +66,6 @@ module.exports = (
     // Typescript 配置
     plugins.push(typescript({ clean: true }))
   }
-
 
   const defaultOptions = {
     plugins: [
@@ -93,9 +89,11 @@ module.exports = (
        * JS方式引入less
        * 后期最好将css独立分割出来维护
        */
-      noCss ? null : postcss({
-        plugins: [url({ url: 'inline' })]
-      }),
+      noCss
+        ? null
+        : postcss({
+            plugins: [url({ url: 'inline' })]
+          }),
 
       // 引入的图片统一用base64输出，后期要做大小限制
       fileAsBlob({

@@ -5,9 +5,9 @@
  * 4. 判断该包是否存在，存在的话是否是包的所有者，是的话判断版本增加
  */
 
-const {execCommand, runCommand, git} = require('../utils/runCommand')
+const { execCommand, runCommand, git } = require('../utils/runCommand')
 const logger = require('../utils/logger')
-const {eachWithNext} = require('../utils/function')
+const { eachWithNext } = require('../utils/function')
 const simpletGit = require('simple-git/promise')
 const axios = require('axios')
 const path = require('path')
@@ -30,7 +30,7 @@ const gitConnectTest = async () => {
 // 判断是否还有未提交文件
 const gitCommitTest = async () => {
   try {
-    const {files, staged} = await simpletGit().status()
+    const { files, staged } = await simpletGit().status()
     if (files.length > 0 || staged > 0) {
       logger.fatal('还存在未提交文件')
     }
@@ -49,7 +49,7 @@ const gitPull = async () => {
 }
 
 // 判断是否npm登录，判断提交文件中
-const npmTest = async ({lastCommit}) => {
+const npmTest = async ({ lastCommit }) => {
   let changedDirs = []
   let changedPkgs = []
   let user = null
@@ -63,16 +63,20 @@ const npmTest = async ({lastCommit}) => {
   // 获取需要被发布的包，返回包名数组，不含被删除的包
   try {
     // 获取lerna.json中ingnore文件
-    const lerna= require(path.resolve('lerna.json'))
+    const lerna = require(path.resolve('lerna.json'))
     let lernaIgnore = []
-    if (lerna.command && lerna.command.publish && lerna.command.publish.ignoreChanges) {
+    if (
+      lerna.command &&
+      lerna.command.publish &&
+      lerna.command.publish.ignoreChanges
+    ) {
       lernaIgnore = lerna.command.publish.ignoreChanges
     }
 
     changedDirs = Array.from(
       new Set(
         git.getChangedFiles(lastCommit).reduce((a, b) => {
-          const isInIgnore = lernaIgnore.some((e) => {
+          const isInIgnore = lernaIgnore.some(e => {
             return b.indexOf(e) >= 0
           })
           if (!isInIgnore && /^packages\//.test(b)) {
@@ -91,40 +95,52 @@ const npmTest = async ({lastCommit}) => {
   if (changedDirs.length >= 0) {
     try {
       changedDirs.forEach(e => {
-        const {name, version} = require(path.resolve('packages', e, 'package.json'))
-        changedPkgs.push({name, version})
+        const { name, version } = require(path.resolve(
+          'packages',
+          e,
+          'package.json'
+        ))
+        changedPkgs.push({ name, version })
       })
     } catch (e) {
       logger.log(e)
       logger.fatal('存在包缺少package.json文件')
     }
-  } 
+  }
 
   // 判断每个包的拥有者，和版本号
   if (changedPkgs.length >= 0) {
     await eachWithNext(changedPkgs, async (pkg, next) => {
       await axios
-      .get(`https://registry.npmjs.org/${pkg.name}`)
-      .then(res => {
-        const lastestVersion = res.data['dist-tags'].latest
-        const localVersion = pkg.version
-        // 当前包只有一个maintainer
-        const _user = res.data.maintainers[0].name
-        if (user !== _user) {
-          logger.fatal(`${pkg.name}非用户${user}维护`)
-        }
-        logger.success(`${pkg.name}是用户${user}维护`)
-        if (semver.lt(localVersion, lastestVersion)) {
-          logger.fatal(`${pkg.name}(${localVersion})版本号低于最新版本号${lastestVersion}`)
-        }
-        logger.success(`${pkg.name}(${localVersion})版本号验证通过`)
-      })
-      .catch(data => {
-        if (data && data.response && data.response.data.error === 'Not found') {
-          return logger.success(`${pkg.name}为新包`)
-        }
-        logger.fatal('验证npm时候发生未知网络错误')
-      })
+        .get(`https://registry.npmjs.org/${pkg.name}`)
+        .then(res => {
+          const lastestVersion = res.data['dist-tags'].latest
+          const localVersion = pkg.version
+          // 当前包只有一个maintainer
+          const _user = res.data.maintainers[0].name
+          if (user !== _user) {
+            logger.fatal(`${pkg.name}非用户${user}维护`)
+          }
+          logger.success(`${pkg.name}是用户${user}维护`)
+          if (semver.lt(localVersion, lastestVersion)) {
+            logger.fatal(
+              `${
+                pkg.name
+              }(${localVersion})版本号低于最新版本号${lastestVersion}`
+            )
+          }
+          logger.success(`${pkg.name}(${localVersion})版本号验证通过`)
+        })
+        .catch(data => {
+          if (
+            data &&
+            data.response &&
+            data.response.data.error === 'Not found'
+          ) {
+            return logger.success(`${pkg.name}为新包`)
+          }
+          logger.fatal('验证npm时候发生未知网络错误')
+        })
       next()
     })
   }
@@ -138,7 +154,7 @@ const getLastCommit = async () => {
     const json = require(packageJson)
     if (!json.lastCommit) {
       json.lastCommit = execCommand('git rev-parse HEAD')
-      await fs.outputJson(packageJson, json, {spaces: 2})
+      await fs.outputJson(packageJson, json, { spaces: 2 })
     }
     return json.lastCommit
   }
@@ -151,7 +167,7 @@ const setLastCommit = async () => {
   } else {
     const json = require(packageJson)
     json.lastCommit = execCommand('git rev-parse HEAD')
-    await fs.outputJson(packageJson, json, {spaces: 2})
+    await fs.outputJson(packageJson, json, { spaces: 2 })
   }
 }
 
@@ -170,41 +186,29 @@ const run = async () => {
   let lastCommit = await getLastCommit()
 
   // 测试是否能连上git
-  await loadingProcess(
-    '进行git连接测试测试',
-    'git连接成功',
-    gitConnectTest
-  )
+  await loadingProcess('进行git连接测试测试', 'git连接成功', gitConnectTest)
 
   // 查看是否有文件未提交
-  await loadingProcess(
-    '查看本地提交',
-    '文件已提交',
-    gitCommitTest
-  )
+  await loadingProcess('查看本地提交', '文件已提交', gitCommitTest)
 
   // 拉取远程最新代码
-  await loadingProcess(
-    '拉取代码',
-    '代码拉取成功',
-    gitPull
-  )
+  await loadingProcess('拉取代码', '代码拉取成功', gitPull)
 
   // 上次发布和这次发布之间所有commit进行遍历和包检查
   await loadingProcess(
     '进行npm用户和包检查',
     'npm检查成功',
-    npmTest.bind(null, {lastCommit})
+    npmTest.bind(null, { lastCommit })
   )
 
   logger.success('开始发布')
 
   // 发布前后的commit进行比较，如果发生改变，则记录最新的commit号
   const beforeCommit = execCommand('git rev-parse HEAD')
-  await runCommand('lerna', ['publish'], {stdio: 'inherit'})
+  await runCommand('lerna', ['publish'], { stdio: 'inherit' })
   const afterCommit = execCommand('git rev-parse HEAD')
   if (beforeCommit !== afterCommit) await setLastCommit()
-  
+
   // 重新提交代码，提交内容为最新的npm push commitID
   await loadingProcess(
     '提交commitID',

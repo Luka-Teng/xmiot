@@ -3,14 +3,10 @@
  */
 
 // 对引入的es6进行编译
-require("@babel/register")({
+require('@babel/register')({
   presets: ['@babel/env'],
-  ignore: [
-    /node_modules/,
-  ],
-  only: [
-    /.+\.config\.js$/
-  ],
+  ignore: [/node_modules/],
+  only: [/.+\.config\.js$/],
   extensions: ['.js']
 })
 
