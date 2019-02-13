@@ -1,18 +1,35 @@
 /*
  * usage: devServer -package:包名 -entry:入口文件 -type:项目类型(global, react)
  */
+
+// 对引入的es6进行编译
+require("@babel/register")({
+  presets: ['@babel/env'],
+  ignore: [
+    /node_modules/,
+  ],
+  only: [
+    /.+\.config\.js$/
+  ],
+  extensions: ['.js']
+})
+
 const logger = require('../utils/logger')
 const path = require('path')
 const fs = require('fs-extra')
 const rollup = require('rollup')
-const getRollupConfig = require('../utils/getRollupConfig')
 const serve = require('rollup-plugin-serve')
 const livereload = require('rollup-plugin-livereload')
 const program = require('commander')
+const { isArray } = require('../utils/function')
 
 const cwd = process.cwd()
 const USER_HOME = process.env.HOME || process.env.USERPROFILE
 const serverTemp = path.resolve(USER_HOME, 'serverTemp')
+const templates = {
+  global: 'global.template.html',
+  react: 'react.template.html'
+}
 
 /*
  * 命令行 packageName
@@ -22,7 +39,6 @@ const serverTemp = path.resolve(USER_HOME, 'serverTemp')
 program
   .version('1.0.0', '-v, --version')
   .usage('packageName [options]')
-  .option('-e, --entry [address]', '添加入口', 'src/index.js')
   .option('-t, --type [type]', '包类型(react, global)', 'global')
   .parse(process.argv)
 
@@ -42,29 +58,24 @@ process.on('exit', function () {
  * 提取参数，并对参数做验证
  */
 const getOptions = () => {
-  let { entry, type } = program
   let packageName = program.args[0]
   if (!packageName) {
     logger.fatal('packageName cannot be null')
   }
   const packageDir = path.resolve(cwd, 'packages', packageName)
-  entry = path.resolve(cwd, 'packages', packageName, entry)
 
   if (!fs.existsSync(packageDir)) {
     logger.fatal('不存在该包名')
   }
-  if (!fs.existsSync(entry)) {
-    logger.fatal('不存在该入口文件')
-  }
 
   const packageInfo = require(path.resolve(packageDir, 'package.json'))
+
   // type值可以被package.json的devTestType重写
-  type = packageInfo.devTestType || type
+  const type = packageInfo.devTestType || program.type || 'global'
 
   return {
     packageName,
     packageDir,
-    entry,
     type
   }
 }
@@ -72,33 +83,19 @@ const getOptions = () => {
 // 执行rollup
 const run = () => {
   // 获取参数和插件配置
-  const { type, packageDir, entry } = getOptions()
+  const { type, packageDir } = getOptions()
 
-  // 使用的模板，默认为global
-  let template = 'global.template.html'
-
-  const config = getRollupConfig({
-  },{
-    type,
-    packageDir
-  })
+  const configs = require(path.resolve(packageDir, 'rollup.config.js')).default
+  const config = isArray(configs) ? configs[0] : configs
 
   if (!fs.existsSync(serverTemp)) {
     fs.mkdirSync(serverTemp)
-    // 根据type属性，切换模板
-    switch (type) {
-      case 'react':
-        template = 'react.template.html'
-        break
-
-      default:
-        break
-    }
-    fs.copyFileSync(
-      path.resolve(__dirname, `devTemplates/${template}`),
-      path.resolve(serverTemp, 'index.html')
-    )
   }
+
+  fs.copyFileSync(
+    path.resolve(__dirname, `devTemplates/${templates[type]}`),
+    path.resolve(serverTemp, 'index.html')
+  )
 
   // 增加插件配置
   config.plugins.push(
@@ -116,8 +113,8 @@ const run = () => {
 
   // watchOptions 配置
   const inputOptions = {
-    input: entry,
-    ...config
+    ...config,
+    input: path.resolve(packageDir, config.input)
   }
   const outputOptions = {
     file: `${serverTemp}/index.js`,
