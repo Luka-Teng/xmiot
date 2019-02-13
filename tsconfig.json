@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "declarationDir": "./entry",
+        "removeComments": false,
+        "lib": [
+            "es2015",
+            "dom"
+        ],
+        "target": "es5"
+    }
+}
