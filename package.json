@@ -18,7 +18,7 @@
     }
   },
   "lint-staged": {
-    "packages/**/*.js": [
+    "**/*.js": [
       "npm run prettier",
       "git add"
     ]
