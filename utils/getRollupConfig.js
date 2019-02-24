@@ -6,7 +6,6 @@
  */
 const babel = require('rollup-plugin-babel')
 const path = require('path')
-const resolve = require('rollup-plugin-node-resolve')
 const commonjs = require('rollup-plugin-commonjs')
 const postcss = require('rollup-plugin-postcss')
 const url = require('postcss-url')
@@ -30,23 +29,10 @@ function esLintConfig (packageDir) {
   })
 }
 
-/**
- * rollup引入node_modules模块
- */
-function rosolveNodeModulesConfig () {
-  return resolve({
-    jsnext: true,
-    main: true,
-    browser: true
-  })
-}
-
 module.exports = (
   options = {},
   { type = 'global', packageDir = '', isTypeScript = false, noCss = false } = {}
 ) => {
-  console.log(path.resolve(packageDir, 'src/**/*.js'))
-
   const plugins = [
     builtins(),
 
@@ -61,7 +47,6 @@ module.exports = (
   if (!isTypeScript) {
     // 不是 TypeScript 就是 JavaScript
     plugins.push(esLintConfig(packageDir))
-    plugins.push(rosolveNodeModulesConfig())
   } else {
     // Typescript 配置
     plugins.push(typescript({ clean: true }))

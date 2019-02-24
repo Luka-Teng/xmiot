@@ -18,6 +18,7 @@ const serve = require('rollup-plugin-serve')
 const livereload = require('rollup-plugin-livereload')
 const program = require('commander')
 const { isArray } = require('../utils/function')
+const resolve = require('rollup-plugin-node-resolve')
 
 const cwd = process.cwd()
 const USER_HOME = process.env.HOME || process.env.USERPROFILE
@@ -104,6 +105,14 @@ const run = () => {
     }),
     livereload({
       watch: serverTemp
+    })
+  )
+
+  config.plugins.unshift(
+    resolve({
+      jsnext: true,
+      main: true,
+      browser: true
     })
   )
 
