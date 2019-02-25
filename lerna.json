@@ -6,7 +6,8 @@
     "publish": {
       "ignoreChanges": [
         "package-lock.json",
-        "README.md"
+        "README.md",
+        "rollup.config.js"
       ]
     }
   },
