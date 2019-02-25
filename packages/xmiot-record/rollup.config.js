@@ -7,7 +7,7 @@ const fileName = {
 
 function getOptions (module) {
   return {
-    input: './src/index.ts',
+    input: './src/index.js',
     output: {
       file: `./entry/${fileName[module]}`,
       format: module
