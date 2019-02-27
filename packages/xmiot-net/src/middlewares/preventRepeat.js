@@ -6,23 +6,23 @@ export default net => {
   const pending = []
 
   const handlePre = config => {
-    const flagUrl = getUrlFlag(config)
-    const flagIndex = pending.indexOf(flagUrl)
+    const urlFlag = getUrlFlag(config)
+    const flagIndex = pending.indexOf(urlFlag)
     if (flagIndex >= 0) {
-      console.log(flagUrl + ' : cancel')
+      console.log(urlFlag + ' : cancel')
       // 仿造response返回类型，返回取消的错误
       throw cancelResponse(config)
     } else {
-      console.log(flagUrl + ' : add')
-      pending.push(flagUrl)
+      console.log(urlFlag + ' : add')
+      pending.push(urlFlag)
     }
   }
 
   const handlePost = config => {
-    const flagUrl = getUrlFlag(config)
-    const flagIndex = pending.indexOf(flagUrl)
+    const urlFlag = getUrlFlag(config)
+    const flagIndex = pending.indexOf(urlFlag)
     if (flagIndex >= 0) {
-      console.log(flagUrl + ' : removed')
+      console.log(urlFlag + ' : removed')
       pending.splice(flagIndex, 1)
     }
   }

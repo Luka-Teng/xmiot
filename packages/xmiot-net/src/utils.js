@@ -1,4 +1,3 @@
-import parse from 'url-parse'
 /*
  * 顺序执行promise
  * handler可以是普通函数和promise
@@ -31,15 +30,6 @@ export const promiseSequence = (arr, handler) => {
 }
 
 /*
- * 用于处理从url拼接origin和pathname
- */
-export const getOriginWithPath = url => {
-  // console.log(parse(url))
-  const { origin, pathname } = parse(url)
-  return origin + pathname
-}
-
-/*
  * 用于判断是否过期
  */
 export const isOverTime = (beginning, timeout) => {
@@ -51,13 +41,31 @@ export const isOverTime = (beginning, timeout) => {
 }
 
 /*
+ * 用于返回configFlag
+ */
+export const getConfigFlag = ({ baseURL, url, method, params, data }) => {
+  if (baseURL) {
+    url = url.indexOf(baseURL) === 0 ? url : handlePath(baseURL).join(url).url
+  }
+  return JSON.stringify({
+    url,
+    method,
+    params,
+    data
+  })
+}
+
+/*
  * 用于返回urlFlag
  */
 export const getUrlFlag = ({ baseURL, url, method }) => {
   if (baseURL) {
     url = url.indexOf(baseURL) === 0 ? url : handlePath(baseURL).join(url).url
   }
-  return getOriginWithPath(url) + '&' + method
+  return JSON.stringify({
+    url,
+    method
+  })
 }
 
 /*
@@ -68,15 +76,7 @@ export const handlePath = (base = '') => {
 
   const join = (path = '') => {
     const { url } = obj
-    const lastCharOfBase = url[url.length - 1]
-    const firstCharOfPath = path[0]
-    if (lastCharOfBase !== '/' && firstCharOfPath !== '/') {
-      obj.url = url + '/' + path
-    } else if (lastCharOfBase === '/' && firstCharOfPath === '/') {
-      obj.url = url + path.slice(1)
-    } else {
-      obj.url = url + path
-    }
+    obj.url = url.replace(/\/+$/, '') + '/' + path.replace(/^\/+/, '')
     return obj
   }
 
@@ -98,4 +98,33 @@ export const handlePath = (base = '') => {
     addParam,
     url: base
   })
+}
+
+/* 过滤对象的属性 */
+export const sortAndfilterObject = (data, ignore) => {
+  if (Object.prototype.toString.call(data) !== '[object Object]') return data
+
+  let isNullObject = true
+
+  const result = Object.keys(data)
+    .sort()
+    .reduce((a, b) => {
+      if (!ignore.includes(b)) {
+        a[b] = data[b]
+        isNullObject = false
+      }
+      return a
+    }, {})
+
+  return isNullObject ? undefined : result
+}
+
+/* 获取一个包含promise本体，res，rej的对象 */
+export const getPromise = () => {
+  let res, rej
+  const promise = new Promise((resolve, reject) => {
+    res = resolve
+    rej = reject
+  })
+  return { promise, res, rej }
 }

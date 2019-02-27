@@ -1,45 +1,28 @@
-import { getUrlFlag } from './utils'
-import { cacheAdapter } from './adapters'
 import WaterfallHook from './netHook/waterfallHook'
-
+import { CacheAdapter, MockAdapter } from './adapters'
 import preventRepeat from './middlewares/preventRepeat'
 import addResend from './middlewares/addResend'
 import unexpectedError from './middlewares/unexpectedError'
 
 import axios from 'axios'
 
-window.hook = WaterfallHook
-
 /*
- * pre(config): 提供请求发送前的钩子函数
- * postSuccess(response): 提供响应成功后的钩子函数
- * postError(err): 提供响应失败后的钩子函数
- * 以上三个方法需要返回对应值（借鉴tapable的waterfall模式，没有返回值的是否返回上一个返回值）
- * 用法:
- * let net = new Net(axiosInstance, preventRepeat)
- * axiosInstance: axios实例
- * preventRepeat: 是否阻止重复提交
- * 开发要点:
- * cancel: cancel可以取消请求发送，并且不会走adapter, request拦截器return reject有同样效果
- * adapter: 是请求的处理中心，可以根据更换adapter来实现mock
- */
-
-/*
- * TODO... v1.2.0
- * mockResponse优化，针对无响应条件
- * 加入mock
+ * TODO... v1.2.1
  * 加入parallehook 来作用于业务无关的逻辑 log类的
  */
 
 class Net {
-  // 针对于拦截器
+  /* 针对于拦截器 */
   requestHandlers = new WaterfallHook('config')
   responseHandlers = {
     success: new WaterfallHook('response'),
     error: new WaterfallHook('error')
   }
 
-  // 针对于adapters的委托
+  /* 注册过得adapter */
+  registeredAdapters = []
+
+  /* 针对于adapters的委托 */
   adapterOptions = {}
 
   axiosInstance = null
@@ -54,7 +37,7 @@ class Net {
     this.init(preventRepeat)
   }
 
-  // 为后续parallel hooks做基础
+  /* 为后续parallel hooks做基础 */
   run = (type, params) => {
     const handlers =
       type === 'pre'
@@ -64,31 +47,33 @@ class Net {
           : this.responseHandlers.error
 
     try {
+      params.inQueue = type
       return handlers.run(params)
     } catch (e) {
       throw e
     } finally {
-      // 平行钩子
+      /* 平行钩子 */
     }
   }
 
   init = _preventRepeat => {
-    // 依次执行前置拦截中间函数
+    /* 依次执行前置拦截中间函数 */
     this.axiosInstance.interceptors.request.use(
       async config => {
-        // 每次请求重新开始，都要对响应拦截刷新
+        /* 每次请求重新开始，都要对响应拦截刷新 */
         this.responseHandlers.success.resetReady()
         this.responseHandlers.error.resetReady()
 
         const result = await this.run('pre', config)
-        return result
+
+        return this.handleAdapter(result)
       },
       async error => {
         return Promise.reject(error)
       }
     )
 
-    // 依次执行后置拦截中间函数
+    /* 依次执行后置拦截中间函数 */
     this.axiosInstance.interceptors.response.use(
       async response => {
         const result = await this.run('postSuccess', response)
@@ -96,27 +81,28 @@ class Net {
       },
       async error => {
         const result = await this.run('postError', error)
+
+        /* 代表错误已经转化为正确队列 */
+        if (result.inQueue === 'postSuccess') {
+          return result
+        }
+
         return Promise.reject(result)
       }
     )
 
-    // 处理非网络/意外错误
+    /* 注册Adapter */
+    this.registerAdapter(new CacheAdapter(this), new MockAdapter(this))
+
+    /* 处理非网络/意外错误 */
     unexpectedError(this)
 
-    // 开启请求锁
+    /* 开启请求锁 */
     if (_preventRepeat) {
       preventRepeat(this)
     }
 
-    // adapters配置
-    this.handleAdapter()
-
-    // 添加默认配置
-    this.applyMiddlewares()
-  }
-
-  applyMiddlewares = () => {
-    // 增加重发属性
+    /* 增加重发属性 */
     addResend(this)
   }
 
@@ -150,45 +136,25 @@ class Net {
     return this
   }
 
-  /*
-   * 用于处理不同adapters的调度策略
-   * 调度向adapter传递参数，统一使用config.needParams
-   */
-  handleAdapter = () => {
-    this.pre((config, stop) => {
-      const flagUrl = getUrlFlag(config)
-      const options = this.adapterOptions[flagUrl]
-      if (options) {
-        switch (options.type) {
-          case 'cache':
-            stop()
-            config.adapter = cacheAdapter
-            config.needParams = { timeout: options.timeout }
-            break
-
-          default:
-            break
-        }
-      }
-      return config
-    })
+  /* 注册adapters */
+  registerAdapter = (...adapters) => {
+    this.registeredAdapters.push(...adapters)
   }
 
-  // 缓存
-  onCache = ({ url, method, timeout = 3600000 } = {}) => {
-    if (!url || !method) {
-      throw new Error('缺少参数url或method')
+  /* 用于处理不同adapters的调度策略 */
+  handleAdapter = config => {
+    for (let adapter of this.registeredAdapters) {
+      if (adapter.pass(config)) {
+        config.adapter = adapter.adapter
+        break
+      }
     }
-    const urlFlag = getUrlFlag({ url, method })
-    const options = {
-      timeout,
-      type: 'cache'
-    }
-    this.adapterOptions[urlFlag] = options
+    return config
   }
 }
 
 export default Net
 
+axios.defaults.timeout = 5000
 window.net = new Net(axios, true)
 window.axios = axios

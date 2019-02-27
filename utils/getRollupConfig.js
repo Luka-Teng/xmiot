@@ -12,7 +12,6 @@ const url = require('postcss-url')
 const fileAsBlob = require('rollup-plugin-file-as-blob')
 const replace = require('rollup-plugin-replace')
 const { eslint } = require('rollup-plugin-eslint')
-const builtins = require('rollup-plugin-node-builtins')
 const { getClientEnvironment } = require('./env')
 const { multiDeepAssign } = require('./function')
 const typescript = require('rollup-plugin-typescript2')
@@ -34,8 +33,6 @@ module.exports = (
   { type = 'global', packageDir = '', isTypeScript = false, noCss = false } = {}
 ) => {
   const plugins = [
-    builtins(),
-
     // 环境变量的定义
     replace({
       ...getClientEnvironment().stringified
