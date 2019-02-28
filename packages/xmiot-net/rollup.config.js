@@ -11,7 +11,8 @@ function getOptions (module) {
     output: {
       file: `./entry/${fileName[module]}`,
       format: module
-    }
+    },
+    external: ['axios']
   }
 }
 
