@@ -1,6 +1,6 @@
 {
   "name": "xmiot-popup",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "react 项目 居中弹窗",
   "main": "entry/index.common.js",
   "module": "entry/index.esm.js",
