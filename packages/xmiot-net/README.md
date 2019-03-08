@@ -183,3 +183,6 @@ net.delete
 net.get('/a').replyOnce(200, {}, {delay: 3000})
   .get('/a').reply(400, {}, {errorMessage: 'error'})
 ```
+
+###注意事项
+不要再拦截器中返回非config/response/err的其他值，会产生不可控影响

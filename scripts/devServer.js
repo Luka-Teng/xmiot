@@ -119,6 +119,7 @@ const run = () => {
   // watchOptions 配置
   const inputOptions = {
     ...config,
+    external: [],
     input: path.resolve(packageDir, config.input)
   }
   const outputOptions = {
