@@ -110,7 +110,7 @@ class WaterfallHook extends Hook {
 
     this.resetReady()
     if (err) throw err
-    return result || params[0]
+    return result === undefined ? params[0] : result
   }
 }
 
