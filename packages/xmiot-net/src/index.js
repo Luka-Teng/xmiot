@@ -4,8 +4,6 @@ import preventRepeat from './middlewares/preventRepeat'
 import addResend from './middlewares/addResend'
 import unexpectedError from './middlewares/unexpectedError'
 
-import axios from 'axios'
-
 /*
  * TODO... v1.2.1
  * 加入parallehook 来作用于业务无关的逻辑 log类的
@@ -21,9 +19,6 @@ class Net {
 
   /* 注册过得adapter */
   registeredAdapters = []
-
-  /* 针对于adapters的委托 */
-  adapterOptions = {}
 
   axiosInstance = null
 
@@ -154,7 +149,3 @@ class Net {
 }
 
 export default Net
-
-axios.defaults.timeout = 5000
-window.net = new Net(axios, true)
-window.axios = axios
