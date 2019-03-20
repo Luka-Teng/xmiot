@@ -7,7 +7,7 @@ import Hook from './hook'
  * hook = new WaterfallHook(args: any[])
  * **
  * 加入事件：
- * hook.listen((args: any, stop: Function) => {})
+ * hook.listen((args: any[], stop: Function) => {})
  * **
  * 触发事件流：
  * hook.run(args: any[])
@@ -19,8 +19,13 @@ import Hook from './hook'
  * **
  */
 class WaterfallHook extends Hook {
+  /* 存储hooks间的事件关联 */
   connections = new Map()
 
+  /**
+   * proxy监听readyHandlers的delete事件
+   * 达到不同hooks内部事件的同步删除
+   */
   proxy = obj => {
     return new Proxy(obj, {
       deleteProperty: (target, prop) => {
@@ -39,6 +44,7 @@ class WaterfallHook extends Hook {
     })
   }
 
+  /* 实际进入运行队列的事件 */
   readyHandlers = this.proxy([...this.handlers])
 
   resetReady = () => {
@@ -58,33 +64,33 @@ class WaterfallHook extends Hook {
     this.readyHandlers.push(fn)
   }
 
-  connect = (...hooks) => {
-    return (...fns) => {
-      const connectedHooks = []
+  /* 关联不同hooks之间的事件 */
+  connect = (...hooks) => (...fns) => {
+    const connectedHooks = []
 
-      if (fns.length !== hooks.length + 1) {
-        throw new Error('hooks and fns are not compatible')
-      }
-
-      this.listen(fns[0])
-
-      for (let i in hooks) {
-        i = +i
-        connectedHooks.push({
-          hook: hooks[i],
-          fn: fns[i + 1]
-        })
-        hooks[i].listen(fns[i + 1])
-      }
-
-      this.connections.set(fns[0], connectedHooks)
+    if (fns.length !== hooks.length + 1) {
+      throw new Error('hooks and fns are not compatible')
     }
+
+    this.listen(fns[0])
+
+    for (let i in hooks) {
+      i = +i
+      connectedHooks.push({
+        hook: hooks[i],
+        fn: fns[i + 1]
+      })
+      hooks[i].listen(fns[i + 1])
+    }
+
+    this.connections.set(fns[0], connectedHooks)
   }
 
+  /* 运行方法，会被父类hook的run调用 */
   call = async (...params) => {
     const readyHandlers = this.readyHandlers
+    params = params.length === 0 ? [undefined] : params
 
-    // 默认result为参数的第一个
     let result, err
     let _stop = false
     const stop = () => {
@@ -93,17 +99,23 @@ class WaterfallHook extends Hook {
 
     for (let i in readyHandlers) {
       if (_stop) {
+        /* 如果产生中断，则删除相应事件，并通过proxy删除关联事件 */
         delete readyHandlers[i]
       } else {
         let _result
         try {
           result === undefined
             ? (_result = await readyHandlers[i](...params, stop))
-            : (_result = await readyHandlers[i](result, stop))
+            : (_result = await readyHandlers[i](
+              result,
+              ...params.slice(1),
+              stop
+            ))
         } catch (e) {
           stop()
           err = e
         }
+        /* 保证返回值可以断崖式（遇到事件没有返回值）传递 */
         result = _result === undefined ? result : _result
       }
     }

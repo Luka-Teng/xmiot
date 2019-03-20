@@ -20,9 +20,56 @@ test('a waterfallHook can pass args', async () => {
   wHook1.listen(mockFn)
 
   const result = await wHook1.run('luka')
+
+  /* 确保单参数情况下的正常传递 */
   expect(mockFn.mock.calls[0][0]).toBe('luka')
   expect(mockFn.mock.calls[1][0]).toBe('luka1')
   expect(mockFn.mock.calls[2][0]).toBe('luka1')
+
+  /* 确保stop参数可以正常传入 */
+  expect(mockFn.mock.calls[0][1]).toBeInstanceOf(Function)
+  expect(mockFn.mock.calls[1][1]).toBeInstanceOf(Function)
+  expect(mockFn.mock.calls[2][1]).toBeInstanceOf(Function)
+
+  expect(result).toBe('luka11')
+})
+
+test('a waterfallHook can pass multi args', async () => {
+  const multiHook = new WaterfallHook('name', 'gender')
+
+  const mockFn = jest
+    .fn()
+    .mockImplementationOnce((name, gender) => {
+      console.log(name, gender)
+      return name + 1
+    })
+    .mockImplementationOnce((name, gender) => {
+      console.log(name, gender)
+      return undefined
+    })
+    .mockImplementationOnce((name, gender) => {
+      console.log(name, gender)
+      return name + 1
+    })
+
+  multiHook.listen(mockFn)
+  multiHook.listen(mockFn)
+  multiHook.listen(mockFn)
+
+  const spyConsole = jest.spyOn(console, 'log')
+  const result = await multiHook.run('luka', 'male')
+
+  /* 确保多参数情况下的正常传递 */
+  expect(spyConsole).toHaveBeenCalledWith('luka', 'male')
+  expect(spyConsole).toHaveBeenCalledWith('luka1', 'male')
+  expect(spyConsole).toHaveBeenCalledWith('luka1', 'male')
+
+  /* 确保stop参数可以正常传入 */
+  expect(mockFn.mock.calls[0][2]).toBeInstanceOf(Function)
+  expect(mockFn.mock.calls[1][2]).toBeInstanceOf(Function)
+  expect(mockFn.mock.calls[2][2]).toBeInstanceOf(Function)
+
+  /* 确保结果是符合预期 */
   expect(result).toBe('luka11')
 })
 
@@ -40,7 +87,11 @@ test('a waterfallHook can stop the chain', async () => {
   wHook1.listen(mockFn)
 
   const result = await wHook1.run('luka')
+
+  /* 确保函数只运行两次 */
   expect(mockFn.mock.calls.length).toBe(2)
+
+  /* 确保结果是符合预期 */
   expect(result).toBe('luka1')
 })
 
