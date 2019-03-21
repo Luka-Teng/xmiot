@@ -12,7 +12,7 @@ import Hook from './hook'
  * 触发事件流：
  * hook.run(args: any[])
  * **
- * 链接多个hooks, hooks数目要和事件对应，主hook的stop事件会导致所链接hook的事件全部失效。
+ * 链接多个hooks, hooks数目要和事件对应，hook1的stop事件会导致所链接hooks的事件全部失效。
  * hook1.connect(...hooks)(...cbs)
  * **
  */
