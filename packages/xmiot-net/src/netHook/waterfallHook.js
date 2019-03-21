@@ -1,21 +1,19 @@
 import Hook from './hook'
 
 /**
- * @description 瀑布式串联钩子
+ * @description 瀑布式串联hook
  * @description 每个事件的返回都会带给下一个做参数，如果不返回则默认返回上一个
  * 创建实例：
  * hook = new WaterfallHook(args: any[])
  * **
  * 加入事件：
- * hook.listen((args: any[], stop: Function) => {})
+ * hook.listen(cb: (args: any[], stop: Function) => any)
  * **
  * 触发事件流：
  * hook.run(args: any[])
  * **
- * 链接多个钩子, 几个钩子就添加几个事件，主钩子stop事件会导致所链接钩子的事件全部失效。
- * hook1.connect(hook2)(() => {
- * }, () => {
- * })
+ * 链接多个hooks, hooks数目要和事件对应，主hook的stop事件会导致所链接hook的事件全部失效。
+ * hook1.connect(...hooks)(...cbs)
  * **
  */
 class WaterfallHook extends Hook {
@@ -75,12 +73,11 @@ class WaterfallHook extends Hook {
     this.listen(fns[0])
 
     for (let i in hooks) {
-      i = +i
       connectedHooks.push({
         hook: hooks[i],
-        fn: fns[i + 1]
+        fn: fns[+i + 1]
       })
-      hooks[i].listen(fns[i + 1])
+      hooks[i].listen(fns[+i + 1])
     }
 
     this.connections.set(fns[0], connectedHooks)
