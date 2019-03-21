@@ -10,7 +10,9 @@ class Hook {
   }
 
   listen = fn => {
-    this.handlers.push(fn)
+    if (this.handlers.indexOf(fn) === -1) {
+      this.handlers.push(fn)
+    }
   }
 
   constructor (...args) {

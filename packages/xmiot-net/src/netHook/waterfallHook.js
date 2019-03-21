@@ -58,8 +58,10 @@ class WaterfallHook extends Hook {
   }
 
   listen = fn => {
-    this.handlers.push(fn)
-    this.readyHandlers.push(fn)
+    if (this.handlers.indexOf(fn) === -1) {
+      this.handlers.push(fn)
+      this.readyHandlers.push(fn)
+    }
   }
 
   /* 关联不同hooks之间的事件 */
