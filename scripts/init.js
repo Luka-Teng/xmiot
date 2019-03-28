@@ -137,6 +137,10 @@ eachWithNext(
       description: {
         type: 'input',
         message: '描述'
+      },
+      isTs: {
+        message: '是否使用typescript',
+        type: 'confirm'
       }
     }
 
