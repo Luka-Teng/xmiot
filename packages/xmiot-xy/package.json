@@ -1,5 +1,5 @@
 {
-  "name": "xy",
+  "name": "xmiot-xy",
   "version": "1.0.0",
   "description": "小雅sdk",
   "main": "entry/index.common.js",
@@ -7,7 +7,7 @@
   "scripts": {
     "prepublishOnly": "rollup -c"
   },
-  "author": "Luka &lt;luka.teng@ximalaya.com&gt;",
+  "author": "Luka",
   "license": "ISC",
   "devTestType": "global",
   "files": [
