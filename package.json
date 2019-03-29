@@ -21,6 +21,10 @@
     "packages/**/*.js": [
       "prettier-eslint --eslint-config-path \"./.eslintrc\" --write",
       "git add"
+    ],
+    "packages/**/*.ts": [
+      "prettier-eslint --eslint-config-path \"./.eslintrc\" --write",
+      "git add"
     ]
   },
   "jest": {
