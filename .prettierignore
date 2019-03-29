@@ -1,4 +1,4 @@
 **/entry/**/*.js
-index.common.js
-index.esm.js
-packageTemplates/**
+**/index.common.js
+**/index.esm.js
+**/packageTemplates/**/*.js

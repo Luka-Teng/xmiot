@@ -5,7 +5,7 @@ const getPromise = () => {
     res = resolve
     rej = reject
   })
-  return { promise, res, rej }
+  return { promise,res,rej }
 }
 
 export {

@@ -19,7 +19,7 @@
   },
   "lint-staged": {
     "packages/**/*.js": [
-      "npm run prettier",
+      "prettier-eslint --eslint-config-path \"./.eslintrc\" --write",
       "git add"
     ]
   },
