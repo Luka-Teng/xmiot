@@ -13,6 +13,7 @@
   "files": [
     "entry"
   ],
+  "types": "entry/index",
   "publishConfig": {
     "access": "public"
   }
