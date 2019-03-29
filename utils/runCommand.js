@@ -8,7 +8,7 @@ const exec = require('child_process').execSync
 const logger = require('./logger')
 
 // command默认使用pipe，以便返回错误，spawn一般用于处理非返回性的
-const runCommand = (cmd, args, options = {}) => {
+const runCommand = (cmd,args,options = {}) => {
   return new Promise((resolve, reject) => {
     const mergeOptions = Object.assign(
       {
