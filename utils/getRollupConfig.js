@@ -46,7 +46,12 @@ module.exports = (
     plugins.push(esLintConfig(packageDir))
   } else {
     // Typescript 配置
-    plugins.push(typescript({ clean: true }))
+    plugins.push(
+      typescript({
+        clean: true,
+        tsconfig: path.resolve(packageDir, 'tsconfig.json')
+      })
+    )
   }
 
   const defaultOptions = {

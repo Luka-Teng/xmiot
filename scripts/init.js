@@ -10,6 +10,8 @@ const { prompt, gitUser } = require('./utils')
 const logger = require('../utils/logger')
 const path = require('path')
 const exists = require('fs').existsSync
+const match = require('minimatch')
+
 const { eachWithNext, eachWithAll } = require('../utils/function')
 const { npmInstall } = require('../utils/runCommand')
 
@@ -41,6 +43,19 @@ const run = ({ from, to, prompts }) => {
       },
       done
     )
+  })
+
+  metalsmith.use((files, metalsmith, done) => {
+    for (let fileName in files) {
+      if (metadata.isTs && match(fileName, '**/.eslintrc', { dot: true })) {
+        delete files[fileName]
+      }
+
+      if (!metadata.isTs && match(fileName, '**/tsconfig.json', { dot: true })) {
+        delete files[fileName]
+      }
+    }
+    done()
   })
 
   // 对模板进行渲染

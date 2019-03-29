@@ -108,6 +108,7 @@
     "less": "^3.8.1",
     "lint-staged": "^7.3.0",
     "metalsmith": "^2.3.0",
+    "minimatch": "^3.0.4",
     "ora": "^3.0.0",
     "prettier": "1.14.3",
     "prettier-eslint-cli": "^4.7.1",
