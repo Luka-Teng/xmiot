@@ -1,3 +1,4 @@
 **/entry/**/*.js
 index.common.js
 index.esm.js
+**/packageTemplates/**/rollup.config.js
