@@ -51,7 +51,10 @@ const run = ({ from, to, prompts }) => {
         delete files[fileName]
       }
 
-      if (!metadata.isTs && match(fileName, '**/tsconfig.json', { dot: true })) {
+      if (
+        !metadata.isTs &&
+        match(fileName, '**/tsconfig.json', { dot: true })
+      ) {
         delete files[fileName]
       }
     }
