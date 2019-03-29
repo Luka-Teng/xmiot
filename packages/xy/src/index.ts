@@ -1,4 +1,5 @@
 import { getPromise } from './utils'
+import { nameMap } from './constant'
 /**
  * public api:
  *
@@ -72,14 +73,14 @@ class XY {
      * TODOLSIT
      * 加入map，H5和nativeFn名字的映射
      */
-    const fn = window.JSBridge[name]
+    const fn = window.JSBridge[nameMap[name] || name]
     if (fn) {
       return fn.bind(window.JSBridge)
     }
     return null
   }
 
-  public call(functionName: string, params: genObject = {}) {
+  public call(functionName: string, params: genObject = {}): Promise<any> {
     const fn = this.findNativeFn(functionName)
 
     if (!fn) {
