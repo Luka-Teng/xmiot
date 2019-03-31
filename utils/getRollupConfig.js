@@ -49,6 +49,7 @@ module.exports = (
     plugins.push(
       typescript({
         clean: true,
+        abortOnError: false,
         tsconfig: path.resolve(packageDir, 'tsconfig.json')
       })
     )

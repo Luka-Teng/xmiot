@@ -16,5 +16,6 @@
   "types": "entry/index",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "14f355d2f3c5104095dc676eeb96119287a4476d"
 }

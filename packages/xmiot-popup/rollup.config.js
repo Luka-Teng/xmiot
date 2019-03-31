@@ -18,7 +18,7 @@ function getOptions (module) {
 
 const extraOptions = {
   type: 'react',
-  isTypeScript: true,
+  isTypeScript: false,
   packageDir: __dirname
 }
 

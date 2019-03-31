@@ -32,16 +32,54 @@ const babelConfig = {
 }
 
 // ts编译
-let tsConfig = {}
-const tsConfigPath = path.resolve(process.cwd(), 'tsconfig.json')
-if (fs.existsSync(tsConfigPath)) {
-  tsConfig = require(tsConfigPath)
+let tsConfig = {
+  tsConfig: {
+    target: 'es5',
+    jsx: 'preserve',
+    allowSyntheticDefaultImports: true,
+    allowJs: true,
+    experimentalDecorators: true,
+    module: "esnext",
+    moduleResolution: "node",
+    lib: [
+      "dom",
+      "es2017"
+    ],
+    skipLibCheck: true,
+    esModuleInterop: true,
+    strict: true,
+    forceConsistentCasingInFileNames: true,
+    resolveJsonModule: true,
+    isolatedModules: true,
+    noEmit: true
+  }
 }
-tsConfig.compilerOptions = Object.assign(tsConfig.compilerOptions, {
-  target: 'es6',
-  jsx: 'preserve',
-  allowSyntheticDefaultImports: true
-})
+// const tsConfigPath = path.resolve(process.cwd(), 'tsconfig.json')
+// if (fs.existsSync(tsConfigPath)) {
+//   tsConfig = require(tsConfigPath)
+// }
+// tsConfig.compilerOptions = Object.assign(tsConfig.compilerOptions, {
+//   target: 'es5000',
+//   jsx: 'preserve',
+//   allowSyntheticDefaultImports: true,
+//   allowJs: true,
+//   experimentalDecorators: true,
+//   module: "esnext",
+//   moduleResolution: "nodeff",
+//   lib: [
+//     "dom",
+//     "es2017"
+//   ],
+//   rootDirs:['./'],
+//   skipLibCheck: true,
+//   esModuleInterop: true,
+//   strict: true,
+//   forceConsistentCasingInFileNames: true,
+//   resolveJsonModule: true,
+//   isolatedModules: false,
+//   noEmit: true
+// })
+
 
 module.exports = {
   babelConfig,

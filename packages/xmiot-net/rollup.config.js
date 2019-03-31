@@ -18,7 +18,7 @@ function getOptions (module) {
 
 const extraOptions = {
   type: 'global',
-  isTypeScript: true,
+  isTypeScript: false,
   noCss: true,
   packageDir: __dirname
 }

@@ -19,7 +19,7 @@ export default {
 
   /**
    * 获取 hash 连接中参数值
-   * @param name 
+   * @param name
    */
   getHashString(name: string) {
     const hashContent = decodeURI(window.location.hash.slice(2))
@@ -86,7 +86,7 @@ export default {
 
     let sec = date.getSeconds()
 
-    let preArr = Array.apply(null, Array(10)).map(function(elem, index) {
+    let preArr = Array(10).map(function(elem, index) {
       return '0' + index
     }) /// /开个长度为10的数组 格式为 00 01 02 03
 
