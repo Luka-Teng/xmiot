@@ -1,4 +1,4 @@
-import { getPromise } from './utils'
+import { getPromise, checkVersion } from './utils'
 import { nameMap } from './constant'
 /**
  * public api:
@@ -27,16 +27,12 @@ window.nativeCallback = {}
 let callbackIndex = 0
 
 class XY {
-  // 注册callback，并在运行后自动注销
-  private registerCallBack(callback: Function) {
-    const callbackName = `cb${callbackIndex++}`
-    window.nativeCallback[callbackName] = (...args: any[]) => {
-      callback(...args)
-      delete window.nativeCallback[callbackName]
-    }
-    return callbackName
+  constructor() {
+    // 确认sdk的版本信息
+    checkVersion()
   }
 
+  // 注册callback，并在运行后自动注销
   private registerCallBacks(...callbacks: Function[]) {
     if (callbacks.length < 1) {
       throw new Error('registerCallBacks需要至少一个回调参数')
@@ -70,7 +66,6 @@ class XY {
 
   private findNativeFn(name: string) {
     /**
-     * TODOLSIT
      * 加入map，H5和nativeFn名字的映射
      */
     const fn = window.JSBridge[nameMap[name] || name]
