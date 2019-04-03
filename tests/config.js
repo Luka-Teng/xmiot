@@ -1,6 +1,3 @@
-const fs = require('fs')
-const path = require('path')
-
 // js编译
 const babelConfig = {
   presets: ['@babel/preset-env', '@babel/preset-react'],
@@ -54,32 +51,6 @@ let tsConfig = {
     noEmit: true
   }
 }
-// const tsConfigPath = path.resolve(process.cwd(), 'tsconfig.json')
-// if (fs.existsSync(tsConfigPath)) {
-//   tsConfig = require(tsConfigPath)
-// }
-// tsConfig.compilerOptions = Object.assign(tsConfig.compilerOptions, {
-//   target: 'es5000',
-//   jsx: 'preserve',
-//   allowSyntheticDefaultImports: true,
-//   allowJs: true,
-//   experimentalDecorators: true,
-//   module: "esnext",
-//   moduleResolution: "nodeff",
-//   lib: [
-//     "dom",
-//     "es2017"
-//   ],
-//   rootDirs:['./'],
-//   skipLibCheck: true,
-//   esModuleInterop: true,
-//   strict: true,
-//   forceConsistentCasingInFileNames: true,
-//   resolveJsonModule: true,
-//   isolatedModules: false,
-//   noEmit: true
-// })
-
 
 module.exports = {
   babelConfig,

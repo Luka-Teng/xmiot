@@ -139,7 +139,8 @@
     "typescript": "^3.3.3"
   },
   "dependencies": {
-    "postcss-url": "^8.0.0"
+    "postcss-url": "^8.0.0",
+    "rollup-plugin-json": "^4.0.0"
   },
   "lastCommit": "14f355d2f3c5104095dc676eeb96119287a4476d"
 }
