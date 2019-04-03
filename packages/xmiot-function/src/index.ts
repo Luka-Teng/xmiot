@@ -71,7 +71,8 @@ export default {
    *
    * 完全可以自定义 格式
    */
-  FormatDate(time: number | string, format = 'YY-MM-DD hh:mm:ss') {
+  FormatDate(time: number, format = 'YY-MM-DD hh:mm:ss') {
+    console.log(time)
     let date = new Date(time)
 
     let year = date.getFullYear()
@@ -86,17 +87,20 @@ export default {
 
     let sec = date.getSeconds()
 
-    let preArr = Array(10).map(function(elem, index) {
+    let preArr = Array.apply(null, Array(10)).map(function(
+      elem: any,
+      index: number
+    ) {
       return '0' + index
     }) /// /开个长度为10的数组 格式为 00 01 02 03
 
     let newTime = format
       .replace(/YY/g, (year as {}) as string)
-      .replace(/MM/g, preArr[month] || month)
-      .replace(/DD/g, preArr[day] || day)
-      .replace(/hh/g, preArr[hour] || hour)
-      .replace(/mm/g, preArr[min] || min)
-      .replace(/ss/g, preArr[sec] || sec)
+      .replace(/MM/g, (preArr[month] || month) as string)
+      .replace(/DD/g, (preArr[day] || day) as string)
+      .replace(/hh/g, (preArr[hour] || hour) as string)
+      .replace(/mm/g, (preArr[min] || min) as string)
+      .replace(/ss/g, (preArr[sec] || sec) as string)
 
     return newTime
   },
@@ -148,8 +152,8 @@ export default {
    *节流函数
    */
 
-  throttle(fn, delay) {
-    var timer = null
+  throttle(fn: Function, delay: number) {
+    let timer: any = null
 
     return function() {
       clearTimeout(timer)
@@ -165,7 +169,12 @@ export default {
    * @param fn 方法 或者函数
    * @param capture
    */
-  addEventHandle(target, type, fn, capture: boolean = false) {
+  addEventHandle(
+    target: any,
+    type: string,
+    fn: Function,
+    capture: boolean = false
+  ) {
     if (target.addEventListener) {
       target.addEventListener(type, fn, capture)
     } else if (target.attachEvent) {
@@ -181,7 +190,7 @@ export default {
    * @param fn 方法 或者函数
    * @param capture
    */
-  removeEventHandle(target, type, fn, capture: boolean) {
+  removeEventHandle(target: any, type: string, fn: Function, capture: boolean) {
     if (target.addEventListener) {
       // 如果为true的话，进入
       target.removeEventListener(type, fn, capture)
@@ -198,14 +207,16 @@ export default {
    * 滚动 ，入参是 滚动的距离 和时间
    */
 
-  ScrollTop(number = 0, time) {
+  ScrollTop(number = 0, time?: number) {
     if (!time) {
-      document.body.scrollTop = document.documentElement.scrollTop = number
+      document.body.scrollTop = (document.documentElement as HTMLElement).scrollTop = number
       return number
     }
     const spacingTime = 20 // 设置循环的间隔时间  值越小消耗性能越高
     let spacingInex = time / spacingTime // 计算循环的次数
-    let nowTop = document.body.scrollTop + document.documentElement.scrollTop // 获取当前滚动条位置
+    let nowTop =
+      document.body.scrollTop +
+      (document.documentElement as HTMLElement).scrollTop // 获取当前滚动条位置
     let everTop = (number - nowTop) / spacingInex // 计算每次滑动的距离
 
     let scrollTimer = setInterval(() => {
@@ -253,8 +264,17 @@ export default {
    *
    * @param key 获取本地存储 key值
    */
+  // getData(key: string) {
+  //   let value:string=JSON.parse(localStorage.getItem(key))
+  //   return
+  // },
+
   getData(key: string) {
-    return JSON.parse(localStorage.getItem(key))
+    let value = localStorage.getItem(key)
+    if (value && value != 'undefined' && value != 'null') {
+      return JSON.parse(value)
+    }
+    return null
   },
 
   /**
@@ -281,7 +301,7 @@ export default {
    */
 
   // 手机 验证 11为手机号
-  isMobile(str) {
+  isMobile(str: string) {
     if (str == null || str === '') return false
     var result = str.match(/0?(13|14|15|18|17)[0-9]{9}/)
     if (result == null) return false
@@ -289,7 +309,7 @@ export default {
   },
 
   // 验证 固定电话
-  isTel(str) {
+  isTel(str: string) {
     if (str == null || str === '') return false
     var result = str.match(/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/)
     if (result == null) return false
@@ -298,7 +318,7 @@ export default {
 
   // 身份证号 验证 15位
 
-  isIDCard1(str) {
+  isIDCard1(str: string) {
     if (str == null || str === '') return false
     var result = str.match(
       /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/
@@ -311,7 +331,7 @@ export default {
    * 身份证号验证 18位
    */
 
-  isIDCard2(str) {
+  isIDCard2(str: string) {
     if (str == null || str === '') return false
     var result = str.match(
       /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$/
