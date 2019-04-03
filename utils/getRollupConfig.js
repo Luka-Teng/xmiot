@@ -15,6 +15,7 @@ const { eslint } = require('rollup-plugin-eslint')
 const { getClientEnvironment } = require('./env')
 const { multiDeepAssign } = require('./function')
 const typescript = require('rollup-plugin-typescript2')
+const json = require('rollup-plugin-json')
 
 /*
  * eslint的配置在每个包中，由包主人自行管理
@@ -72,6 +73,9 @@ module.exports = (
 
       // Convert CommonJS modules to ES6
       commonjs(),
+
+      // read json as es6 module
+      json(),
 
       /*
        * JS方式引入less
