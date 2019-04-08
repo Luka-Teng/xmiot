@@ -72,7 +72,16 @@ module.exports = (
       }),
 
       // Convert CommonJS modules to ES6
-      commonjs(),
+      // 增加对react的Component的导出
+      commonjs(
+        type === 'react'
+        ? {
+            namedExports: {
+              [path.resolve(packageDir, 'node_modules', 'react')]: [ 'Component' ]
+            }
+          }
+        : {}
+      ),
 
       // read json as es6 module
       json(),
