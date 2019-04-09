@@ -77,7 +77,7 @@ module.exports = (
         type === 'react'
         ? {
             namedExports: {
-              [path.resolve(packageDir, 'node_modules', 'react')]: [ 'Component' ]
+              [path.resolve(packageDir, 'node_modules', 'react')]: [ 'Component', 'PureComponent' ]
             }
           }
         : {}

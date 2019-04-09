@@ -111,3 +111,9 @@ lerna发布分为两步
 
 ### xmiot-cli
 > react项目脚手架搭建
+
+### xmiot-xy
+> 小雅jssdk
+
+### xmiot-form
+> 后台配置型表单
