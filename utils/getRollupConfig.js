@@ -17,6 +17,8 @@ const { multiDeepAssign } = require('./function')
 const typescript = require('rollup-plugin-typescript2')
 const json = require('rollup-plugin-json')
 
+const namedExports = require('./namedExports')
+
 /*
  * eslint的配置在每个包中，由包主人自行管理
  * eslint的插件包，preset包由lerna统一管理
@@ -60,28 +62,21 @@ module.exports = (
     plugins: [
       ...plugins,
 
+      // Convert CommonJS modules to ES6
+      // 增加对react的Component的导出
+      commonjs(type === 'react' ? { namedExports: namedExports(packageDir) } : {}),
+
       // babel先对react进行转义,只有在react环境中执行
       babel({
         babelrc: false,
         presets: ['@babel/preset-react'],
         exclude: 'node_modules/**',
         plugins: [
+          path.resolve(__dirname, 'babel-plugin-require-to-import'),
           '@babel/plugin-proposal-class-properties',
           '@babel/plugin-proposal-object-rest-spread'
         ]
       }),
-
-      // Convert CommonJS modules to ES6
-      // 增加对react的Component的导出
-      commonjs(
-        type === 'react'
-        ? {
-            namedExports: {
-              [path.resolve(packageDir, 'node_modules', 'react')]: [ 'Component', 'PureComponent' ]
-            }
-          }
-        : {}
-      ),
 
       // read json as es6 module
       json(),
