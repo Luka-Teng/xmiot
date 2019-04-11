@@ -71,10 +71,15 @@ module.exports = (
         babelrc: false,
         presets: ['@babel/preset-react'],
         exclude: 'node_modules/**',
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
         plugins: [
-          path.resolve(__dirname, 'babel-plugin-require-to-import'),
-          '@babel/plugin-proposal-class-properties',
-          '@babel/plugin-proposal-object-rest-spread'
+          [path.resolve(__dirname, 'babel-plugin-require-to-import')],
+          ['@babel/plugin-proposal-class-properties'],
+          ['@babel/plugin-proposal-object-rest-spread'],
+          ['import', {
+            libraryName: 'antd',
+            ibraryDirectory: 'es'
+          }],
         ]
       }),
 
