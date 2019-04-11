@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import AntForm from 'antd/lib/form'
+import { Form as AntForm } from 'antd'
 
 import { FormProps } from './types'
 import Fields from './fields'
@@ -37,7 +37,7 @@ class Form extends Component<FormProps> {
     confirmButton = Object.assign({}, defaultConfirmButtonProps, confirmButton)
 
     return (
-      <AntForm className="ant-advanced-search-form">
+      <AntForm className="xmiot-form">
         <Fields options={options} styles={styles} form={form} />
       </AntForm>
     )

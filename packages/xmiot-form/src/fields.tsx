@@ -2,14 +2,15 @@ import React, { PureComponent } from 'react'
 
 import { FieldsProps } from './types'
 import Input from './components/input'
+import Select from './components/select'
 
 class Fields extends PureComponent<FieldsProps> {
-  input = (option: FieldsProps['options'][number]) => {
+  input = (option: any) => {
     return <Input {...option} form={this.props.form} />
   }
 
-  select = (option: FieldsProps['options'][number]) => {
-    return <Input {...option} form={this.props.form} />
+  select = (option: any) => {
+    return <Select {...option} form={this.props.form} />
   }
 
   render () {

@@ -12,7 +12,7 @@ function getOptions (module) {
       file: `./entry/${fileName[module]}`,
       format: module
     },
-    external: ['react', 'antd']
+    external: ['react', 'antd', 'antd/lib']
   }
 }
 

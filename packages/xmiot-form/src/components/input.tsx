@@ -4,7 +4,7 @@ import AntInput from 'antd/lib/input'
 import { FormItemProps } from '../types'
 import { wrapField } from './utils'
 
-type InputItemProps = FormItemProps<'InputConfig'>
+type InputItemProps = FormItemProps<'input'>
 
 class Input extends PureComponent<InputItemProps> {
   render () {
@@ -14,11 +14,10 @@ class Input extends PureComponent<InputItemProps> {
       props,
       styles = {},
       config = {},
-      form
+      form: { getFieldDecorator }
     } = this.props
 
     const { initialValue = '', rules = [] } = config
-    const { getFieldDecorator } = this.props.form
 
     return wrapField(getFieldDecorator(name, {
       initialValue,

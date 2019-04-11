@@ -2,6 +2,7 @@ import { ButtonProps as AntdButtonProps } from 'antd/lib/button'
 import { FormComponentProps, ValidationRule } from 'antd/lib/form'
 import { RefObject, ReactElement, CSSProperties } from 'react'
 
+/*-----FORM-----*/
 /**
  * Button
  * 按钮的基础类型
@@ -37,37 +38,67 @@ export type FormStyles = {
 }
 
 /* 基础config配置 */
-type BasicConfig = {
+type BasicConfig<T = any> = {
   rules?: ValidationRule[]
-  initialValue?: any
+  initialValue?: T
 }
 
 /**
  * 所有组件的config类型
  * @prop { InputConfig } input组件
+ * @prop { SelectConfig } select组件
  */
-type Config = {
+export type Config = {
   InputConfig: BasicConfig
+  SelectConfig: BasicConfig & {
+    data: {
+      name: string
+      value: string | number
+    }[]
+    multi?: boolean
+    onSelectChange?: (value: any) => void
+  }
 }
+
+/*
+ * FormItemTypes
+ * 可支持的表单组件类型
+ */
+type FormItemTypes = 'input' | 'select'
+
+/*
+ * ItemType mapping to Config
+ * 根据表单组件类型获取对应的config
+ */
+type ItemTypeToConfig<T extends FormItemTypes> = T extends 'input'
+  ? Config['InputConfig']
+  : T extends 'select'
+  ? Config['SelectConfig']
+  : never
 
 /**
  * option
- * 表单基础配置
+ * 表单组件基础配置
  * @prop { type } 组件类型
  * @prop { name } 组件名称
  * @prop { label } 组件label名
  * @prop { props } 组件内部元素基础属性
  * @prop { styles } 组件样式
  */
-type FormItemTypes = 'input' | 'select'
-export type FormItem = {
-  type: FormItemTypes
+export type FormItem<T extends FormItemTypes> = {
+  type: T
   name: string
   label?: string
   props?: genObject
   styles?: FormStyles
-  config?: Config['InputConfig']
+  config?: ItemTypeToConfig<T>
 }
+
+/**
+ * FormItemTypes to FormItems
+ * 获取所有表单组件配置的联合类型
+ */
+type ItemTypesToFormItems<T> = T extends any ? FormItem<T> : never
 
 /**
  * Form
@@ -80,7 +111,7 @@ export type FormItem = {
  * @prop { styles } 表单组件全局样式
  */
 export interface FormProps extends FormComponentProps {
-  options: FormItem[]
+  options: ItemTypesToFormItems<FormItemTypes>[]
   onSubmit: (values: genObject) => void
   confirmButton?: ButtonProps
   extranButtons?: ExtraButtonProps[]
@@ -88,18 +119,19 @@ export interface FormProps extends FormComponentProps {
   styles?: FormStyles
 }
 
+/*-----COMPONENT-----*/
 /**
  * FormItemProps
  * 表单组件需要的类型
  * 除了表单基础配置还需要额外的config配置和form属性
  */
-export type FormItemProps<T extends keyof Config> = Pick<
-  FormItem,
-  'name' | 'label' | 'props' | 'styles'
-> & {
-  config?: Config[T]
-} & FormComponentProps
+export type FormItemProps<T extends FormItemTypes> = Pick<
+  FormItem<T>,
+  'name' | 'label' | 'props' | 'styles' | 'config'
+> &
+  FormComponentProps
 
+/*-----FIELDS-----*/
 /**
  * FieldsProps
  * Fields组件的props
