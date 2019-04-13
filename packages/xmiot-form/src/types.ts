@@ -47,9 +47,21 @@ type BasicConfig<T = any> = {
  * 所有组件的config类型
  * @prop { InputConfig } input组件
  * @prop { SelectConfig } select组件
+ * @prop { TextareaConfig } textarea组件
+ * @prop { DatePicker } datePicker组件
+ * @prop { CheckGroup } checkGroup组件
+ * @prop {Upload} Upload组件
  */
 export type Config = {
-  InputConfig: BasicConfig
+  InputConfig: BasicConfig & {
+    onChange?: (value: any) => void
+  }
+  TextareaConfig: BasicConfig & {
+    rows?: number
+    resize?: boolean
+    onChange?: (value: any) => void
+    onPressEnter?: (value: any) => void
+  }
   SelectConfig: BasicConfig & {
     data: {
       name: string
@@ -58,13 +70,38 @@ export type Config = {
     multi?: boolean
     onSelectChange?: (value: any) => void
   }
+  DatePicker: BasicConfig & {
+    range?: boolean
+    onChange?: (data: any, dataString: any) => void
+  }
+  CheckGroup: BasicConfig<Array<string | number>> & {
+    data: {
+      label: string
+      value: string | number
+    }[]
+    onChange?: (value: any) => void
+    checkAllBtn?: boolean
+  }
+  UploadConfig: BasicConfig<Array<string>> & {
+    maxNumber?: number
+    onUpload?: Function
+    maxSize?: number // kb
+    /* 文件类型或image video */
+    accept?: Array<string> | 'image' | 'video'
+  }
 }
 
 /*
  * FormItemTypes
  * 可支持的表单组件类型
  */
-type FormItemTypes = 'input' | 'select'
+type FormItemTypes =
+  | 'input'
+  | 'select'
+  | 'textarea'
+  | 'datePicker'
+  | 'checkGroup'
+  | 'upload'
 
 /*
  * ItemType mapping to Config
@@ -74,6 +111,14 @@ type ItemTypeToConfig<T extends FormItemTypes> = T extends 'input'
   ? Config['InputConfig']
   : T extends 'select'
   ? Config['SelectConfig']
+  : T extends 'textarea'
+  ? Config['TextareaConfig']
+  : T extends 'datePicker'
+  ? Config['DatePicker']
+  : T extends 'checkGroup'
+  ? Config['CheckGroup']
+  : T extends 'upload'
+  ? Config['UploadConfig']
   : never
 
 /**

@@ -1,14 +1,12 @@
 import React, { PureComponent } from 'react'
-import AntSelect from 'antd/lib/select'
+import { Select as AntSelect } from 'antd'
 
 import { FormItemProps } from '../types'
 import { wrapField } from './utils'
 
-type SelectItemProps = FormItemProps<'select'>
-
 const AntOption = AntSelect.Option
 
-class Select extends PureComponent<SelectItemProps> {
+class Select extends PureComponent<FormItemProps<'select'>> {
   render () {
     const {
       name,
@@ -22,7 +20,7 @@ class Select extends PureComponent<SelectItemProps> {
       form: { getFieldDecorator }
     } = this.props
     
-    const { initialValue = null, rules = [], multi = false, onSelectChange = () => {}, data } = config
+    const { initialValue = null, rules = [], multi = false, onSelectChange, data } = config
 
     return wrapField(getFieldDecorator(name, {
       initialValue: initialValue || (multi ? [] : ''),

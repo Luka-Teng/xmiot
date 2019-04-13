@@ -1,12 +1,10 @@
 import React, { PureComponent } from 'react'
-import AntInput from 'antd/lib/input'
+import { Input as AntInput } from 'antd'
 
 import { FormItemProps } from '../types'
 import { wrapField } from './utils'
 
-type InputItemProps = FormItemProps<'input'>
-
-class Input extends PureComponent<InputItemProps> {
+class Input extends PureComponent<FormItemProps<'input'>> {
   render () {
     const {
       name,
@@ -17,13 +15,13 @@ class Input extends PureComponent<InputItemProps> {
       form: { getFieldDecorator }
     } = this.props
 
-    const { initialValue = '', rules = [] } = config
+    const { initialValue = '', rules = [], onChange } = config
 
     return wrapField(getFieldDecorator(name, {
       initialValue,
       rules
     })(
-      <AntInput placeholder={label} {...props} />
+      <AntInput placeholder={label} {...props} onChange={onChange} />
     ), styles, name, label)
   }
 }
