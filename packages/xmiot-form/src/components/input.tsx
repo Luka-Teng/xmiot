@@ -17,12 +17,15 @@ class Input extends PureComponent<FormItemProps<'input'>> {
 
     const { initialValue = '', rules = [], onChange } = config
 
-    return wrapField(getFieldDecorator(name, {
-      initialValue,
-      rules
-    })(
-      <AntInput placeholder={label} {...props} onChange={onChange} />
-    ), styles, name, label)
+    return wrapField(
+      getFieldDecorator(name, {
+        initialValue,
+        rules
+      })(<AntInput placeholder={label} {...props} onChange={onChange} />),
+      styles,
+      name,
+      label
+    )
   }
 }
 
