@@ -7,7 +7,7 @@ import { wrapField } from './utils'
 const AntRadioGroup = Radio.Group
 
 class RadioGroup extends PureComponent<FormItemProps<'radioGroup'>> {
-  render () {
+  render() {
     const {
       name,
       label,
@@ -19,27 +19,30 @@ class RadioGroup extends PureComponent<FormItemProps<'radioGroup'>> {
       },
       form: { getFieldDecorator }
     } = this.props
-    
+
     const { initialValue = '', rules = [], onChange, data } = config
 
-    return wrapField(getFieldDecorator(name, {
-      initialValue,
-      rules
-    })(
-      <AntRadioGroup onChange={onChange} {...props} >
-        { 
-          data.map((d, i) =>{
+    return wrapField(
+      getFieldDecorator(name, {
+        initialValue,
+        rules
+      })(
+        <AntRadioGroup onChange={onChange} {...props}>
+          {data.map((d, i) => {
             return (
               <div key={i} style={_styles.divStyle}>
-                { d.insertElement }
-                <Radio value={d.value}>{ d.label }</Radio>
-                { d.appendElement }
+                {d.insertElement}
+                <Radio value={d.value}>{d.label}</Radio>
+                {d.appendElement}
               </div>
             )
-          }) 
-        }
-      </AntRadioGroup>
-    ), styles, name, label)
+          })}
+        </AntRadioGroup>
+      ),
+      styles,
+      name,
+      label
+    )
   }
 }
 

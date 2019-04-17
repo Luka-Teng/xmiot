@@ -7,7 +7,7 @@ import { wrapField } from './utils'
 const AntOption = AntSelect.Option
 
 class Select extends PureComponent<FormItemProps<'select'>> {
-  render () {
+  render() {
     const {
       name,
       label,
@@ -19,17 +19,37 @@ class Select extends PureComponent<FormItemProps<'select'>> {
       },
       form: { getFieldDecorator }
     } = this.props
-    
-    const { initialValue = null, rules = [], multi = false, onSelectChange, data } = config
 
-    return wrapField(getFieldDecorator(name, {
-      initialValue: initialValue || (multi ? [] : ''),
-      rules
-    })(
-      <AntSelect onChange={onSelectChange} placeholder={label} {...props} mode={multi ? 'multiple' : ''} >
-        { data.map((d) => <AntOption key={d.name} value={d.value}>{ d.name }</AntOption>) }
-      </AntSelect>
-    ), styles, name, label)
+    const {
+      initialValue = null,
+      rules = [],
+      multi = false,
+      onSelectChange,
+      data
+    } = config
+
+    return wrapField(
+      getFieldDecorator(name, {
+        initialValue: initialValue || (multi ? [] : ''),
+        rules
+      })(
+        <AntSelect
+          onChange={onSelectChange}
+          placeholder={label}
+          {...props}
+          mode={multi ? 'multiple' : ''}
+        >
+          {data.map(d => (
+            <AntOption key={d.name} value={d.value}>
+              {d.name}
+            </AntOption>
+          ))}
+        </AntSelect>
+      ),
+      styles,
+      name,
+      label
+    )
   }
 }
 

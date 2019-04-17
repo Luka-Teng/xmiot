@@ -9,7 +9,7 @@ export default class Video extends PureComponent<Props> {
   player: any
   uid: string = '' + Math.random()
 
-  componentDidMount () {
+  componentDidMount() {
     this.player = new XgPlayer({
       id: this.uid,
       url: this.props.url,
@@ -20,7 +20,7 @@ export default class Video extends PureComponent<Props> {
     this.player.play()
   }
 
-  render () {
-    return <div id={this.uid}></div>
+  render() {
+    return <div id={this.uid} />
   }
 }

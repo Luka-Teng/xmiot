@@ -31,9 +31,9 @@ class CheckGroup extends PureComponent<FormItemProps<'checkGroup'>> {
       form: { getFieldDecorator }
     } = this.props
 
-    const { 
-      initialValue = [], 
-      rules = [], 
+    const {
+      initialValue = [],
+      rules = [],
       onChange,
       data,
       checkAllBtn = false
@@ -45,9 +45,7 @@ class CheckGroup extends PureComponent<FormItemProps<'checkGroup'>> {
       getFieldDecorator(name, {
         initialValue,
         rules
-      })(
-        <AntCheckboxGroup options={data} {...props} onChange={onChange} />
-      ),
+      })(<AntCheckboxGroup options={data} {...props} onChange={onChange} />),
       {
         insertElement: checkAllBtn ? (
           <AntRow style={{ lineHeight: 'normal' }}>

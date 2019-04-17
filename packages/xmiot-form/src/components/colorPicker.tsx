@@ -11,7 +11,7 @@ type ColorPickerStates = {
 }
 
 const getRgbaObject = (rgba: string) => {
-  const pattern  = /^rgba\((\s*\d{1,3}\s*),(\s*\d{1,3}\s*),(\s*\d{1,3}\s*),(\s*\d{1,3}\s*)\)$/
+  const pattern = /^rgba\((\s*\d{1,3}\s*),(\s*\d{1,3}\s*),(\s*\d{1,3}\s*),(\s*\d{1,3}\s*)\)$/
   if (pattern.test(rgba)) {
     const values = rgba.match(pattern)
     if (values) {
@@ -27,12 +27,18 @@ const getRgbaObject = (rgba: string) => {
   return null
 }
 
-class ColorPicker extends Component<FormItemProps<'colorPicker'>, ColorPickerStates> {
-  constructor (props: FormItemProps<'colorPicker'>) {
+class ColorPicker extends Component<
+  FormItemProps<'colorPicker'>,
+  ColorPickerStates
+> {
+  constructor(props: FormItemProps<'colorPicker'>) {
     super(props)
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', e => {
       const picker = document.querySelector('.sketch-picker')
-      if (picker && (!(picker.parentElement as Element).contains(e.target as Element))) {
+      if (
+        picker &&
+        !(picker.parentElement as Element).contains(e.target as Element)
+      ) {
         this.hidePicker()
       }
     })
@@ -51,8 +57,13 @@ class ColorPicker extends Component<FormItemProps<'colorPicker'>, ColorPickerSta
   }
 
   handleChangeComplete = (color: any) => {
-    const { form: { setFieldsValue }, name } = this.props
-    const { rgb: { r, g, b, a } } = color
+    const {
+      form: { setFieldsValue },
+      name
+    } = this.props
+    const {
+      rgb: { r, g, b, a }
+    } = color
     this.setState({
       selectedColor: `rgba(${r}, ${g}, ${b}, ${a})`
     })
@@ -67,7 +78,7 @@ class ColorPicker extends Component<FormItemProps<'colorPicker'>, ColorPickerSta
     })
   }
 
-  render () {
+  render() {
     const {
       name,
       label,
@@ -78,8 +89,45 @@ class ColorPicker extends Component<FormItemProps<'colorPicker'>, ColorPickerSta
 
     const { pickerVisible } = this.state
 
-    const colors = ['#4D4D4D', '#999999', '#FFFFFF', '#F44E3B', '#FE9200', '#FCDC00', '#DBDF00', '#A4DD00', '#68CCCA', '#73D8FF', '#AEA1FF', '#FDA1FF', '#333333', '#808080', '#cccccc', '#D33115', '#E27300', '#FCC400', '#B0BC00', '#68BC00', '#16A5A5', '#009CE0', '#7B64FF', '#FA28FF', '#000000', '#666666', '#B3B3B3', '#9F0500', '#C45100', '#FB9E00', '#808900', '#194D33', '#0C797D', '#0062B1', '#653294', '#AB149E']
-    
+    const colors = [
+      '#4D4D4D',
+      '#999999',
+      '#FFFFFF',
+      '#F44E3B',
+      '#FE9200',
+      '#FCDC00',
+      '#DBDF00',
+      '#A4DD00',
+      '#68CCCA',
+      '#73D8FF',
+      '#AEA1FF',
+      '#FDA1FF',
+      '#333333',
+      '#808080',
+      '#cccccc',
+      '#D33115',
+      '#E27300',
+      '#FCC400',
+      '#B0BC00',
+      '#68BC00',
+      '#16A5A5',
+      '#009CE0',
+      '#7B64FF',
+      '#FA28FF',
+      '#000000',
+      '#666666',
+      '#B3B3B3',
+      '#9F0500',
+      '#C45100',
+      '#FB9E00',
+      '#808900',
+      '#194D33',
+      '#0C797D',
+      '#0062B1',
+      '#653294',
+      '#AB149E'
+    ]
+
     return wrapField(
       getFieldDecorator(name, {
         initialValue,
@@ -87,18 +135,25 @@ class ColorPicker extends Component<FormItemProps<'colorPicker'>, ColorPickerSta
       })(
         <Input
           onFocus={this.showPicker}
-          prefix={<div style={{backgroundColor: getFieldValue(name), ..._styles.prefixStyles}}></div>}
+          prefix={
+            <div
+              style={{
+                backgroundColor: getFieldValue(name),
+                ..._styles.prefixStyles
+              }}
+            />
+          }
         />
       ),
       {
-        appendElement: pickerVisible 
-          ? <SketchPicker 
-              onChangeComplete={ this.handleChangeComplete }
-              color={this.state.selectedColor} 
-              width='300px' 
-              presetColors={colors} 
-            />
-          : null
+        appendElement: pickerVisible ? (
+          <SketchPicker
+            onChangeComplete={this.handleChangeComplete}
+            color={this.state.selectedColor}
+            width="300px"
+            presetColors={colors}
+          />
+        ) : null
       },
       name,
       label

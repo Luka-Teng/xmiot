@@ -1,8 +1,8 @@
-module.exports = ({types: t}) => ({
+module.exports = ({ types: t }) => ({
   visitor: {
     CallExpression (path) {
       if (
-        t.isIdentifier(path.node.callee, {name: 'require'}) &&
+        t.isIdentifier(path.node.callee, { name: 'require' }) &&
         t.isStringLiteral(path.node.arguments[0]) &&
         path.node.arguments.length === 1
       ) {
@@ -22,9 +22,7 @@ module.exports = ({types: t}) => ({
             const importName = path.scope.generateUidIdentifier(assignedName)
             program.node.body.unshift(
               t.importDeclaration(
-                [t.importDefaultSpecifier(
-                  importName
-                )],
+                [t.importDefaultSpecifier(importName)],
                 t.stringLiteral(dependencyName)
               )
             )
@@ -35,9 +33,8 @@ module.exports = ({types: t}) => ({
         // Scenario:
         // var foo = require('bar').baz;
         // TODO: Support chained member expressions like require('foo').bar.baz.lol
-
         else if (
-          t.isMemberExpression(path.parentPath.node, {computed: false})
+          t.isMemberExpression(path.parentPath.node, { computed: false })
         ) {
           const memberExpressionPath = path.parentPath
           const propertyName = memberExpressionPath.node.property
@@ -49,17 +46,20 @@ module.exports = ({types: t}) => ({
             const variableDeclarator = memberExpressionPath.parentPath.node
             const assignedName = memberExpressionPath.parentPath.node.id
 
-            if (t.isVariableDeclaration(memberExpressionPath.parentPath.parentPath.node)) {
-              const importName = path.scope.generateUidIdentifierBasedOnNode(assignedName)
+            if (
+              t.isVariableDeclaration(
+                memberExpressionPath.parentPath.parentPath.node
+              )
+            ) {
+              const importName = path.scope.generateUidIdentifierBasedOnNode(
+                assignedName
+              )
 
               variableDeclarator.init = importName
 
               program.node.body.unshift(
                 t.importDeclaration(
-                  [t.importSpecifier(
-                    importName,
-                    propertyName
-                  )],
+                  [t.importSpecifier(importName, propertyName)],
                   t.stringLiteral(dependencyName)
                 )
               )
@@ -73,10 +73,7 @@ module.exports = ({types: t}) => ({
           const dependencyName = path.node.arguments[0].value
           path.parentPath.remove()
           program.node.body.unshift(
-            t.importDeclaration(
-              [],
-              t.stringLiteral(dependencyName)
-            )
+            t.importDeclaration([], t.stringLiteral(dependencyName))
           )
         }
       }

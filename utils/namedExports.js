@@ -1,16 +1,16 @@
 const path = require('path')
 
-module.exports = (packageDir) => {
+module.exports = packageDir => {
   return {
-    [path.resolve(packageDir, 'node_modules', 'react')]: [ 
-      'Component', 
-      'PureComponent', 
+    [path.resolve(packageDir, 'node_modules', 'react')]: [
+      'Component',
+      'PureComponent',
       'createElement',
       'cloneElement',
-      'Children' 
+      'Children'
     ],
-    [path.resolve(packageDir, 'node_modules', 'react-dom')]: [ 
-      'unmountComponentAtNode', 
+    [path.resolve(packageDir, 'node_modules', 'react-dom')]: [
+      'unmountComponentAtNode',
       'findDOMNode',
       'createPortal'
     ],

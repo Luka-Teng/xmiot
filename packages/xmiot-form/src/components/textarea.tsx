@@ -5,7 +5,7 @@ import { FormItemProps } from '../types'
 import { wrapField } from './utils'
 
 class Textarea extends PureComponent<FormItemProps<'textarea'>> {
-  render () {
+  render() {
     const {
       name,
       label,
@@ -24,19 +24,24 @@ class Textarea extends PureComponent<FormItemProps<'textarea'>> {
       onPressEnter
     } = config
 
-    return wrapField(getFieldDecorator(name, {
-      initialValue,
-      rules
-    })(
-      <AntInput.TextArea 
-        placeholder={label}
-        {...props}
-        rows={rows}
-        onChange={onChange}
-        onPressEnter={onPressEnter}
-        style={{resize: resize ? 'both' : 'none'}}
-      />
-    ), styles, name, label)
+    return wrapField(
+      getFieldDecorator(name, {
+        initialValue,
+        rules
+      })(
+        <AntInput.TextArea
+          placeholder={label}
+          {...props}
+          rows={rows}
+          onChange={onChange}
+          onPressEnter={onPressEnter}
+          style={{ resize: resize ? 'both' : 'none' }}
+        />
+      ),
+      styles,
+      name,
+      label
+    )
   }
 }
 

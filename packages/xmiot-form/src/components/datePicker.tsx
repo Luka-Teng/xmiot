@@ -7,7 +7,7 @@ import { wrapField } from './utils'
 const AntRangePicker = AntDatePicker.RangePicker
 
 class Select extends PureComponent<FormItemProps<'datePicker'>> {
-  render () {
+  render() {
     const {
       name,
       label,
@@ -17,22 +17,24 @@ class Select extends PureComponent<FormItemProps<'datePicker'>> {
       config = {},
       form: { getFieldDecorator }
     } = this.props
-    
-    const { 
-      initialValue, 
-      rules = [], 
-      range = false,
-      onChange
-    } = config
 
-    return wrapField(getFieldDecorator(name, {
-      initialValue,
-      rules
-    })(
-      range
-      ? <AntRangePicker onChange={onChange} {...props} />
-      : <AntDatePicker onChange={onChange} {...props} />
-    ), styles, name, label)
+    const { initialValue, rules = [], range = false, onChange } = config
+
+    return wrapField(
+      getFieldDecorator(name, {
+        initialValue,
+        rules
+      })(
+        range ? (
+          <AntRangePicker onChange={onChange} {...props} />
+        ) : (
+          <AntDatePicker onChange={onChange} {...props} />
+        )
+      ),
+      styles,
+      name,
+      label
+    )
   }
 }
 

@@ -15,7 +15,7 @@ class Form extends Component<FormProps> {
     extranButtons: []
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const resetFormRef = (ref: any, form: FormProps['form']) => {
       ref.current = form
     }
@@ -23,7 +23,7 @@ class Form extends Component<FormProps> {
     if (formRef) resetFormRef(formRef, form)
   }
 
-  render () {
+  render() {
     let {
       options,
       onSubmit,

@@ -36,12 +36,9 @@ let tsConfig = {
     allowSyntheticDefaultImports: true,
     allowJs: true,
     experimentalDecorators: true,
-    module: "esnext",
-    moduleResolution: "node",
-    lib: [
-      "dom",
-      "es2017"
-    ],
+    module: 'esnext',
+    moduleResolution: 'node',
+    lib: ['dom', 'es2017'],
     skipLibCheck: true,
     esModuleInterop: true,
     strict: true,

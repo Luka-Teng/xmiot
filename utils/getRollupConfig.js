@@ -64,7 +64,9 @@ module.exports = (
 
       // Convert CommonJS modules to ES6
       // 增加对react的Component的导出
-      commonjs(type === 'react' ? { namedExports: namedExports(packageDir) } : {}),
+      commonjs(
+        type === 'react' ? { namedExports: namedExports(packageDir) } : {}
+      ),
 
       // babel先对react进行转义,只有在react环境中执行
       babel({
@@ -76,10 +78,13 @@ module.exports = (
           [path.resolve(__dirname, 'babel-plugin-require-to-import')],
           ['@babel/plugin-proposal-class-properties'],
           ['@babel/plugin-proposal-object-rest-spread'],
-          ['import', {
-            libraryName: 'antd',
-            ibraryDirectory: 'es'
-          }],
+          [
+            'import',
+            {
+              libraryName: 'antd',
+              ibraryDirectory: 'es'
+            }
+          ]
         ]
       }),
 

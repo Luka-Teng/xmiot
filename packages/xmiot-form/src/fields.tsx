@@ -43,7 +43,7 @@ class Fields extends PureComponent<FieldsProps> {
     return <ColorPicker {...option} form={this.props.form} />
   }
 
-  render () {
+  render() {
     const views: React.ReactNode[] = []
     const { options, styles } = this.props
     options.forEach((option, index) => {

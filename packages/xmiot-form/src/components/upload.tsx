@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Upload as AntUpload, Icon, Modal, Input, message } from 'antd'
 import { UploadProps } from 'antd/lib/upload'
 import extName from 'ext-name'
-import isEqual  from 'lodash/isEqual'
+import isEqual from 'lodash/isEqual'
 
 import { FormItemProps } from '../types'
 import { wrapField } from './utils'
@@ -20,7 +20,14 @@ type UploadFileStatus = NonNullable<UploadFile['status']>
 
 /* 支持的文件类型 */
 const imageTypes = ['image/png', 'image/jpeg']
-const videoTypes = ['video/mp4', 'video/avi', 'video/wmv', 'video/mpeg', 'video/quicktime', 'video/x-ms-wmv']
+const videoTypes = [
+  'video/mp4',
+  'video/avi',
+  'video/wmv',
+  'video/mpeg',
+  'video/quicktime',
+  'video/x-ms-wmv'
+]
 
 const getFile = (url: string, status: UploadFileStatus) => {
   const ext = extName(url)[0]
@@ -40,7 +47,7 @@ const getFile = (url: string, status: UploadFileStatus) => {
 }
 
 class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
-  constructor (props: FormItemProps<'upload'>) {
+  constructor(props: FormItemProps<'upload'>) {
     super(props)
     const { config = {} } = props
     const { initialValue = [] } = config
@@ -48,18 +55,19 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
       fileList: initialValue.map((url: string) => getFile(url, 'success')),
       previewUrl: '',
       previewVisible: false,
-      previewType: 'image',
+      previewType: 'image'
     }
   }
 
   uidMapUrl: genObject = {}
 
-  static getDerivedStateFromProps (props: FormItemProps<'upload'>, state: UploadStates) {
+  static getDerivedStateFromProps(
+    props: FormItemProps<'upload'>,
+    state: UploadStates
+  ) {
     const { config = {} } = props
     const { initialValue = [] } = config
-    if (
-      !isEqual(state.preInitialValue, initialValue)
-    ) {
+    if (!isEqual(state.preInitialValue, initialValue)) {
       state.fileList = initialValue.map(url => getFile(url, 'success'))
     }
 
@@ -69,8 +77,7 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
 
   syncInput = (validate: boolean = true) => {
     const input = this.state.fileList.reduce<any[]>((result, file) => {
-      if (file.status === 'done')
-        result.push(file.url)
+      if (file.status === 'done') result.push(file.url)
       return result
     }, [])
     this.props.form.setFieldsValue({
@@ -86,8 +93,8 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
     const previewType = imageTypes.includes(file.type)
       ? 'image'
       : videoTypes.includes(file.type)
-        ? 'video'
-        : null
+      ? 'video'
+      : null
     if (previewType) {
       this.setState({
         previewUrl: file.url || '',
@@ -98,12 +105,12 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
   }
 
   customRequest = ({
-    file, 
+    file,
     onProgress,
     onSuccess,
     onError
   }: {
-    file: UploadFile 
+    file: UploadFile
     onProgress: Function
     onSuccess: Function
     onError: Function
@@ -122,7 +129,9 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
      * 这里必须保证请求时异步的
      */
     setTimeout(() => {
-      this.props.config && this.props.config.onUpload && this.props.config.onUpload(file, success, fail, onProgress)
+      this.props.config &&
+        this.props.config.onUpload &&
+        this.props.config.onUpload(file, success, fail, onProgress)
     })
   }
 
@@ -130,7 +139,7 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
     file,
     fileList
   }: {
-    file: UploadFile,
+    file: UploadFile
     fileList: UploadFile[]
   }) => {
     fileList = fileList.filter(file => file.status !== undefined)
@@ -140,7 +149,7 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
       const mapUrl = this.uidMapUrl[fileList[fileIndex].uid]
       if (mapUrl) {
         fileList[fileIndex].url = mapUrl
-      }   
+      }
     }
     this.setState({
       fileList
@@ -151,14 +160,11 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
   beforeUpload = (file: UploadFile) => {
     const { config = {} } = this.props
     let { maxSize, accept } = config
-    accept = accept === 'image' 
-      ? imageTypes 
-      : accept === 'video'
-        ? videoTypes
-        : accept
+    accept =
+      accept === 'image' ? imageTypes : accept === 'video' ? videoTypes : accept
     let passed = true
 
-    if (maxSize && (file.size / 1024 > maxSize)) {
+    if (maxSize && file.size / 1024 > maxSize) {
       message.error(`文件超过${maxSize}kb限制`)
       passed = false
     }
@@ -167,7 +173,7 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
       message.error(`非法的文件后缀`)
       passed = false
     }
-    
+
     return passed
   }
 
@@ -181,7 +187,7 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
     }
   }
 
-  render () {
+  render() {
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -198,18 +204,9 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
       form: { getFieldDecorator }
     } = this.props
 
-    const {
-      initialValue = [],
-      rules = [],
-      maxNumber = 1,
-    } = config
+    const { initialValue = [], rules = [], maxNumber = 1 } = config
 
-    const {
-      fileList,
-      previewVisible,
-      previewUrl,
-      previewType
-    } = this.state
+    const { fileList, previewVisible, previewUrl, previewType } = this.state
 
     const {
       customRequest,
@@ -219,7 +216,7 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
       handlePreview
     } = this
 
-    return wrapField((
+    return wrapField(
       <div>
         <AntUpload
           listType="picture-card"
@@ -230,21 +227,25 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
           beforeUpload={beforeUpload}
           {...props}
         >
-          { fileList.length < maxNumber && uploadButton }
+          {fileList.length < maxNumber && uploadButton}
         </AntUpload>
-        {
-          getFieldDecorator(name, {
-            initialValue,
-            rules
-          })(
-            <Input hidden placeholder={label} {...props} />
-          )
-        }
-        <Modal destroyOnClose visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          { renderPreview(previewType, previewUrl) }  
+        {getFieldDecorator(name, {
+          initialValue,
+          rules
+        })(<Input hidden placeholder={label} {...props} />)}
+        <Modal
+          destroyOnClose
+          visible={previewVisible}
+          footer={null}
+          onCancel={this.handleCancel}
+        >
+          {renderPreview(previewType, previewUrl)}
         </Modal>
-      </div>
-    ), styles, name, label)
+      </div>,
+      styles,
+      name,
+      label
+    )
   }
 }
 

@@ -5,7 +5,7 @@ import AntCol from 'antd/lib/col'
 import { FormStyles } from '../types'
 
 type WrapFieldOptions = FormStyles & {
-  insertElement?: React.ReactNode,
+  insertElement?: React.ReactNode
   appendElement?: React.ReactNode
 }
 
@@ -13,9 +13,15 @@ export const wrapField = (
   element: React.ReactNode,
   options: WrapFieldOptions = {},
   name: string,
-  label?: string,
+  label?: string
 ): React.ReactNode => {
-  const { display = '1/3', labelStyle, itemStyle, insertElement, appendElement } = options
+  const {
+    display = '1/3',
+    labelStyle,
+    itemStyle,
+    insertElement,
+    appendElement
+  } = options
   const wrapper = (spanNum: number) => (
     <AntCol span={spanNum} key={name}>
       <AntForm.Item
@@ -32,7 +38,9 @@ export const wrapField = (
     </AntCol>
   )
 
-  const strategies: { [key in NonNullable<WrapFieldOptions['display']>]: React.ReactNode } = {
+  const strategies: {
+    [key in NonNullable<WrapFieldOptions['display']>]: React.ReactNode
+  } = {
     '1/1': wrapper(24),
     '1/2': wrapper(12),
     '1/3': wrapper(8),
@@ -40,4 +48,4 @@ export const wrapField = (
   }
 
   return strategies[display]
-} 
+}
