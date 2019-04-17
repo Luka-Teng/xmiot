@@ -10,7 +10,7 @@ class Input extends PureComponent<FormItemProps<'input'>> {
       name,
       label,
       props,
-      styles = {},
+      styles,
       config = {},
       form: { getFieldDecorator }
     } = this.props

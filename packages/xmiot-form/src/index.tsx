@@ -7,13 +7,14 @@ import Form from './form'
 class A extends Component {
   ref = React.createRef()
   render () {
+    window.mytest = this.ref
     return <Form 
       options={[{
         type: 'input',
         name: 'test',
         label: 'test',
         styles: {
-          display: '1/1'
+          display: '1/4'
         },
         config: {
           onChange: (value) => {
@@ -25,7 +26,7 @@ class A extends Component {
         name: 'aaa',
         label: 'test',
         styles: {
-          display: '1/1'
+          display: '1/4'
         },
         config: {
           data: [{
@@ -80,6 +81,9 @@ class A extends Component {
           data: [{
             label: 'aa',
             value: '11'
+          }, {
+            label: 'aaa',
+            value: '11a'
           }],
           onChange: (date => {
             console.log(date)
@@ -102,6 +106,28 @@ class A extends Component {
           maxSize: 102400,
           accept: 'video'
         }
+      }, {
+        type: 'radioGroup',
+        name: 'radio',
+        label: '不知道',
+        styles: {
+          display: '1/1'
+        },
+        config: {
+          data: [{
+            label: 'luka',
+            value: 'wtf',
+            appendElement: <div><img width='200px' src='http://www.pptbz.com/pptpic/UploadFiles_6909/201203/2012031220134655.jpg' /></div>
+          }, {
+            label: 'luka1',
+            value: 'wtf1'
+          }],
+          onChange: (values) => {console.log(values)},
+        }
+      }, {
+        type: 'colorPicker',
+        name: 'color',
+        label: 'colors'
       }]}
       onSubmit={() => {}} formRef={this.ref} 
     />

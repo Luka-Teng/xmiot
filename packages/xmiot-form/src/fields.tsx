@@ -7,6 +7,8 @@ import Textarea from './components/textarea'
 import DatePicker from './components/datePicker'
 import CheckGroup from './components/checkGroup'
 import Upload from './components/upload'
+import RadioGroup from './components/radioGroup'
+import ColorPicker from './components/colorPicker'
 
 class Fields extends PureComponent<FieldsProps> {
   input = (option: any) => {
@@ -31,6 +33,14 @@ class Fields extends PureComponent<FieldsProps> {
 
   upload = (option: any) => {
     return <Upload {...option} form={this.props.form} />
+  }
+
+  radioGroup = (option: any) => {
+    return <RadioGroup {...option} form={this.props.form} />
+  }
+
+  colorPicker = (option: any) => {
+    return <ColorPicker {...option} form={this.props.form} />
   }
 
   render () {

@@ -12,7 +12,7 @@ class Select extends PureComponent<FormItemProps<'select'>> {
       name,
       label,
       props,
-      styles = {},
+      styles,
       /* 由于config可以为undefined，所以必须加上初始值 */
       config = {
         data: []

@@ -23,7 +23,7 @@ class CheckGroup extends PureComponent<FormItemProps<'checkGroup'>> {
       name,
       label,
       props,
-      styles = {},
+      styles,
       /* 由于config可以为undefined，所以必须加上初始值 */
       config = {
         data: []
@@ -46,7 +46,8 @@ class CheckGroup extends PureComponent<FormItemProps<'checkGroup'>> {
         initialValue,
         rules
       })(
-      <AntCheckboxGroup options={data} {...props} onChange={onChange} />),
+        <AntCheckboxGroup options={data} {...props} onChange={onChange} />
+      ),
       {
         insertElement: checkAllBtn ? (
           <AntRow style={{ lineHeight: 'normal' }}>

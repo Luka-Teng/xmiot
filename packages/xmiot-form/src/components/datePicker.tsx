@@ -12,7 +12,7 @@ class Select extends PureComponent<FormItemProps<'datePicker'>> {
       name,
       label,
       props,
-      styles = {},
+      styles,
       /* 由于config可以为undefined，所以必须加上初始值 */
       config = {},
       form: { getFieldDecorator }
@@ -26,7 +26,7 @@ class Select extends PureComponent<FormItemProps<'datePicker'>> {
     } = config
 
     return wrapField(getFieldDecorator(name, {
-      ...{ initialValue },
+      initialValue,
       rules
     })(
       range

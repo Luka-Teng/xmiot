@@ -10,7 +10,7 @@ class Textarea extends PureComponent<FormItemProps<'textarea'>> {
       name,
       label,
       props,
-      styles = {},
+      styles,
       config = {},
       form: { getFieldDecorator }
     } = this.props

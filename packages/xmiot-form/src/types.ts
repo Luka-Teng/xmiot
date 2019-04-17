@@ -50,7 +50,9 @@ type BasicConfig<T = any> = {
  * @prop { TextareaConfig } textarea组件
  * @prop { DatePicker } datePicker组件
  * @prop { CheckGroup } checkGroup组件
- * @prop {Upload} Upload组件
+ * @prop { Upload } Upload组件
+ * @prop { RadioGroup } RadioGroup组件
+ * @prop { ColorPicker } ColorPicker组件
  */
 export type Config = {
   InputConfig: BasicConfig & {
@@ -70,11 +72,11 @@ export type Config = {
     multi?: boolean
     onSelectChange?: (value: any) => void
   }
-  DatePicker: BasicConfig & {
+  DatePickerConfig: BasicConfig & {
     range?: boolean
     onChange?: (data: any, dataString: any) => void
   }
-  CheckGroup: BasicConfig<Array<string | number>> & {
+  CheckGroupConfig: BasicConfig<Array<string | number>> & {
     data: {
       label: string
       value: string | number
@@ -89,6 +91,16 @@ export type Config = {
     /* 文件类型或image video */
     accept?: Array<string> | 'image' | 'video'
   }
+  RadioGroupConfig: BasicConfig<string | number> & {
+    data: {
+      label: string
+      value: string | number
+      insertElement?: React.ReactNode
+      appendElement?: React.ReactNode
+    }[]
+    onChange?: (value: any) => void
+  }
+  ColorPickerConfig: BasicConfig<string>
 }
 
 /*
@@ -102,6 +114,8 @@ type FormItemTypes =
   | 'datePicker'
   | 'checkGroup'
   | 'upload'
+  | 'radioGroup'
+  | 'colorPicker'
 
 /*
  * ItemType mapping to Config
@@ -114,11 +128,15 @@ type ItemTypeToConfig<T extends FormItemTypes> = T extends 'input'
   : T extends 'textarea'
   ? Config['TextareaConfig']
   : T extends 'datePicker'
-  ? Config['DatePicker']
+  ? Config['DatePickerConfig']
   : T extends 'checkGroup'
-  ? Config['CheckGroup']
+  ? Config['CheckGroupConfig']
   : T extends 'upload'
   ? Config['UploadConfig']
+  : T extends 'radioGroup'
+  ? Config['RadioGroupConfig']
+  : T extends 'colorPicker'
+  ? Config['ColorPickerConfig']
   : never
 
 /**

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { Upload as AntUpload, Icon, Modal, Input, message } from 'antd'
 import { UploadProps } from 'antd/lib/upload'
 import extName from 'ext-name'
@@ -39,7 +39,7 @@ const getFile = (url: string, status: UploadFileStatus) => {
   }
 }
 
-class Upload extends PureComponent<FormItemProps<'upload'>, UploadStates> {
+class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
   constructor (props: FormItemProps<'upload'>) {
     super(props)
     const { config = {} } = props
@@ -193,7 +193,7 @@ class Upload extends PureComponent<FormItemProps<'upload'>, UploadStates> {
       name,
       label,
       props,
-      styles = {},
+      styles,
       config = {},
       form: { getFieldDecorator }
     } = this.props
