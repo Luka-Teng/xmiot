@@ -5,7 +5,7 @@ import { FormItemProps } from '../types'
 import { wrapField } from './utils'
 
 class Input extends PureComponent<FormItemProps<'input'>> {
-  render () {
+  render() {
     const {
       name,
       label,

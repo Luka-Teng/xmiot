@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "publish": "node scripts/publish.js",
-    "prettier": "prettier-eslint --write \"**/*.jsx\" \"**/*.js\" --eslint-config-path \"./.eslintrc\"",
+    "prettier": "prettier-eslint --write \"**/*.jsx\" \"**/*.js\" \"**/*.ts\" \"**/*.tsx\" --eslint-config-path \"./.eslintrc\"",
     "start-prod": "cross-env NODE_ENV=production node scripts/devServer.js",
     "start-dev": "cross-env NODE_ENV=development node scripts/devServer.js",
     "bootstrap": "lerna exec npm i",
@@ -18,11 +18,7 @@
     }
   },
   "lint-staged": {
-    "packages/**/*.js": [
-      "prettier-eslint --eslint-config-path \"./.eslintrc\" --write",
-      "git add"
-    ],
-    "packages/**/*.ts": [
+    "packages/**/*.{js, jsx, ts, tsx}": [
       "prettier-eslint --eslint-config-path \"./.eslintrc\" --write",
       "git add"
     ]
