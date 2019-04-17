@@ -62,12 +62,6 @@ module.exports = (
     plugins: [
       ...plugins,
 
-      // Convert CommonJS modules to ES6
-      // 增加对react的Component的导出
-      commonjs(
-        type === 'react' ? { namedExports: namedExports(packageDir) } : {}
-      ),
-
       // babel先对react进行转义,只有在react环境中执行
       babel({
         babelrc: false,
@@ -87,6 +81,12 @@ module.exports = (
           ]
         ]
       }),
+
+      // Convert CommonJS modules to ES6
+      // 增加对react的Component的导出
+      commonjs(
+        type === 'react' ? { namedExports: namedExports(packageDir) } : {}
+      ),
 
       // read json as es6 module
       json(),
