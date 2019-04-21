@@ -8,14 +8,14 @@ const ShowErrorsWebpackPlugin = require('./plugins/showErrorsWebpackPlugin')
 /* devServer不负责打包，环境变量是development */
 process.env.NODE_ENV = 'development'
 
-module.exports = (isTs) => {
+module.exports = ({ isTs, entry }) => {
   return {
     mode: 'development',
     devtool: 'cheap-module-source-map',
     /* 默认为工作目录 */
     context: process.cwd(),
     entry: [
-      path.resolve('index')
+      path.resolve(process.cwd(), entry)
     ],
     output: {
       path: path.resolve('build'),

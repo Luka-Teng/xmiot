@@ -1,7 +1,7 @@
 const yargs = require('yargs')
 const path = require('path')
 const log = require('../utils/log')
-const checkTsOrJs = require('../utils/checkTsOrJs')
+const checkIsTs = require('../utils/checkIsTs')
 
 const argv = yargs
   .alias('v', 'version')
@@ -13,15 +13,15 @@ const argv = yargs
   .help('h')
   .argv
 
-const entry = argv._[0] && path.resolve(argv._[0])
+const entry = argv._[0] && path.resolve(process.cwd(), argv._[0])
 
 if (!entry) {
   log.fatal('需要一个入口文件')
 }
 
-const language = argv.l || checkTsOrJs(entry)
+const isTs = argv.l === 'ts' || checkIsTs(entry)
 
 module.exports = {
   entry,
-  language
+  isTs
 }

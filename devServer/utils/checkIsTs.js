@@ -1,7 +1,7 @@
 const fs = require('fs')
 const log = require('./log')
 
-const checkTsOrJs = (entry) => {
+const checkIsTs = (entry) => {
   const jsPattern = /\.(js|jsx)$/
   const tsPattern = /\.(ts|tsx)$/
 
@@ -13,15 +13,15 @@ const checkTsOrJs = (entry) => {
 
   if (jsPattern.test(entry)) {
     checkFile(entry)
-    return 'js'
+    return false
   }
 
   if (tsPattern.test(entry)) {
     checkFile(entry)
-    return 'ts'
+    return true
   }
 
   log.fatal('入口文件必须以ts, tsx, js, jsx结尾')
 }
 
-module.exports = checkTsOrJs
+module.exports = checkIsTs

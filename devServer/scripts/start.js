@@ -2,8 +2,9 @@ const WebpackDevServer = require('webpack-dev-server')
 const webpack = require('webpack')
 const path = require('path')
 
-const config = require('../webpack.config')(true)
-// const options = require('./options')
+const options = require('./options')
+const config = require('../webpack.config')(options)
+
 let compiler = webpack(config)
 
 const serverConfig = {
@@ -13,7 +14,11 @@ const serverConfig = {
   publicPath: '/',
   quiet: true,
   historyApiFallback: true,
-  overlay:false
+  /* 暂时对warnings，errors统一占屏输出，后续剥离warnings值浏览器console */
+  overlay: {
+    errors: true,
+    warnings: true
+  }
 }
 
 const devServer = new WebpackDevServer(compiler, serverConfig)
