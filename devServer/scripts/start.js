@@ -3,9 +3,17 @@ const webpack = require('webpack')
 const path = require('path')
 
 const options = require('./options')
+const createCompiler = require('../utils/createCompiler')
 const config = require('../webpack.config')(options)
 
-let compiler = webpack(config)
+let compiler = createCompiler({
+  webpack,
+  config,
+  isTs: options.isTs,
+  getDevServer: () => {
+    return devServer
+  }
+})
 
 const serverConfig = {
   compress: true,

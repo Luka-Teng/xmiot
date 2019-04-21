@@ -2,13 +2,16 @@
  * @param { object } webpack webpack构造函数
  * @param { boolean } isTs 是否是ts
  * @param { object } config webpack配置
+ * @param { function } getDevServer 获取devServer的方法
  * 对compiler做预处理
  * 主要是push forkTsCheckerWebpackPlugin的errors和warnings
+ * TODO: 对内部的输出统一化，美观化
  */
 
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const chalk = require('chalk')
 const clearConsole = require('./clearConsole')
+const typescriptFormat = require('./typescriptFormat')
 
 /* 判断输出是否是终端 */
 const isInteractive = process.stdout.isTTY
@@ -16,11 +19,33 @@ const _clearConsole = () => {
   if (isInteractive) clearConsole()
 }
 
+/* 对errors和warnings的终端统一输出 */
+const output = (messages) => {
+  const isSuccessful = !messages.errors.length && !messages.warnings.length
+  if (isSuccessful) {
+    console.log(chalk.green('Compiled successfully!'))
+  }
+
+  /* 输出errors */
+  if (messages.errors.length) {
+    /* 一般情况下我们只需要输出第一个错误 */
+    console.log(chalk.red('Failed to compile.\n'))
+    console.log(messages.errors[0])
+    return
+  }
+
+  /* 输出warnings */
+  if (messages.warnings.length) {
+    console.log(chalk.yellow('Compiled with warnings.\n'))
+    console.log(messages.warnings.join('\n\n'))
+  }
+}
 
 module.exports = ({
   webpack,
   config,
-  isTs
+  isTs,
+  getDevServer
 }) => {
   /* 实例化错误的输出 */
   let compiler
@@ -58,9 +83,12 @@ module.exports = ({
 
         /* 记录tsChecker的errors和warnings */
         tsMessagesResolver({
-          errors: allMsgs.filter(msg => msg.severity === 'error'),
+          errors: allMsgs
+            .filter(msg => msg.severity === 'error')
+            .map(msg => typescriptFormat(msg)),
           warnings: allMsgs
             .filter(msg => msg.severity === 'warning')
+            .map(msg => typescriptFormat(msg))
         })
       })
   }
@@ -98,12 +126,18 @@ module.exports = ({
 
       /* 向socket client推送消息 */
       if (messages.errors.length > 0) {
-        devSocket.errors(messages.errors);
+        const devServer = getDevServer()
+        devServer.sockWrite(devServer.sockets, 'errors', messages.errors)
       } else if (messages.warnings.length > 0) {
-        devSocket.warnings(messages.warnings);
+        const devServer = getDevServer()
+        devServer.sockWrite(devServer.sockets, 'errors', messages.warnings)
       }
 
       _clearConsole()
     }
+
+    output(statsData)
   })
+
+  return compiler
 }
