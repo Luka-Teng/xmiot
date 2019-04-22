@@ -1,6 +1,6 @@
 {
   "name": "xmiot-server",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "xmiot用于测试环境包测试",
   "main": "index.js",
   "scripts": {
@@ -19,6 +19,7 @@
     "fork-ts-checker-webpack-plugin": "1.0.0-alpha.6",
     "fs-extra": "^7.0.1",
     "html-webpack-plugin": "4.0.0-alpha.2",
+    "less-loader": "^4.1.0",
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.6.0",
