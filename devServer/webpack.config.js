@@ -1,6 +1,6 @@
 /**
  * TODOLIST
- * 1. 目前ts，tslint，eslint检测只会在包入口所在目录，需改善
+ * 1. 目前babel，ts，tslint，eslint检测只会在包入口所在目录，需改善
  */
 
 const path = require('path')
@@ -69,7 +69,7 @@ module.exports = ({ isTs, entry }) => {
       }, {
         oneOf: [{
           test: /\.(js|mjs|jsx|ts|tsx)$/,
-          include: __dirname,
+          include: absoluteEntryDir,
           loader: require.resolve('babel-loader'),
           options: {
             babelrc: false,
@@ -103,7 +103,7 @@ module.exports = ({ isTs, entry }) => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: path.resolve(process.cwd(), 'public/index.template.html'),
+        template: path.resolve(__dirname, 'public/index.template.html'),
         inject: true
       }),
       new webpack.HotModuleReplacementPlugin(),
