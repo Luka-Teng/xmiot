@@ -1,6 +1,6 @@
 {
   "name": "xmiot-server",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "xmiot用于测试环境包测试",
   "main": "index.js",
   "scripts": {
