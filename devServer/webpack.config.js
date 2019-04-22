@@ -1,22 +1,43 @@
+/**
+ * TODOLIST
+ * 1. 目前ts，tslint，eslint检测只会在包入口所在目录，需改善
+ */
+
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const ShowErrorsWebpackPlugin = require('./plugins/showErrorsWebpackPlugin')
+const overrideTsConfig = require('./utils/overrideTsConfig')
+const lookUpFile = require('./utils/lookUpFile')
 
 /* devServer不负责打包，环境变量是development */
 process.env.NODE_ENV = 'development'
 
 module.exports = ({ isTs, entry }) => {
+  const absoluteEntry = path.resolve(process.cwd(), entry)
+  const absoluteEntryDir = path.resolve(process.cwd(), entry, '..')
+  let needTsLint = false
+
+  if (isTs) {
+    /* 重置ts检测目录 */
+    overrideTsConfig({
+      include: absoluteEntryDir
+    })
+
+    /* 检测是否需要tslint */
+    if (lookUpFile(process.cwd(), absoluteEntryDir, 'tslint.json')) {
+      needTsLint = true
+    }
+  }
+
   return {
     mode: 'development',
     devtool: 'cheap-module-source-map',
     /* 默认为工作目录 */
     context: process.cwd(),
-    entry: [
-      path.resolve(process.cwd(), entry)
-    ],
+    entry: [absoluteEntry],
     output: {
       path: path.resolve('build'),
       filename: 'bundle.js',
@@ -35,6 +56,11 @@ module.exports = ({ isTs, entry }) => {
     },
     module: {
       rules: [{
+        test: /\.(js|jsx)$/,
+        enforce: 'pre',
+        loader: require.resolve('eslint-loader'),
+        include: absoluteEntry,
+      }, {
         oneOf: [{
           test: /\.(js|mjs|jsx|ts|tsx)$/,
           include: __dirname,
@@ -68,7 +94,7 @@ module.exports = ({ isTs, entry }) => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: path.resolve('public/index.template.html'),
+        template: path.resolve(process.cwd(), 'public/index.template.html'),
         inject: true
       }),
       new webpack.HotModuleReplacementPlugin(),
@@ -90,7 +116,7 @@ module.exports = ({ isTs, entry }) => {
         useTypescriptIncrementalApi: true,
         checkSyntacticErrors: true,
         silent: true,
-        include: ['utils']
+        tslint: needTsLint
       })
     ].filter(Boolean)
   }

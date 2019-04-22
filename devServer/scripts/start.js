@@ -1,8 +1,10 @@
+/* 获取入口参数先行 */
+const options = require('./options')
+
 const WebpackDevServer = require('webpack-dev-server')
 const webpack = require('webpack')
 const path = require('path')
 
-const options = require('./options')
 const createCompiler = require('../utils/createCompiler')
 const config = require('../webpack.config')(options)
 

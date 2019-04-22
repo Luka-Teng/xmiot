@@ -1,7 +1,8 @@
 /**
  * 干两件事
  * 1. 处理tsCheck的errors和warning的socket
- * 2. 统一处理浏览器的错误显示（目前仅需要在浏览器控制台输出） 
+ * 2. 统一处理浏览器的错误显示（目前仅需要在浏览器控制台输出）
+ * 对于第二个问题暂时使用webpack-dev-server/clinet的overlay 
  */
 const SockJS = require('sockjs-client')
 const url = require('url')
@@ -27,7 +28,6 @@ connection.onmessage = (e) => {
     case 'hash':
       console.warn(`current Hash: ${message.data}`)
       break;
-    case 'still-ok':
     case 'ok':
       
       break;
