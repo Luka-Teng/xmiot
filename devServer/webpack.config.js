@@ -76,7 +76,10 @@ module.exports = ({ isTs, entry }) => {
             configFile: false,
             presets: [['react-app', { "flow": false, "typescript": true }]],
             overrides: [{
-              plugins: [["@babel/plugin-proposal-decorators", { "legacy": true }]]
+              plugins: [
+                ['@babel/plugin-proposal-decorators', { legacy: true }],
+                ['@babel/plugin-proposal-class-properties']
+              ]
             }]
           },
         }, {
