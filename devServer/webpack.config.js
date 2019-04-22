@@ -27,7 +27,13 @@ module.exports = ({ isTs, entry }) => {
     })
 
     /* 检测是否需要tslint */
-    if (lookUpFile(process.cwd(), absoluteEntryDir, 'tslint.json')) {
+    if (
+      lookUpFile({
+        rootDir: process.cwd(), 
+        startDir: absoluteEntryDir, 
+        file: 'tslint.json'
+      })
+    ) {
       needTsLint = true
     }
   }

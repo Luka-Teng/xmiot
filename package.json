@@ -7,6 +7,7 @@
     "prettier": "prettier-eslint --write \"**/*.jsx\" \"**/*.js\" \"**/*.ts\" \"**/*.tsx\" --eslint-config-path \"./.eslintrc\"",
     "start-prod": "cross-env NODE_ENV=production node scripts/devServer.js",
     "start-dev": "cross-env NODE_ENV=development node scripts/devServer.js",
+    "server": "xmiot-server",
     "bootstrap": "lerna exec npm i",
     "init": "node scripts/init.js",
     "test": "cross-env NODE_ENV=testing jest --no-cache",
@@ -137,7 +138,8 @@
   },
   "dependencies": {
     "postcss-url": "^8.0.0",
-    "rollup-plugin-json": "^4.0.0"
+    "rollup-plugin-json": "^4.0.0",
+    "xmiot-server": "^1.0.0"
   },
   "lastCommit": "83f31e252ee252b4f6c89f539163d51c2cef3030"
 }

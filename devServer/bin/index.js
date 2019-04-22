@@ -1,1 +1,2 @@
-require('../scripts/start')
+#!/usr/bin/env node
+require('../scripts/start.js')
