@@ -78,18 +78,19 @@ module.exports = ({ isTs, entry }) => {
        * tslint默认根目录为cwd
        */
       isTs && new ForkTsCheckerWebpackPlugin({
+        tsconfig: path.resolve(__dirname, 'tsconfig.override.json'),
         async: true,
         /* 需要抛出错误的文件 */
         reportFiles: [
-          '**/*.{ts,tsx}',
+          '**/*.{js,ts,tsx}',
           '!**/*.json',
           '!**/__tests__/**',
           '!**/?(*.)(spec|test).*'
         ],
         useTypescriptIncrementalApi: true,
         checkSyntacticErrors: true,
-        tsconfig: path.resolve(__dirname, 'tsconfig.json'),
-        silent: true
+        silent: true,
+        include: ['utils']
       })
     ].filter(Boolean)
   }
