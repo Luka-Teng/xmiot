@@ -24,7 +24,7 @@ module.exports = ({ isTs, entry }) => {
   if (isTs) {
     /* 重置ts检测目录 */
     overrideTsConfig({
-      include: absoluteEntryDir
+      include: [absoluteEntryDir]
     })
 
     /* 检测是否需要tslint */
