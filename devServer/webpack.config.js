@@ -11,6 +11,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const ShowErrorsWebpackPlugin = require('./plugins/showErrorsWebpackPlugin')
 const overrideTsConfig = require('./utils/overrideTsConfig')
 const lookUpFile = require('./utils/lookUpFile')
+const getStyleLoaders = require('./utils/getStyleLoaders')
 
 /* devServer不负责打包，环境变量是development */
 process.env.NODE_ENV = 'development'
@@ -58,7 +59,7 @@ module.exports = ({ isTs, entry }) => {
       runtimeChunk: true
     },
     resolve: {
-      extensions: ['.js', '.ts']
+      extensions: ['.js', '.ts', '.jsx', '.tsx']
     },
     module: {
       rules: [{
@@ -98,6 +99,12 @@ module.exports = ({ isTs, entry }) => {
             ],
             cacheDirectory: true
           },
+        }, {
+          test: /\.css$/,
+          use: getStyleLoaders()
+        }, {
+          test: /\.less$/,
+          use: getStyleLoaders('less-loader')
         }]
       }]
     },
