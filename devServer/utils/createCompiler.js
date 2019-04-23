@@ -13,12 +13,6 @@ const chalk = require('chalk')
 const clearConsole = require('./clearConsole')
 const typescriptFormat = require('./typescriptFormat')
 
-/* 判断输出是否是终端 */
-const isInteractive = process.stdout.isTTY
-const _clearConsole = () => {
-  if (isInteractive) clearConsole()
-}
-
 /* 对errors和warnings的终端统一输出 */
 const output = (messages) => {
   const isSuccessful = !messages.errors.length && !messages.warnings.length
@@ -61,7 +55,7 @@ module.exports = ({
 
   /* invalid会在webpack重新编译的过程中产生，这边直接输出compiler */
   compiler.hooks.invalid.tap('invalid', () => {
-    _clearConsole()
+    clearConsole()
     console.log('Compiling...');
   })
 
@@ -94,7 +88,7 @@ module.exports = ({
   }
 
   compiler.hooks.done.tap('done', async stats => {
-    _clearConsole()
+    clearConsole()
 
     /* stats.toJson：将stats输出成需要的格式 */
     const statsData = stats.toJson({
@@ -133,7 +127,7 @@ module.exports = ({
         devServer.sockWrite(devServer.sockets, 'errors', messages.warnings)
       }
 
-      _clearConsole()
+      clearConsole()
     }
 
     output(statsData)

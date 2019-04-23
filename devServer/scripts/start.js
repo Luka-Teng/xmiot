@@ -7,6 +7,7 @@ const path = require('path')
 
 const createCompiler = require('../utils/createCompiler')
 const config = require('../webpack.config')(options)
+const clearConsole = require('../utils/clearConsole')
 
 let compiler = createCompiler({
   webpack,
@@ -28,14 +29,25 @@ const serverConfig = {
   overlay: {
     errors: true,
     warnings: true
-  }
+  },
+  open: 'Google Chrome'
 }
 
 const devServer = new WebpackDevServer(compiler, serverConfig)
 
-
 devServer.listen(3001, '0.0.0.0', err => {
   if (err) {
-    return console.log(err);
+    return console.log(err)
   }
+
+  clearConsole()
+  
+  const signals = ['SIGINT', 'SIGTERM']
+  signals.forEach((sig) => {
+    process.on(sig, () => {
+      devServer.close()
+      clearConsole()
+      process.exit()
+    })
+  })
 })

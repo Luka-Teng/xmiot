@@ -57,7 +57,8 @@ const lookUpFile = ({
   }
 
   const hasFile = (_path, file) => {
-    return fs.existsSync(path.resolve(_path, file))
+    const filePath = path.resolve(_path, file)
+    return fs.existsSync(filePath) && filePath
   }
 
   switch (getDirsStatus(_rootDir, _startDir)) {
