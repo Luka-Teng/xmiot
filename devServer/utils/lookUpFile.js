@@ -56,24 +56,21 @@ const lookUpFile = ({
     throw new Error('rootDir和startDir必须是目录, file必须是文件')
   }
 
-  const hasFile = (_path, file) => {
+  const getFile = (_path, file) => {
     const filePath = path.resolve(_path, file)
     return fs.existsSync(filePath) && filePath
   }
 
   switch (getDirsStatus(_rootDir, _startDir)) {
     case 'equal':
-      return hasFile(_startDir, file)
+      return getFile(_startDir, file)
 
     case 'unequal':
     case 'contained':
       throw new Error('rootDir层级必须高于startDir')
 
     case 'containing':
-      if (hasFile(_startDir, file)) {
-        return true
-      }
-      return lookUpFile({
+      return getFile(_startDir, file) || lookUpFile({
         rootDir: _rootDir, 
         startDir: path.resolve(_startDir, '..'), 
         file: file
