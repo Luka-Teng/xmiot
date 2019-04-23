@@ -16,27 +16,16 @@ const getStyleLoaders = require('./utils/getStyleLoaders')
 /* devServer不负责打包，环境变量是development */
 process.env.NODE_ENV = 'development'
 
-module.exports = ({ isTs, entry }) => {
+module.exports = ({ isTs, entry, workDir: _workDir }) => {
   const absoluteEntry = path.resolve(process.cwd(), entry)
   const absoluteEntryDir = path.resolve(process.cwd(), entry, '..')
-  let needTsLint = false
-
+  const workDir = _workDir || absoluteEntryDir
+  
   if (isTs) {
     /* 重置ts检测目录 */
     overrideTsConfig({
-      include: [absoluteEntryDir]
+      include: [workDir]
     })
-
-    /* 检测是否需要tslint */
-    if (
-      lookUpFile({
-        rootDir: process.cwd(), 
-        startDir: absoluteEntryDir, 
-        file: 'tslint.json'
-      })
-    ) {
-      needTsLint = true
-    }
   }
 
   return {
@@ -70,7 +59,8 @@ module.exports = ({ isTs, entry }) => {
       }, {
         oneOf: [{
           test: /\.(js|mjs|jsx|ts|tsx)$/,
-          include: absoluteEntryDir,
+          include: workDir,
+          exclude: /node_modules/,
           loader: require.resolve('babel-loader'),
           options: {
             babelrc: false,
@@ -98,7 +88,7 @@ module.exports = ({ isTs, entry }) => {
               ],
             ],
             cacheDirectory: true
-          },
+          }
         }, {
           test: /\.css$/,
           use: getStyleLoaders()
@@ -124,7 +114,7 @@ module.exports = ({ isTs, entry }) => {
         async: true,
         /* 需要抛出错误的文件 */
         reportFiles: [
-          '**/*.{js,ts,tsx}',
+          '**/*.{ts,tsx}',
           '!**/*.json',
           '!**/__tests__/**',
           '!**/?(*.)(spec|test).*'
@@ -132,7 +122,11 @@ module.exports = ({ isTs, entry }) => {
         useTypescriptIncrementalApi: true,
         checkSyntacticErrors: true,
         silent: true,
-        tslint: needTsLint
+        tslint: lookUpFile({
+          rootDir: process.cwd(), 
+          startDir: workDir, 
+          file: 'tslint.json'
+        })
       })
     ].filter(Boolean)
   }
