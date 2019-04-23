@@ -12,8 +12,7 @@ const argv = yargs
   .choices('f', ['ts', 'js'])
   .alias('w', 'workDir')
   .describe('w', '主工作目录（用于主Babel编译，eslint，tslint，tsChecker）')
-  .help('h')
-  .argv
+  .help('h').argv
 
 const entry = argv._[0] && path.resolve(process.cwd(), argv._[0])
 

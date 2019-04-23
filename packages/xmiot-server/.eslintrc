@@ -1,0 +1,7 @@
+{
+  "parser": "babel-eslint",
+  "rules": {
+    "space-before-function-paren": ["warn", "always"],
+    "camelcase": "error"
+  }
+}

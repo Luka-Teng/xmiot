@@ -1,11 +1,11 @@
 const fs = require('fs')
 const log = require('./log')
 
-const checkIsTs = (entry) => {
+const checkIsTs = entry => {
   const jsPattern = /\.(js|jsx)$/
   const tsPattern = /\.(ts|tsx)$/
 
-  const checkFile = (file) => {
+  const checkFile = file => {
     if (!fs.existsSync(file)) {
       log.fatal(`找不到入口文件: ${file}`)
     }

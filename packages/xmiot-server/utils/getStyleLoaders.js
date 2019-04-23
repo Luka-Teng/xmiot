@@ -1,4 +1,4 @@
-const getStyleLoaders = (preProcessor) => {
+const getStyleLoaders = preProcessor => {
   const loaders = [
     require.resolve('style-loader'),
     require.resolve('css-loader'),
@@ -10,7 +10,7 @@ const getStyleLoaders = (preProcessor) => {
           require('postcss-flexbugs-fixes'),
           require('postcss-preset-env')({
             autoprefixer: {
-              flexbox: 'no-2009',
+              flexbox: 'no-2009'
             },
             stage: 3
           })

@@ -5,7 +5,7 @@
 const path = require('path')
 const fs = require('fs-extra')
 
-const isDir = (path) => {
+const isDir = path => {
   try {
     const stats = fs.statSync(path)
     return stats.isDirectory()
@@ -15,8 +15,8 @@ const isDir = (path) => {
 }
 
 /**
- * @param {string} dir1 
- * @param {string} dir2 
+ * @param {string} dir1
+ * @param {string} dir2
  * result: containing equal contained unequal
  */
 const getDirsStatus = (_dir1, _dir2) => {
@@ -39,11 +39,7 @@ const getDirsStatus = (_dir1, _dir2) => {
   return dirsStatus(dir1, dir2) || 'unequal'
 }
 
-const lookUpFile = ({
-  rootDir,
-  startDir,
-  file
-}) => {
+const lookUpFile = ({ rootDir, startDir, file }) => {
   if (!(rootDir && startDir && file)) {
     throw new Error('参数不能为空')
   }
@@ -70,14 +66,17 @@ const lookUpFile = ({
       throw new Error('rootDir层级必须高于startDir')
 
     case 'containing':
-      return getFile(_startDir, file) || lookUpFile({
-        rootDir: _rootDir, 
-        startDir: path.resolve(_startDir, '..'), 
-        file: file
-      })
+      return (
+        getFile(_startDir, file) ||
+        lookUpFile({
+          rootDir: _rootDir,
+          startDir: path.resolve(_startDir, '..'),
+          file: file
+        })
+      )
 
     default:
-      break;
+      break
   }
 }
 

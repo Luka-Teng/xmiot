@@ -28,7 +28,7 @@ const serverConfig = {
   /* 暂时对warnings，errors统一占屏输出，后续剥离warnings值浏览器console */
   overlay: {
     errors: true,
-    warnings: true
+    warnings: false
   },
   open: 'Google Chrome'
 }
@@ -41,9 +41,9 @@ devServer.listen(3001, '0.0.0.0', err => {
   }
 
   clearConsole()
-  
+
   const signals = ['SIGINT', 'SIGTERM']
-  signals.forEach((sig) => {
+  signals.forEach(sig => {
     process.on(sig, () => {
       devServer.close()
       clearConsole()

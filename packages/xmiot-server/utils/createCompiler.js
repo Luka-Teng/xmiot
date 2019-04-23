@@ -14,7 +14,7 @@ const clearConsole = require('./clearConsole')
 const typescriptFormat = require('./typescriptFormat')
 
 /* 对errors和warnings的终端统一输出 */
-const output = (messages) => {
+const output = messages => {
   const isSuccessful = !messages.errors.length && !messages.warnings.length
   if (isSuccessful) {
     console.log(chalk.green('Compiled successfully!'))
@@ -35,16 +35,11 @@ const output = (messages) => {
   }
 }
 
-module.exports = ({
-  webpack,
-  config,
-  isTs,
-  getDevServer
-}) => {
+module.exports = ({ webpack, config, isTs, getDevServer }) => {
   /* 实例化错误的输出 */
   let compiler
   try {
-    compiler = webpack(config);
+    compiler = webpack(config)
   } catch (err) {
     console.log(chalk.red('Failed to compile.'))
     console.log()
@@ -56,7 +51,7 @@ module.exports = ({
   /* invalid会在webpack重新编译的过程中产生，这边直接输出compiler */
   compiler.hooks.invalid.tap('invalid', () => {
     clearConsole()
-    console.log('Compiling...');
+    console.log('Compiling...')
   })
 
   /* 用于记录tsChecker完成的promise */
@@ -70,9 +65,9 @@ module.exports = ({
       })
     })
 
-    ForkTsCheckerWebpackPlugin
-      .getCompilerHooks(compiler)
-      .receive.tap('afterTypeScriptCheck', (diagnostics, lints) => {
+    ForkTsCheckerWebpackPlugin.getCompilerHooks(compiler).receive.tap(
+      'afterTypeScriptCheck',
+      (diagnostics, lints) => {
         const allMsgs = [...diagnostics, ...lints]
 
         /* 记录tsChecker的errors和warnings */
@@ -84,7 +79,8 @@ module.exports = ({
             .filter(msg => msg.severity === 'warning')
             .map(msg => typescriptFormat(msg))
         })
-      })
+      }
+    )
   }
 
   compiler.hooks.done.tap('done', async stats => {
@@ -94,7 +90,7 @@ module.exports = ({
     const statsData = stats.toJson({
       all: false,
       warnings: true,
-      errors: true,
+      errors: true
     })
 
     /**

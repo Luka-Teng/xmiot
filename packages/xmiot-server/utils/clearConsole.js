@@ -9,4 +9,4 @@ const clearConsole = () => {
   }
 }
 
-module.exports = clearConsole;
+module.exports = clearConsole
