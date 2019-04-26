@@ -4,25 +4,45 @@ import { cancelResponse } from '../mockResponse'
 // 防止重复提交
 export default net => {
   const pending = []
+  let ignores = []
+
+  net.prevent = (options) => {
+    if (Object.prototype.toString(options) !== '[object Object]') {
+      throw new Error('prevent 参数必须是对象')
+    }
+    ignores = options.ignores
+  }
+
+  const isIgnore = (config) => {
+    return ignores.some((ignore) => {
+      return getUrlFlag(config) === getUrlFlag({
+        ...config,
+        url: ignore
+      })
+    })
+  }
 
   const handlePre = config => {
+    if (isIgnore(config)) {
+      return
+    }
     const urlFlag = getUrlFlag(config)
     const flagIndex = pending.indexOf(urlFlag)
     if (flagIndex >= 0) {
-      console.log(urlFlag + ' : cancel')
       // 仿造response返回类型，返回取消的错误
       throw cancelResponse(config)
     } else {
-      console.log(urlFlag + ' : add')
       pending.push(urlFlag)
     }
   }
 
   const handlePost = config => {
+    if (isIgnore(config)) {
+      return
+    }
     const urlFlag = getUrlFlag(config)
     const flagIndex = pending.indexOf(urlFlag)
     if (flagIndex >= 0) {
-      console.log(urlFlag + ' : removed')
       pending.splice(flagIndex, 1)
     }
   }
