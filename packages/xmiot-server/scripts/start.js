@@ -4,10 +4,19 @@ const options = require('./options')
 const WebpackDevServer = require('webpack-dev-server')
 const webpack = require('webpack')
 const path = require('path')
+const open = require('open')
 
 const createCompiler = require('../utils/createCompiler')
 const config = require('../webpack.config')(options)
 const clearConsole = require('../utils/clearConsole')
+const log = require('../utils/log')
+const choosePort = require('../utils/choosePort')
+
+/* 默认端口 */
+const PORT = 3000
+const HOST = '0.0.0.0'
+
+let devServer
 
 let compiler = createCompiler({
   webpack,
@@ -29,25 +38,30 @@ const serverConfig = {
   overlay: {
     errors: true,
     warnings: false
-  },
-  open: 'Google Chrome'
+  }
 }
 
-const devServer = new WebpackDevServer(compiler, serverConfig)
+/* 必须传入host，nodejs会默认像去查询ipv6的端口是否存在 */
+choosePort(PORT, HOST, port => {
+  /* devServer实例一创建就开始build */
+  devServer = new WebpackDevServer(compiler, serverConfig)
+  devServer.listen(port, HOST, err => {
+    if (err) {
+      return console.log(err)
+    }
 
-devServer.listen(3001, '0.0.0.0', err => {
-  if (err) {
-    return console.log(err)
-  }
+    clearConsole()
+    open(`http://${HOST}:${port}`).catch(e => {
+      log.warn('无法打开浏览器')
+    })
 
-  clearConsole()
-
-  const signals = ['SIGINT', 'SIGTERM']
-  signals.forEach(sig => {
-    process.on(sig, () => {
-      devServer.close()
-      clearConsole()
-      process.exit()
+    const signals = ['SIGINT', 'SIGTERM']
+    signals.forEach(sig => {
+      process.on(sig, () => {
+        devServer.close()
+        clearConsole()
+        process.exit()
+      })
     })
   })
 })
