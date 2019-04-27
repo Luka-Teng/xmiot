@@ -3,7 +3,6 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "prettier": "prettier-eslint --write \"**/*.jsx\" \"**/*.js\" \"**/*.ts\" \"**/*.tsx\" --eslint-config-path \"./.eslintrc\"",
     "server": "xmiot-server",
     "bootstrap": "lerna exec npm i",
     "init": "node scripts/init.js",
