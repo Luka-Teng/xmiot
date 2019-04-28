@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "server": "xmiot-server",
-    "prettier": "node scripts/prettier",
+    "xmiot-prettier": "node scripts/xmiot-prettier",
     "bootstrap": "lerna exec npm i",
     "init": "node scripts/init.js",
     "test": "cross-env NODE_ENV=testing jest --no-cache",
@@ -16,8 +16,8 @@
     }
   },
   "lint-staged": {
-    "packages/**/*.{js,jsx,ts,tsx}": [
-      "npm run prettier",
+    "**/*.{js,jsx,ts,tsx}": [
+      "npm run xmiot-prettier",
       "git add"
     ]
   },
