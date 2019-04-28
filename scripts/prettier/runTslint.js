@@ -1,7 +1,9 @@
 const { Linter } = require("tslint")
 const fs = require("fs-extra")
+const chalk = require('chalk')
 
 const { tslintRules } = require('./config')
+const { getScriptType } = require('../utils')
 
 /* 由于tslint API无法直接识别tslintJson，需要转化格式 */
 const parseLintConfig = (config) => {
@@ -87,17 +89,11 @@ const getErrorMessage = (messages) => {
   })
 }
 
-const extentions = ['.ts', '.tsx']
-
-const isTs = (file) => {
-  return extentions.some(extention => file.endsWith(extention))
-}
-
 const lint = (file) => {
   /* 文件类型检查 */
-  if (!isTs(file)) return
+  if (getScriptType(file) !== 'ts') return
   
-  console.log(`start to tslint file: ${file}`)
+  console.log(chalk.green(`start to tslint: `), file)
 
   const fileContents = fs.readFileSync(file, "utf8")
   const linter = new Linter({ fix: true })
@@ -115,7 +111,7 @@ const lint = (file) => {
     throw ErrorMessage.failure
   }
 
-  console.log(`tslint done: ${file}`)
+  console.log(chalk.green(`tslint done: `), file, '\n')
 }
 
 module.exports = lint

@@ -1,6 +1,7 @@
 const CLIEngine = require("eslint").CLIEngine
 const { eslintRules } = require('./config')
 const { getScriptType } = require('../utils')
+const chalk = require('chalk')
 
 const cli = new CLIEngine({
   parser: 'babel-eslint',
@@ -23,7 +24,7 @@ const lint = (file) => {
   /* 文件类型检查 */
   if (getScriptType(file) !== 'js') return
 
-  console.log(`start to eslint file: ${file}`)
+  console.log(chalk.green(`start to eslint: `), file)
 
   var report = cli.executeOnFiles([file])
   CLIEngine.outputFixes(report)
@@ -33,7 +34,7 @@ const lint = (file) => {
     throw fatalMessage.message
   }
 
-  console.log(`eslint done: ${file}`)
+  console.log(chalk.green(`eslint done: `), file, '\n')
 }
 
 module.exports = lint
