@@ -97,6 +97,8 @@ const lint = (file) => {
   /* 文件类型检查 */
   if (!isTs(file)) return
   
+  console.log(`start to tslint file: ${file}`)
+
   const fileContents = fs.readFileSync(file, "utf8")
   const linter = new Linter({ fix: true })
   linter.lint(file, fileContents, parseLintConfig({ 
@@ -112,6 +114,8 @@ const lint = (file) => {
   if (ErrorMessage) {
     throw ErrorMessage.failure
   }
+
+  console.log(`tslint done: ${file}`)
 }
 
 module.exports = lint

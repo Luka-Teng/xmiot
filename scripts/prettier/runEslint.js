@@ -1,13 +1,11 @@
 const CLIEngine = require("eslint").CLIEngine
 const { eslintRules } = require('./config')
-
-const extentions = ['.js', '.jsx']
+const { getScriptType } = require('../utils')
 
 const cli = new CLIEngine({
   parser: 'babel-eslint',
   useEslintrc: false,
   rules: eslintRules,
-  extentions,
   fix: true
 })
 
@@ -21,13 +19,11 @@ const getFatalMessage = (messages) => {
   })
 }
 
-const isJs = (file) => {
-  return extentions.some(extention => file.endsWith(extention))
-}
-
 const lint = (file) => {
   /* 文件类型检查 */
-  if (!isJs(file)) return
+  if (getScriptType(file) !== 'js') return
+
+  console.log(`start to eslint file: ${file}`)
 
   var report = cli.executeOnFiles([file])
   CLIEngine.outputFixes(report)
@@ -36,6 +32,8 @@ const lint = (file) => {
   if (fatalMessage) {
     throw fatalMessage.message
   }
+
+  console.log(`eslint done: ${file}`)
 }
 
 module.exports = lint
