@@ -50,13 +50,6 @@ const run = ({ from, to, prompts }) => {
       if (metadata.isTs && match(fileName, '**/.eslintrc', { dot: true })) {
         delete files[fileName]
       }
-
-      if (
-        !metadata.isTs &&
-        match(fileName, '**/tsconfig.json', { dot: true })
-      ) {
-        delete files[fileName]
-      }
     }
     done()
   })
