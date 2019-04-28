@@ -4,10 +4,17 @@ const path = require('path')
 const runEslint = require('./runEslint')
 const runTslint = require('./runTslint')
 const runPrettier = require('./runPrettier')
-const { getScriptType } = require('../utils')
+const { getScriptType, matchFile } = require('./utils')
+const { ignores } = require('./config')
 
 const file = process.argv[2]
 const absoluteFile = path.resolve(process.cwd(), file)
+
+/* 过滤被ignore的文件 */
+if (matchFile(ignores, absoluteFile)) {
+  return
+}
+
 let stats
 
 try {

@@ -3,7 +3,7 @@ const fs = require('fs-extra')
 const chalk = require('chalk')
 
 const { tslintRules } = require('./config')
-const { getScriptType } = require('../utils')
+const { getScriptType } = require('./utils')
 
 /* 由于tslint API无法直接识别tslintJson，需要转化格式 */
 const parseLintConfig = config => {

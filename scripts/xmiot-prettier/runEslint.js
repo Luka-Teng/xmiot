@@ -1,6 +1,6 @@
 const CLIEngine = require("eslint").CLIEngine
 const { eslintRules } = require('./config')
-const { getScriptType } = require('../utils')
+const { getScriptType } = require('./utils')
 const chalk = require('chalk')
 
 const cli = new CLIEngine({
