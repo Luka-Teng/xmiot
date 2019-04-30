@@ -52,8 +52,7 @@ module.exports = (
     plugins.push(
       typescript({
         clean: true,
-        abortOnError: false,
-        tsconfig: path.resolve(packageDir, 'tsconfig.json')
+        abortOnError: false
       })
     )
   }
@@ -81,7 +80,7 @@ module.exports = (
           ]
         ]
       }),
-      
+
       // Convert CommonJS modules to ES6
       // 增加对react的Component的导出
       commonjs(
