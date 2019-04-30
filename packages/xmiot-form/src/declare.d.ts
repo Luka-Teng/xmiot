@@ -1,11 +1,13 @@
 /// <reference path="../../../declare/global.d.ts" />
 
 declare module 'ext-name' {
-  export default any
+  const a: any
+  export default a
 }
 
 declare module 'xgplayer' {
-  export default any
+  const a: any
+  export default a
 }
 
 /* 方便测试 */

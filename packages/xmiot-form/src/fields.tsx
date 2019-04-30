@@ -9,6 +9,7 @@ import CheckGroup from './components/checkGroup'
 import Upload from './components/upload'
 import RadioGroup from './components/radioGroup'
 import ColorPicker from './components/colorPicker'
+import Button from './components/button'
 
 class Fields extends PureComponent<FieldsProps> {
   input = (option: any) => {
@@ -43,10 +44,15 @@ class Fields extends PureComponent<FieldsProps> {
     return <ColorPicker {...option} form={this.props.form} />
   }
 
+  button = (option: any) => {
+    return <Button {...option} form={this.props.form} />
+  }
+
   render() {
     const views: React.ReactNode[] = []
     const { options, styles } = this.props
     options.forEach((option, index) => {
+      /* 合并formStyle和itemStyle */
       option.styles = Object.assign({}, styles, option.styles)
       views.push(<div key={index}>{this[option.type](option)}</div>)
     })

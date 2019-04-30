@@ -6,7 +6,6 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
-    "rootDir": "./src",
     "jsx": "react",
     "module": "esnext",
     "target": "es6",

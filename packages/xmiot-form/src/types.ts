@@ -11,9 +11,10 @@ import { RefObject, ReactElement, CSSProperties } from 'react'
  * @prop { props } 按钮基础属性
  */
 type ButtonProps = {
-  doubleCheck?: boolean
+  confirm?: string
   name?: string
   props?: AntdButtonProps
+  styles?: FormStyles
 }
 
 /**
@@ -21,7 +22,7 @@ type ButtonProps = {
  * @prop { cb } 按钮点击后的回调
  */
 type ExtraButtonProps = ButtonProps & {
-  cb: Function
+  cb: (e?: React.MouseEvent<any>) => void
 }
 
 /**
@@ -53,6 +54,7 @@ type BasicConfig<T = any> = {
  * @prop { Upload } Upload组件
  * @prop { RadioGroup } RadioGroup组件
  * @prop { ColorPicker } ColorPicker组件
+ * @prop { Button } Button组件
  */
 export type Config = {
   InputConfig: BasicConfig & {
@@ -101,6 +103,10 @@ export type Config = {
     onChange?: (value: any) => void
   }
   ColorPickerConfig: BasicConfig<string>
+  ButtonConfig: BasicConfig & {
+    cb: (e?: React.MouseEvent<any>) => void
+    confirm?: string
+  }
 }
 
 /*
@@ -116,6 +122,7 @@ type FormItemTypes =
   | 'upload'
   | 'radioGroup'
   | 'colorPicker'
+  | 'button'
 
 /*
  * ItemType mapping to Config
@@ -137,6 +144,8 @@ type ItemTypeToConfig<T extends FormItemTypes> = T extends 'input'
   ? Config['RadioGroupConfig']
   : T extends 'colorPicker'
   ? Config['ColorPickerConfig']
+  : T extends 'button'
+  ? Config['ButtonConfig']
   : never
 
 /**

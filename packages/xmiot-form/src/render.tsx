@@ -6,7 +6,31 @@ import Form from './index'
 
 ReactDOM.render(
   <Form
+    confirmButton={{
+      name: 'test',
+      styles: {
+        display: '1/1',
+        itemStyle: {
+          textAlign: 'right'
+        }
+      }
+    }}
+
+    extranButtons={[{
+      name: 'luka',
+      cb: () => {console.log('sb')}
+    }]}
+
     options={[
+      {
+        type: 'button',
+        name: 'anniu',
+        config: {
+          cb: () => {
+            console.log(111)
+          }
+        }
+      },
       {
         type: 'input',
         name: 'test',
@@ -155,7 +179,7 @@ ReactDOM.render(
         label: 'colors'
       }
     ]}
-    onSubmit={() => {}}
+    onSubmit={(values) => {console.log(values)}}
   />,
   document.getElementById('root')
 )
