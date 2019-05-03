@@ -6,7 +6,7 @@
  */
 const babel = require('rollup-plugin-babel')
 const path = require('path')
-const commonjs = require('rollup-plugin-commonjs')
+// const commonjs = require('rollup-plugin-commonjs')
 const postcss = require('rollup-plugin-postcss')
 const url = require('postcss-url')
 const fileAsBlob = require('rollup-plugin-file-as-blob')
@@ -17,7 +17,7 @@ const { multiDeepAssign } = require('./function')
 const typescript = require('rollup-plugin-typescript2')
 const json = require('rollup-plugin-json')
 
-const namedExports = require('./namedExports')
+// const namedExports = require('./namedExports')
 
 /*
  * eslint的配置在每个包中，由包主人自行管理
@@ -83,9 +83,9 @@ module.exports = (
 
       // Convert CommonJS modules to ES6
       // 增加对react的Component的导出
-      commonjs(
-        type === 'react' ? { namedExports: namedExports(packageDir) } : {}
-      ),
+      // commonjs(
+      //   type === 'react' ? { namedExports: namedExports(packageDir) } : {}
+      // ),
 
       // read json as es6 module
       json(),

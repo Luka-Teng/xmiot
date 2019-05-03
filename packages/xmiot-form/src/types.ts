@@ -6,9 +6,10 @@ import { RefObject, ReactElement, CSSProperties } from 'react'
 /**
  * Button
  * 按钮的基础类型
- * @prop { doubleCheck } 按钮是否需要二次确认
+ * @prop { confirm } 按钮是否需要二次确认
  * @prop { name } 按钮名字
  * @prop { props } 按钮基础属性
+ * @prop { styles } 按钮样式
  */
 type ButtonProps = {
   confirm?: string
