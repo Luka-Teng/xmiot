@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Form as AntForm } from 'antd'
+import { Form as AntForm, Col } from 'antd'
 
 import { FormProps } from './types'
 import Fields from './fields'
-import Button from './components/button'
+import ConfirmButton from './components/innerComponents/confirmButton'
 
 class Form extends Component<FormProps> {
   static defaultProps: Readonly<Partial<FormProps>> = {
@@ -40,46 +40,42 @@ class Form extends Component<FormProps> {
       styles
     } = this.props
 
-    if (confirmButton) {
-      options.push({
-        type: 'button',
-        name: confirmButton.name || '确认',
-        styles: {
-          display: '1/1',
-          ...confirmButton.styles
-        },
-        config: {
-          confirm: confirmButton.confirm,
-          cb: this.handleSubmit
-        },
-        props: confirmButton.props
-      })
-    }
-    
-    if (extranButtons) {
-      options.push(...(extranButtons || []).map<FormProps['options'][number]>(button => {
-        return {
-          type: 'button',
-          name: button.name || '确认',
-          styles: {
-            display: '1/1',
-            ...button.styles
-          },
-          config: {
-            confirm: button.confirm,
-            cb: button.cb
-          },
-          props: button.props
-        }
-      }))
-    }
-
     return (
       <AntForm className="xmiot-form">
         <Fields options={options} styles={styles} form={form} />
+        <Col span={24} style={{textAlign: 'right'}}>
+          {
+            confirmButton && (
+              <ConfirmButton 
+                style={buttonStyle} 
+                cb={this.handleSubmit} 
+                confirm={confirmButton.confirm}
+                {...confirmButton.props}>
+                  {confirmButton.name}
+              </ConfirmButton>
+            )
+          }
+          {
+            extranButtons && (
+              extranButtons.map(button => {
+                return <ConfirmButton 
+                  style={buttonStyle} 
+                  cb={button.cb} 
+                  confirm={button.confirm}
+                  {...button.props}>
+                    {button.name}
+                </ConfirmButton>
+              })
+            )
+          }
+        </Col>
       </AntForm>
     )
   }
+}
+
+const buttonStyle = {
+  margin: '0px 10px'
 }
 
 export default AntForm.create()(Form)

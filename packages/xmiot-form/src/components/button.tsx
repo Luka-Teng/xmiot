@@ -1,27 +1,18 @@
 import React, { Component } from 'react'
-import { Popconfirm, Button } from 'antd'
+import { Popconfirm, Button as AntButton } from 'antd'
 import { ButtonProps } from 'antd/lib/button'
 import { wrapField } from './utils'
 import { FormItemProps } from '../types'
+import ConfirmButton from './innerComponents/confirmButton'
 
 
-class ConfirmButton extends Component<FormItemProps<'button'>> {
+class Button extends Component<FormItemProps<'button'>> {
   render() {
     const { config = { cb: () => {} }, styles, props, name } = this.props
     const { cb, confirm } = config
     return wrapField(
       (
-        confirm 
-        ? <Popconfirm
-            placement="topLeft"
-            title={confirm}
-            onConfirm={cb}
-            okText="确认"
-            cancelText="取消"
-          >
-            <Button {...props}>{name}</Button>
-          </Popconfirm>
-        : <Button onClick={cb} {...props}>{name}</Button>
+        <ConfirmButton cb={cb} {...props} confirm={confirm}>{name}</ConfirmButton>
       ),
       {
         itemStyle: {
@@ -34,4 +25,4 @@ class ConfirmButton extends Component<FormItemProps<'button'>> {
   }
 }
 
-export default ConfirmButton
+export default Button

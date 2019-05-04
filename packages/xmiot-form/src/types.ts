@@ -15,7 +15,6 @@ type ButtonProps = {
   confirm?: string
   name?: string
   props?: AntdButtonProps
-  styles?: FormStyles
 }
 
 /**
@@ -132,22 +131,20 @@ type FormItemTypes =
 type ItemTypeToConfig<T extends FormItemTypes> = T extends 'input'
   ? Config['InputConfig']
   : T extends 'select'
-  ? Config['SelectConfig']
-  : T extends 'textarea'
-  ? Config['TextareaConfig']
-  : T extends 'datePicker'
-  ? Config['DatePickerConfig']
-  : T extends 'checkGroup'
-  ? Config['CheckGroupConfig']
-  : T extends 'upload'
-  ? Config['UploadConfig']
-  : T extends 'radioGroup'
-  ? Config['RadioGroupConfig']
-  : T extends 'colorPicker'
-  ? Config['ColorPickerConfig']
-  : T extends 'button'
-  ? Config['ButtonConfig']
-  : never
+    ? Config['SelectConfig']
+    : T extends 'textarea'
+      ? Config['TextareaConfig']
+      : T extends 'datePicker'
+        ? Config['DatePickerConfig']
+        : T extends 'checkGroup'
+          ? Config['CheckGroupConfig']
+          : T extends 'upload'
+            ? Config['UploadConfig']
+            : T extends 'radioGroup'
+              ? Config['RadioGroupConfig']
+              : T extends 'colorPicker'
+                ? Config['ColorPickerConfig']
+                : T extends 'button' ? Config['ButtonConfig'] : never
 
 /**
  * option

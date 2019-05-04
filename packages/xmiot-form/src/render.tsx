@@ -7,13 +7,7 @@ import Form from './index'
 ReactDOM.render(
   <Form
     confirmButton={{
-      name: 'test',
-      styles: {
-        display: '1/1',
-        itemStyle: {
-          textAlign: 'right'
-        }
-      }
+      name: 'test'
     }}
 
     extranButtons={[{
