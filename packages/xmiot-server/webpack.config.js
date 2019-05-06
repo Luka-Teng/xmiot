@@ -73,7 +73,15 @@ module.exports = ({ isTs, entry, workDir: _workDir }) => {
                   {
                     plugins: [
                       ['@babel/plugin-proposal-decorators', { legacy: true }],
-                      ['@babel/plugin-proposal-class-properties']
+                      ['@babel/plugin-proposal-class-properties'],
+                      [
+                        'import',
+                        {
+                          libraryName: 'antd',
+                          ibraryDirectory: 'es',
+                          style: true
+                        }
+                      ]
                     ]
                   }
                 ]
