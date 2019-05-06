@@ -110,7 +110,12 @@ module.exports = ({ isTs, entry, workDir: _workDir }) => {
             },
             {
               test: /\.less$/,
-              use: getStyleLoaders('less-loader')
+              use: getStyleLoaders({
+                loader: 'less-loader',
+                options: {
+                  javascriptEnabled: true
+                }
+              })
             }
           ]
         }

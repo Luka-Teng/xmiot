@@ -19,9 +19,11 @@ const getStyleLoaders = preProcessor => {
     }
   ].filter(Boolean)
   if (preProcessor) {
-    loaders.push({
-      loader: require.resolve(preProcessor)
-    })
+    if (typeof preProcessor === 'string') {
+      loaders.push(require.resolve(preProcessor))
+    } else if (Object.prototype.toString.call(preProcessor) === '[object Object]') {
+      loaders.push(preProcessor)
+    }
   }
   return loaders
 }
