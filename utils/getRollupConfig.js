@@ -17,15 +17,11 @@ const { multiDeepAssign } = require('./function')
 const json = require('rollup-plugin-json')
 const extensions = require('./rollup-plugin-extensions')
 
-module.exports = (
-  options = {},
-  { type = 'global', packageDir = '', isTypeScript = false, noCss = false } = {}
-) => {
-
+module.exports = (options = {}) => {
   const defaultOptions = {
     plugins: [
       extensions({
-        extensions: [ '.jsx', '.ts', '.tsx' ]
+        extensions: ['.jsx', '.ts', '.tsx']
       }),
       replace({
         ...getClientEnvironment().stringified
@@ -53,12 +49,9 @@ module.exports = (
         ]
       }),
       json(),
-      noCss
-        ? null
-        : postcss({
-            plugins: [url({ url: 'inline' })]
-          }),
-
+      postcss({
+        plugins: [url({ url: 'inline' })]
+      }),
       // 引入的图片统一用base64输出，后期要做大小限制
       fileAsBlob({
         include: '**/**.png'
