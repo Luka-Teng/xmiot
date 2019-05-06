@@ -130,7 +130,7 @@
   "dependencies": {
     "postcss-url": "^8.0.0",
     "rollup-plugin-json": "^4.0.0",
-    "xmiot-server": "^1.2.4"
+    "xmiot-server": "^1.2.5"
   },
   "lastCommit": "fd7924b8cc3a19cf89be504dd3967d4df89ac697"
 }

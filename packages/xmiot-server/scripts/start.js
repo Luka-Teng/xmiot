@@ -29,7 +29,7 @@ let compiler = createCompiler({
 
 const serverConfig = {
   compress: true,
-  contentBase: path.resolve('public'),
+  contentBase: path.resolve(__dirname, '../public'),
   hot: true,
   publicPath: '/',
   quiet: true,
