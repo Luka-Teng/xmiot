@@ -184,7 +184,7 @@ export interface FormProps extends FormComponentProps {
   options: ItemTypesToFormItems<FormItemTypes>[]
   onSubmit: (values: genObject) => void
   confirmButton?: ButtonProps
-  extranButtons?: ExtraButtonProps[]
+  extraButtons?: ExtraButtonProps[]
   formRef?: RefObject<{}>
   styles?: FormStyles
 }

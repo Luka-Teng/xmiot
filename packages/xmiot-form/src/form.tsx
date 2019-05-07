@@ -7,7 +7,7 @@ import ConfirmButton from './components/innerComponents/confirmButton'
 
 class Form extends Component<FormProps> {
   static defaultProps: Readonly<Partial<FormProps>> = {
-    extranButtons: []
+    extraButtons: []
   }
 
   componentDidMount() {
@@ -34,7 +34,7 @@ class Form extends Component<FormProps> {
     let {
       options,
       onSubmit,
-      extranButtons,
+      extraButtons,
       confirmButton,
       form,
       styles
@@ -56,8 +56,8 @@ class Form extends Component<FormProps> {
             )
           }
           {
-            extranButtons && (
-              extranButtons.map(button => {
+            extraButtons && (
+              extraButtons.map(button => {
                 return <ConfirmButton 
                   style={buttonStyle} 
                   cb={button.cb} 
