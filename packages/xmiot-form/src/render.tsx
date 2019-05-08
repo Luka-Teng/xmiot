@@ -9,12 +9,14 @@ ReactDOM.render(
     confirmButton={{
       name: 'test'
     }}
-
-    extranButtons={[{
-      name: 'luka',
-      cb: () => {console.log('sb')}
-    }]}
-
+    extraButtons={[
+      {
+        name: 'luka',
+        cb: () => {
+          console.log('sb')
+        }
+      }
+    ]}
     options={[
       {
         type: 'button',
@@ -173,7 +175,9 @@ ReactDOM.render(
         label: 'colors'
       }
     ]}
-    onSubmit={(values) => {console.log(values)}}
+    onSubmit={values => {
+      console.log(values)
+    }}
   />,
   document.getElementById('root')
 )
