@@ -40,8 +40,8 @@ module.exports = (options = {}) => {
             'import',
             {
               libraryName: 'antd',
-              ibraryDirectory: 'es',
-              style: true
+              libraryDirectory: 'es',
+              style: 'css'
             }
           ]
         ]
