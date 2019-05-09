@@ -45,9 +45,10 @@ class Form extends Component<FormProps> {
         <Fields options={options} styles={styles} form={form} />
         <Col span={24} style={{ textAlign: 'right' }}>
           {extraButtons &&
-            extraButtons.map(button => {
+            extraButtons.map((button, index) => {
               return (
                 <ConfirmButton
+                  key={index}
                   style={buttonStyle}
                   cb={button.cb}
                   confirm={button.confirm}
@@ -68,6 +69,7 @@ class Form extends Component<FormProps> {
             </ConfirmButton>
           )}
         </Col>
+        <div style={{ clear: 'both' }} />
       </AntForm>
     )
   }
