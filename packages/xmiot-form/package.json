@@ -14,31 +14,29 @@
     "entry"
   ],
   "dependencies": {
+    "@types/react-color": "^3.0.0",
+    "react-color": "^2.17.0",
     "ext-name": "^5.0.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.0.123",
     "@types/react": "^16.8.14",
-    "@types/react-color": "^3.0.0",
     "@types/react-dom": "^16.8.4",
     "antd": "^3.16.6",
     "babel-plugin-import": "^1.11.0",
     "lodash": "^4.17.11",
     "react": "^16.8.6",
-    "react-color": "^2.17.0",
     "react-dom": "^16.6.3",
     "xgplayer": "^1.1.5-beta.20"
   },
   "peerDependencies": {
     "@types/lodash": "^4.0.123",
     "@types/react": "^16.8.14",
-    "@types/react-color": "^3.0.0",
     "@types/react-dom": "^16.8.4",
     "antd": "^3.16.6",
     "babel-plugin-import": "^1.11.0",
     "lodash": "^4.17.11",
     "react": "^16.8.6",
-    "react-color": "^2.17.0",
     "react-dom": "^16.6.3",
     "xgplayer": "^1.1.5-beta.20"
   },
