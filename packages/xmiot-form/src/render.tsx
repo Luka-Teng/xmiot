@@ -39,7 +39,7 @@ ReactDOM.render(
         name: 'test',
         label: 'test',
         styles: {
-          display: '1/4'
+          display: 6
         },
         config: {
           onChange: value => {
@@ -52,7 +52,7 @@ ReactDOM.render(
         name: 'aaa',
         label: 'test',
         styles: {
-          display: '1/4'
+          display: 6
         },
         config: {
           data: [
@@ -76,7 +76,7 @@ ReactDOM.render(
         name: 'testa',
         label: 'test',
         styles: {
-          display: '1/1'
+          display: 24
         },
         config: {
           onChange: e => {
@@ -92,7 +92,7 @@ ReactDOM.render(
         name: 'tests',
         label: 'test',
         styles: {
-          display: '1/2'
+          display: 12
         },
         config: {
           range: false,
@@ -107,7 +107,7 @@ ReactDOM.render(
         name: 'testsx',
         label: 'test',
         styles: {
-          display: '1/2'
+          display: 12
         },
         config: {
           data: [
@@ -131,7 +131,7 @@ ReactDOM.render(
         name: 'video',
         label: '视频',
         styles: {
-          display: '1/1'
+          display: 24
         },
         config: {
           initialValue: [],
@@ -150,7 +150,7 @@ ReactDOM.render(
         name: 'radio',
         label: '不知道',
         styles: {
-          display: '1/1'
+          display: 24
         },
         config: {
           data: [

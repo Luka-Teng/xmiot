@@ -16,7 +16,7 @@ export const wrapField = (
   label?: string
 ): React.ReactNode => {
   const {
-    display = '1/3',
+    display = 8,
     labelStyle,
     itemStyle,
     insertElement,
@@ -38,14 +38,5 @@ export const wrapField = (
     </AntCol>
   )
 
-  const strategies: {
-    [key in NonNullable<WrapFieldOptions['display']>]: React.ReactNode
-  } = {
-    '1/1': wrapper(24),
-    '1/2': wrapper(12),
-    '1/3': wrapper(8),
-    '1/4': wrapper(6)
-  }
-
-  return strategies[display]
+  return wrapper(display)
 }
