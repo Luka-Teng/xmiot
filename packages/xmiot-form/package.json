@@ -14,7 +14,7 @@
     "entry"
   ],
   "dependencies": {
-    "ext-name": "^5.0.0",
+    "ext-name": "^5.0.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.0.123",
