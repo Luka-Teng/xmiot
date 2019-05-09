@@ -1,6 +1,6 @@
 {
   "name": "xmiot-form",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "声联网后台管理统一form表单",
   "main": "entry/index.common.js",
   "module": "entry/index.esm.js",
