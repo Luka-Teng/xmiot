@@ -26,8 +26,15 @@ ReactDOM.render(
             console.log(111)
           }
         }
-      },
-      {
+      }, {
+        type: 'custom',
+        name: 'wtf',
+        config: {
+          render: () => {
+            return <div>11111</div>
+          }
+        }
+      }, {
         type: 'input',
         name: 'test',
         label: 'test',

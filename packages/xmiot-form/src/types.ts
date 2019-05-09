@@ -107,6 +107,9 @@ export type Config = {
     cb: (e?: React.MouseEvent<any>) => void
     confirm?: string
   }
+  CustomConfig: {
+    render: () => React.ReactNode
+  }
 }
 
 /*
@@ -123,6 +126,7 @@ type FormItemTypes =
   | 'radioGroup'
   | 'colorPicker'
   | 'button'
+  | 'custom'
 
 /*
  * ItemType mapping to Config
@@ -144,7 +148,9 @@ type ItemTypeToConfig<T extends FormItemTypes> = T extends 'input'
               ? Config['RadioGroupConfig']
               : T extends 'colorPicker'
                 ? Config['ColorPickerConfig']
-                : T extends 'button' ? Config['ButtonConfig'] : never
+                : T extends 'button'
+                  ? Config['ButtonConfig']
+                  : T extends 'custom' ? Config['CustomConfig'] : never
 
 /**
  * option
