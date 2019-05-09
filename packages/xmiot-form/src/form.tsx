@@ -10,7 +10,7 @@ class Form extends Component<FormProps> {
     extraButtons: []
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const resetFormRef = (ref: any, form: FormProps['form']) => {
       ref.current = form
     }
@@ -18,7 +18,7 @@ class Form extends Component<FormProps> {
     if (formRef) resetFormRef(formRef, form)
   }
 
-  handleSubmit = (e? :React.MouseEvent<any>) => {
+  handleSubmit = (e?: React.MouseEvent<any>) => {
     e && e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -30,7 +30,7 @@ class Form extends Component<FormProps> {
     })
   }
 
-  render() {
+  render () {
     let {
       options,
       onSubmit,
@@ -43,31 +43,30 @@ class Form extends Component<FormProps> {
     return (
       <AntForm className="xmiot-form">
         <Fields options={options} styles={styles} form={form} />
-        <Col span={24} style={{textAlign: 'right'}}>
-          {
-            confirmButton && (
-              <ConfirmButton 
-                style={buttonStyle} 
-                cb={this.handleSubmit} 
-                confirm={confirmButton.confirm}
-                {...confirmButton.props}>
-                  {confirmButton.name}
-              </ConfirmButton>
-            )
-          }
-          {
-            extraButtons && (
-              extraButtons.map(button => {
-                return <ConfirmButton 
-                  style={buttonStyle} 
-                  cb={button.cb} 
+        <Col span={24} style={{ textAlign: 'right' }}>
+          {extraButtons &&
+            extraButtons.map(button => {
+              return (
+                <ConfirmButton
+                  style={buttonStyle}
+                  cb={button.cb}
                   confirm={button.confirm}
-                  {...button.props}>
-                    {button.name}
+                  {...button.props}
+                >
+                  {button.name}
                 </ConfirmButton>
-              })
-            )
-          }
+              )
+            })}
+          {confirmButton && (
+            <ConfirmButton
+              style={buttonStyle}
+              cb={this.handleSubmit}
+              confirm={confirmButton.confirm}
+              {...confirmButton.props}
+            >
+              {confirmButton.name}
+            </ConfirmButton>
+          )}
         </Col>
       </AntForm>
     )
