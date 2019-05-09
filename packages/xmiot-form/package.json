@@ -1,6 +1,6 @@
 {
   "name": "xmiot-form",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "声联网后台管理统一form表单",
   "main": "entry/index.common.js",
   "module": "entry/index.esm.js",
@@ -22,7 +22,7 @@
     "@types/react-color": "^3.0.0",
     "@types/react-dom": "^16.8.4",
     "antd": "^3.16.6",
-    "babel-plugin-import": "^1.11.0", 
+    "babel-plugin-import": "^1.11.0",
     "lodash": "^4.17.11",
     "react": "^16.8.6",
     "react-color": "^2.17.0",
