@@ -165,7 +165,7 @@ ReactDOM.render(
             }
           ],
           onChange: values => {
-            console.log(values)
+            console.log(values, 1)
           }
         }
       },
