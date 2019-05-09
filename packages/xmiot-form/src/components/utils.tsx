@@ -1,6 +1,6 @@
 import React from 'react'
-import AntForm from 'antd/lib/form'
-import AntCol from 'antd/lib/col'
+import { Form as AntForm } from 'antd'
+import { Col as AntCol } from 'antd'
 
 import { FormStyles } from '../types'
 
