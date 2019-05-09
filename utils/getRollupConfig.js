@@ -36,8 +36,6 @@ module.exports = (options = {}) => {
         runtimeHelpers: true,
         plugins: [
           [path.resolve(__dirname, 'babel-plugin-require-to-import')],
-          ['@babel/plugin-proposal-class-properties'],
-          ['@babel/plugin-proposal-object-rest-spread'],
           [
             'import',
             {
