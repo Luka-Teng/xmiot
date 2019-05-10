@@ -53,11 +53,10 @@ class Fields extends PureComponent<FieldsProps> {
     return <Custom {...option} />
   }
 
-  render() {
+  render () {
     const views: React.ReactNode[] = []
     const { options, styles } = this.props
     options.forEach((option, index) => {
-      console.log(index)
       /* 合并formStyle和itemStyle */
       option.styles = Object.assign({}, styles, option.styles)
       views.push(<div key={index}>{this[option.type](option)}</div>)
