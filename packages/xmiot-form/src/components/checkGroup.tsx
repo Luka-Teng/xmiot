@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Checkbox as AntCheckbox, Row as AntRow } from 'antd'
+import { Checkbox as AntCheckbox, Row as AntRow, Divider } from 'antd'
 
 import { FormItemProps } from '../types'
 import { wrapField } from './utils'
@@ -18,7 +18,7 @@ class CheckGroup extends PureComponent<FormItemProps<'checkGroup'>> {
     })
   }
 
-  render() {
+  render () {
     const {
       name,
       label,
@@ -50,6 +50,7 @@ class CheckGroup extends PureComponent<FormItemProps<'checkGroup'>> {
         insertElement: checkAllBtn ? (
           <AntRow style={{ lineHeight: 'normal' }}>
             <AntCheckbox onChange={this.checkAll}>全选</AntCheckbox>
+            <Divider style={{ margin: '10px 0px' }} />
           </AntRow>
         ) : null,
         ...composedStyles
