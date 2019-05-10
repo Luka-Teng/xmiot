@@ -59,6 +59,9 @@ class Fields extends PureComponent<FieldsProps> {
     options.forEach((option, index) => {
       /* 合并formStyle和itemStyle */
       option.styles = Object.assign({}, styles, option.styles)
+      if (!this[option.type]) {
+        throw new Error(`不存在该类型 ${option.type}`)
+      }
       views.push(<div key={index}>{this[option.type](option)}</div>)
     })
     return views

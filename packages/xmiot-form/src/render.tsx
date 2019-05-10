@@ -26,7 +26,8 @@ ReactDOM.render(
             console.log(111)
           }
         }
-      }, {
+      },
+      {
         type: 'custom',
         name: 'wtf',
         config: {
@@ -34,7 +35,8 @@ ReactDOM.render(
             return <div>11111</div>
           }
         }
-      }, {
+      },
+      {
         type: 'input',
         name: 'test',
         label: 'test',
@@ -134,7 +136,9 @@ ReactDOM.render(
           display: 24
         },
         config: {
-          initialValue: [],
+          initialValue: [
+            'http://static2.pp.ximalaya.com/sr012018/xiaoya-os-open-platform/last/build/static/media/login-bg.d1cb9cbd.png'
+          ],
           onUpload: (file: any, success: any, fail: any, onProgress: any) => {
             success(
               'http://static2.pp.ximalaya.com/sr012018/xiaoya-os-open-platform/last/build/static/media/login-bg.d1cb9cbd.png'

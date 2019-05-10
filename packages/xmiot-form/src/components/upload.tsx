@@ -38,7 +38,7 @@ const getFile = (url: string, status: UploadFileStatus) => {
 
   return {
     uid: '' + Math.random(),
-    type: ext.mine,
+    type: ext.mime,
     name: 'random',
     status,
     size: 0,
