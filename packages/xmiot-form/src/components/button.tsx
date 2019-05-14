@@ -5,21 +5,15 @@ import { wrapField } from './utils'
 import { FormItemProps } from '../types'
 import ConfirmButton from './innerComponents/confirmButton'
 
-
 class Button extends Component<FormItemProps<'button'>> {
-  render() {
+  render () {
     const { config = { cb: () => {} }, styles, props, name } = this.props
     const { cb, confirm } = config
     return wrapField(
-      (
-        <ConfirmButton cb={cb} {...props} confirm={confirm}>{name}</ConfirmButton>
-      ),
-      {
-        itemStyle: {
-          textAlign: 'right'
-        },
-        ...styles
-      },
+      <ConfirmButton cb={cb} {...props} confirm={confirm}>
+        {name}
+      </ConfirmButton>,
+      styles,
       Math.random().toLocaleString()
     )
   }
