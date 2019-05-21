@@ -14,12 +14,7 @@ class Button extends Component<FormItemProps<'button'>> {
       (
         <ConfirmButton cb={cb} {...props} confirm={confirm}>{name}</ConfirmButton>
       ),
-      {
-        itemStyle: {
-          textAlign: 'right'
-        },
-        ...styles
-      },
+      styles,
       Math.random().toLocaleString()
     )
   }

@@ -4,6 +4,16 @@
 
 const path = require('path')
 const fs = require('fs-extra')
+const match = require('minimatch')
+
+const matchFile = (globs, file) => {
+  return globs.some(glob => {
+    if (typeof glob === 'function') {
+      return glob(file)
+    }
+    return match(file, glob)
+  })
+}
 
 const isDir = path => {
   try {
@@ -39,8 +49,18 @@ const getDirsStatus = (_dir1, _dir2) => {
   return dirsStatus(dir1, dir2) || 'unequal'
 }
 
-const lookUpFile = ({ rootDir, startDir, file }) => {
-  if (!(rootDir && startDir && file)) {
+const getFile = (_path, globs) => {
+  const children = fs.readdirSync(_path)
+  for (let i in children) {
+    const childPath = path.resolve(_path, children[i])
+    if (matchFile(globs, childPath)) {
+      return childPath
+    }
+  }
+}
+
+const lookUpFile = ({ rootDir, startDir, globs }) => {
+  if (!(rootDir && startDir && globs)) {
     throw new Error('参数不能为空')
   }
 
@@ -52,14 +72,9 @@ const lookUpFile = ({ rootDir, startDir, file }) => {
     throw new Error('rootDir和startDir必须是目录, file必须是文件')
   }
 
-  const getFile = (_path, file) => {
-    const filePath = path.resolve(_path, file)
-    return fs.existsSync(filePath) && filePath
-  }
-
   switch (getDirsStatus(_rootDir, _startDir)) {
     case 'equal':
-      return getFile(_startDir, file)
+      return getFile(_startDir, globs)
 
     case 'unequal':
     case 'contained':
@@ -67,11 +82,11 @@ const lookUpFile = ({ rootDir, startDir, file }) => {
 
     case 'containing':
       return (
-        getFile(_startDir, file) ||
+        getFile(_startDir, globs) ||
         lookUpFile({
           rootDir: _rootDir,
           startDir: path.resolve(_startDir, '..'),
-          file: file
+          file: globs
         })
       )
 

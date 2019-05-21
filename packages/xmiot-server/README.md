@@ -9,9 +9,9 @@
   
 3. 代码风格检测
 
-  a. 使用tslint进行代码风格检测
+  a. 使用tslint进行代码风格检测, 项目会根据目录层级下是否有tslint.json来判断是否启用
 
-  b. js, jsx统一使用eslint进行代码风格检测
+  b. js, jsx统一使用eslint进行代码风格检测，项目会根据项目层级下是否有eslint对应配置文件来判断是否启用
 
   c. 语法检测严格遵守eslint和tslint的层级，好处在于ide也能识别
 

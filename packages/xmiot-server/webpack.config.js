@@ -7,6 +7,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const fs = require('fs-extra')
 
 const ShowErrorsWebpackPlugin = require('./plugins/showErrorsWebpackPlugin')
 const overrideTsConfig = require('./utils/overrideTsConfig')
@@ -20,6 +21,20 @@ module.exports = ({ isTs, entry, workDir: _workDir }) => {
   const absoluteEntry = path.resolve(process.cwd(), entry)
   const absoluteEntryDir = path.resolve(process.cwd(), entry, '..')
   const workDir = _workDir || absoluteEntryDir
+  const hasEslint = lookUpFile({
+    rootDir: process.cwd(),
+    startDir: workDir,
+    globs: [
+      '**/.eslintrc.js',
+      '**/.eslintrc',
+      file => {
+        if (file.endsWith('package.json')) {
+          const json = fs.readJsonSync(file)
+          return json.eslintConfig ? true : false
+        }
+      }
+    ]
+  })
 
   if (isTs) {
     /* 重置ts检测目录 */
@@ -52,12 +67,13 @@ module.exports = ({ isTs, entry, workDir: _workDir }) => {
     },
     module: {
       rules: [
-        {
-          test: /\.(js|jsx)$/,
-          enforce: 'pre',
-          loader: require.resolve('eslint-loader'),
-          include: absoluteEntry
-        },
+        !isTs &&
+          hasEslint && {
+            test: /\.(js|jsx)$/,
+            enforce: 'pre',
+            loader: require.resolve('eslint-loader'),
+            include: absoluteEntry
+          },
         {
           oneOf: [
             {
@@ -119,7 +135,7 @@ module.exports = ({ isTs, entry, workDir: _workDir }) => {
             }
           ]
         }
-      ]
+      ].filter(Boolean)
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -149,7 +165,7 @@ module.exports = ({ isTs, entry, workDir: _workDir }) => {
           tslint: lookUpFile({
             rootDir: process.cwd(),
             startDir: workDir,
-            file: 'tslint.json'
+            globs: ['**/tslint.json']
           })
         })
     ].filter(Boolean)
