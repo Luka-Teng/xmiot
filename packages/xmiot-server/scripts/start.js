@@ -38,6 +38,10 @@ const serverConfig = {
   overlay: {
     errors: true,
     warnings: false
+  },
+  /* 方便对源码进行调试 */
+  watchOptions: {
+    ignored: []
   }
 }
 
