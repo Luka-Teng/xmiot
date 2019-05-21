@@ -3,12 +3,11 @@ import ReactDOM from 'react-dom'
 
 class A extends Component {
   componentDidMount () {
-    debugger
   }
 
   componentDidUpdate () {
-    debugger
   }
+  
 
   render () {
     return (

@@ -86,7 +86,7 @@ const lookUpFile = ({ rootDir, startDir, globs }) => {
         lookUpFile({
           rootDir: _rootDir,
           startDir: path.resolve(_startDir, '..'),
-          file: globs
+          globs
         })
       )
 
