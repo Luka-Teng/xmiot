@@ -84,7 +84,7 @@ module.exports = ({ isTs, entry, workDir: _workDir }) => {
               options: {
                 babelrc: false,
                 configFile: false,
-                presets: [['react-app', { flow: false, typescript: true }]],
+                presets: [['react-app', { flow: true, typescript: true }]],
                 overrides: [
                   {
                     plugins: [
