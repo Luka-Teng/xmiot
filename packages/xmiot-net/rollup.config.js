@@ -12,7 +12,13 @@ function getOptions (module) {
       file: `./entry/${fileName[module]}`,
       format: module
     },
-    external: ['axios']
+    external: (id) => {
+      if (
+        /^axios/.test(id)
+      ) {
+        return true
+      }
+    }
   }
 }
 

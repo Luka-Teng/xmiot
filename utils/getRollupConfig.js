@@ -32,10 +32,11 @@ module.exports = (options = {}) => {
       }),
       babel({
         babelrc: false,
-        presets: [['react-app', { flow: false, typescript: true }]],
+        presets: [
+          ['react-app', { flow: false, typescript: true, helpers: false }]
+        ],
         exclude: 'node_modules/**',
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
-        runtimeHelpers: true,
         plugins: [
           [path.resolve(__dirname, 'babel-plugin-require-to-import')],
           [
