@@ -88,30 +88,6 @@ net.postError((err, stop) => {
 })
 
 /*
- * 请求&成功响应拦截层
- * 两个拦截事件互相绑定，pre被取消也会导致对应postSuceess事件被取消
- */ 
-net.preAndPostSuccess((config, stop) => {
-  // your code here
-  return config
-}, (response, stop) => {
-   // your code here
-  return response 
-})
-
-/*
- * 请求&失败响应拦截层
- * 两个拦截事件互相绑定，pre被取消也会导致对应postError事件被取消
- */ 
-net.preAndPostError((config, stop) => {
-  // your code here
-  return config
-}, (err, stop) => {
-   // your code here
-  return err 
-})
-
-/*
  * 注意
  * 拦截支持链式调用
  */

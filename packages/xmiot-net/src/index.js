@@ -55,10 +55,6 @@ class Net {
     /* 依次执行前置拦截中间函数 */
     this.axiosInstance.interceptors.request.use(
       async config => {
-        /* 每次请求重新开始，都要对响应拦截刷新 */
-        this.responseHandlers.success.resetReady()
-        this.responseHandlers.error.resetReady()
-
         const result = await this.run('pre', config)
 
         return this.handleAdapter(result)
@@ -89,7 +85,7 @@ class Net {
     /* 注册Adapter */
     this.registerAdapter(new CacheAdapter(this), new MockAdapter(this))
 
-    /* 处理非网络/意外错误 */
+    // /* 处理非网络/意外错误 */
     unexpectedError(this)
 
     /* 开启请求锁 */
@@ -97,7 +93,7 @@ class Net {
       preventRepeat(this)
     }
 
-    /* 增加重发属性 */
+    // /* 增加重发属性 */
     addResend(this)
   }
 
@@ -116,18 +112,6 @@ class Net {
   /* 响应失败拦截层 */
   postError = fn => {
     this.responseHandlers.error.listen(fn)
-    return this
-  }
-
-  /* 请求&响应成功拦截层 */
-  preAndPostSuccess = (fn1, fn2) => {
-    this.requestHandlers.connect(this.responseHandlers.success)(fn1, fn2)
-    return this
-  }
-
-  /* 请求&响应失败拦截层 */
-  preAndPostError = (fn1, fn2) => {
-    this.requestHandlers.connect(this.responseHandlers.error)(fn1, fn2)
     return this
   }
 

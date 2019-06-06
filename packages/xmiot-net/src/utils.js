@@ -64,7 +64,7 @@ export const getUrlFlag = ({ baseURL, url, method }) => {
   }
   return JSON.stringify({
     url,
-    method
+    method: method.toLocaleUpperCase()
   })
 }
 
