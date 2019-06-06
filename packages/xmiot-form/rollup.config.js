@@ -12,7 +12,18 @@ function getOptions (module) {
       file: `./entry/${fileName[module]}`,
       format: module
     },
-    external: ['react', 'antd', 'antd/lib', 'antd/dist', 'react-color', 'xgplayer', 'ext-name']
+    external: (id) => {
+      if (
+        /^react/.test(id)
+        || /^antd/.test(id)
+        || /^react-color/.test(id)
+        || /^xgplayer/.test(id)
+        || /^ext-name/.test(id)
+        || /^lodash/.test(id)
+      ) {
+        return true
+      }
+    }
   }
 }
 

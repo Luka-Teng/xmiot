@@ -9,6 +9,8 @@ process.env.NODE_ENV = 'production'
 const babel = require('rollup-plugin-babel')
 const path = require('path')
 const postcss = require('rollup-plugin-postcss')
+const resolve = require('rollup-plugin-node-resolve')
+const commonjs = require('rollup-plugin-commonjs')
 const url = require('postcss-url')
 const fileAsBlob = require('rollup-plugin-file-as-blob')
 const replace = require('rollup-plugin-replace')
@@ -46,6 +48,8 @@ module.exports = (options = {}) => {
           ]
         ]
       }),
+      resolve(),
+      commonjs(),
       json(),
       postcss({
         plugins: [url({ url: 'inline' })]
