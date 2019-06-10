@@ -20,7 +20,7 @@ class RadioGroup extends PureComponent<FormItemProps<'radioGroup'>> {
       form: { getFieldDecorator }
     } = this.props
 
-    const { initialValue = '', rules = [], onChange, data } = config
+    const { initialValue = '', rules = [], onChange, data, appendElement, insertElement } = config
 
     return wrapField(
       getFieldDecorator(name, {
@@ -39,7 +39,7 @@ class RadioGroup extends PureComponent<FormItemProps<'radioGroup'>> {
           })}
         </AntRadioGroup>
       ),
-      styles,
+      { ...styles, appendElement, insertElement },
       name,
       label
     )

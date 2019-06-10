@@ -25,7 +25,9 @@ class Select extends PureComponent<FormItemProps<'select'>> {
       rules = [],
       multi = false,
       onSelectChange,
-      data
+      data,
+      appendElement,
+      insertElement
     } = config
 
     return wrapField(
@@ -46,7 +48,7 @@ class Select extends PureComponent<FormItemProps<'select'>> {
           ))}
         </AntSelect>
       ),
-      styles,
+      { ...styles, appendElement, insertElement },
       name,
       label
     )

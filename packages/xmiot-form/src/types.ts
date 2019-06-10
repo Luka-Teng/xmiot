@@ -66,6 +66,8 @@ export type FormStyles = {
 type BasicConfig<T = any> = {
   rules?: ValidationRule[]
   initialValue?: T
+  appendElement?: React.ReactNode
+  insertElement?: React.ReactNode
 }
 
 /**
@@ -133,6 +135,8 @@ export type Config = {
   }
   CustomConfig: {
     render: () => React.ReactNode
+    appendElement?: React.ReactNode
+    insertElement?: React.ReactNode
   }
 }
 

@@ -21,7 +21,9 @@ class Textarea extends PureComponent<FormItemProps<'textarea'>> {
       resize = false,
       rows = 5,
       onChange,
-      onPressEnter
+      onPressEnter,
+      appendElement,
+      insertElement
     } = config
 
     return wrapField(
@@ -38,7 +40,7 @@ class Textarea extends PureComponent<FormItemProps<'textarea'>> {
           style={{ resize: resize ? 'both' : 'none' }}
         />
       ),
-      styles,
+      { ...styles, appendElement, insertElement },
       name,
       label
     )

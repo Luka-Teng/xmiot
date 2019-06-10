@@ -36,7 +36,9 @@ class CheckGroup extends PureComponent<FormItemProps<'checkGroup'>> {
       rules = [],
       onChange,
       data,
-      checkAllBtn = false
+      checkAllBtn = false,
+      appendElement,
+      insertElement
     } = config
 
     const composedStyles = Object.assign({}, _styles, styles)
@@ -53,7 +55,8 @@ class CheckGroup extends PureComponent<FormItemProps<'checkGroup'>> {
             <Divider style={{ margin: '10px 0px' }} />
           </AntRow>
         ) : null,
-        ...composedStyles
+        ...composedStyles,
+        appendElement
       },
       name,
       label

@@ -204,7 +204,7 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
       form: { getFieldDecorator }
     } = this.props
 
-    const { initialValue = [], rules = [], maxNumber = 1 } = config
+    const { initialValue = [], rules = [], maxNumber = 1, appendElement, insertElement } = config
 
     const { fileList, previewVisible, previewUrl, previewType } = this.state
 
@@ -242,7 +242,7 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
           {renderPreview(previewType, previewUrl)}
         </Modal>
       </div>,
-      styles,
+      { ...styles, appendElement, insertElement },
       name,
       label
     )

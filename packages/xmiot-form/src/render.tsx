@@ -70,7 +70,8 @@ ReactDOM.render(
           initialValue: '11',
           onSelectChange: () => {
             console.log(1111)
-          }
+          },
+          appendElement: <div>222</div>
         }
       },
       {

@@ -6,7 +6,7 @@ import { wrapField } from './utils'
 
 const AntRangePicker = AntDatePicker.RangePicker
 
-class Select extends PureComponent<FormItemProps<'datePicker'>> {
+class DatePicker extends PureComponent<FormItemProps<'datePicker'>> {
   render() {
     const {
       name,
@@ -38,4 +38,4 @@ class Select extends PureComponent<FormItemProps<'datePicker'>> {
   }
 }
 
-export default Select
+export default DatePicker
