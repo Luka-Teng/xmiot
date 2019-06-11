@@ -120,7 +120,7 @@ module.exports = ({ webpack, config, isTs, getDevServer }) => {
         devServer.sockWrite(devServer.sockets, 'errors', messages.errors)
       } else if (messages.warnings.length > 0) {
         const devServer = getDevServer()
-        devServer.sockWrite(devServer.sockets, 'errors', messages.warnings)
+        devServer.sockWrite(devServer.sockets, 'warnings', messages.warnings)
       }
 
       clearConsole()
