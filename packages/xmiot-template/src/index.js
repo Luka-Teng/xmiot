@@ -1,15 +1,19 @@
-import './index.less'
 // import pic from './bg.png'
-import fn from 'xmiot-function'
-import React from 'react'
-import t, { a } from './test'
-window.env = process.env.NODE_ENV
-class Test extends React.Component {
-  render () {
-    console.log(fn)
-    console.log(a)
-    console.log(t)
-    return <div>11111121111</div>
-  }
+import React, { useState, useEffect } from 'react'
+import ReactDOM from 'react-dom'
+
+function Example () {
+  // 声明一个叫 “count” 的 state 变量。
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {})
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+    </div>
+  )
 }
-export default Test
+
+ReactDOM.render(<Example />, document.getElementById('root'))
