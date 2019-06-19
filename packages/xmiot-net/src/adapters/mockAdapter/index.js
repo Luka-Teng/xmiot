@@ -62,7 +62,8 @@ class MockAdapter {
 
     /* 整合baseURL和url到属性url上 */
     if (tempConfig.baseURL) {
-      tempConfig.url = handlePath(baseURL).join(url).url
+      tempConfig.url =
+        url.indexOf(baseURL) === 0 ? url : handlePath(baseURL).join(url).url
       Reflect.deleteProperty(tempConfig, 'baseURL')
     }
 
