@@ -10,7 +10,8 @@ node_modules
 /build
 
 # lib in package
-/packages/*/entry
+/packages/*/entry/index.common.js
+/packages/*/entry/index.esm.js
 
 # misc
 .DS_Store
