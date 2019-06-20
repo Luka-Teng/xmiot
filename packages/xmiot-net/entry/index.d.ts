@@ -78,4 +78,6 @@ declare class Net {
   public delete: VerbMock
 }
 
-export default Net
+export = Net
+
+export as namespace Net
