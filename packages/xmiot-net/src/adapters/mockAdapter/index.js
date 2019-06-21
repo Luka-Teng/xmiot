@@ -47,19 +47,6 @@ class MockAdapter {
     const tempConfig = { ...config }
     const { baseURL, url } = tempConfig
 
-    // 对data排序并反序列化
-    if (tempConfig.data) {
-      tempConfig.data = sortAndfilterObject(
-        typeof config.data === 'string' ? JSON.parse(config.data) : config.data,
-        []
-      )
-    }
-
-    // 对params排序并反序列化
-    if (tempConfig.params) {
-      tempConfig.params = sortAndfilterObject(config.params, [])
-    }
-
     /* 整合baseURL和url到属性url上 */
     if (tempConfig.baseURL) {
       tempConfig.url =

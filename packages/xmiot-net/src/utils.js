@@ -44,6 +44,19 @@ export const isOverTime = (beginning, timeout) => {
  * 用于返回configFlag
  */
 export const getConfigFlag = ({ baseURL, url, method, params, data }) => {
+  // 对data排序并反序列化
+  if (data) {
+    data = sortAndfilterObject(
+      typeof data === 'string' ? JSON.parse(data) : data,
+      []
+    )
+  }
+
+  // 对params排序并反序列化
+  if (params) {
+    params = sortAndfilterObject(params, [])
+  }
+
   if (baseURL) {
     url = url.indexOf(baseURL) === 0 ? url : handlePath(baseURL).join(url).url
   }
