@@ -41,6 +41,16 @@ class MockAdapter {
     const tempConfig = { ...config }
     const { baseURL, url } = tempConfig
 
+    const getResultByFlag = flags => {
+      for (let i in flags) {
+        const flag = flags[i]
+        if (this.handlers[flag]) {
+          return { flag, handler: this.handlers[flag] }
+        }
+      }
+      return { flag: null, handler: null }
+    }
+
     /* 整合baseURL和url到属性url上 */
     if (tempConfig.baseURL) {
       tempConfig.url =
@@ -58,18 +68,15 @@ class MockAdapter {
     })
 
     const configFlag = getConfigFlag(tempConfig)
+    const fuzzyConfigFlag = getConfigFlag({
+      ...tempConfig,
+      data: undefined,
+      params: undefined
+    })
     const urlFlag = getUrlFlag(tempConfig)
-    let flag = null
+
     /* 匹配configFlag的优先级高 */
-    if (this.handlers[configFlag]) {
-      flag = configFlag
-      return { flag, handler: this.handlers[configFlag] }
-    }
-    if (this.handlers[urlFlag]) {
-      flag = urlFlag
-      return { flag, handler: this.handlers[urlFlag] }
-    }
-    return { flag: null, handler: null }
+    return getResultByFlag([configFlag, fuzzyConfigFlag, urlFlag])
   }
 
   addHandler = (key, value) => {
