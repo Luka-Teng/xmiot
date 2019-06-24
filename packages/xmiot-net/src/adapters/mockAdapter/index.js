@@ -1,10 +1,4 @@
-import {
-  getConfigFlag,
-  getUrlFlag,
-  getPromise,
-  handlePath,
-  sortAndfilterObject
-} from '../../utils'
+import { getConfigFlag, getUrlFlag, getPromise, handlePath } from '../../utils'
 import { mockError, mockSuccess } from '../../mockResponse'
 
 const VERBS = ['get', 'post', 'delete', 'put']
