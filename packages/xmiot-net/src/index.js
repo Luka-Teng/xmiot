@@ -42,7 +42,12 @@ class Net {
           : this.responseHandlers.error
 
     try {
-      params.inQueue = type
+      try {
+        params.inQueue = type
+      } catch {
+        params = new Error(params)
+        params.inQueue = type
+      }
       return handlers.run(params)
     } catch (e) {
       throw e
