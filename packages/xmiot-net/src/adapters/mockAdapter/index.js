@@ -104,7 +104,17 @@ class MockAdapter {
   adapter = config => {
     const { handler, flag } = this.getHandlerFromConfig(config)
     const reply = handler[0]
-    const { code, response, options, type } = reply
+    const { code, options, type } = reply
+    let response = reply.response
+
+    /* response需要mutable化 */
+    response =
+      Object.prototype.toString.call(response) === '[object Object]'
+        ? { ...response }
+        : Object.prototype.toString.call(response) === '[object Array]'
+          ? [...response]
+          : response
+
     const { promise, res, rej } = getPromise()
     const send = () => {
       if (this.validateStatus(code)) {
