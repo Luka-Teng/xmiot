@@ -1,4 +1,4 @@
-import { getConfigFlag, getUrlFlag, getPromise, handlePath } from '../../utils'
+import { getConfigFlag, getUrlFlag, getPromise, handlePath, deepAssign } from '../../utils'
 import { mockError, mockSuccess } from '../../mockResponse'
 
 const VERBS = ['get', 'post', 'delete', 'put']
@@ -108,12 +108,7 @@ class MockAdapter {
     let response = reply.response
 
     /* response需要mutable化 */
-    response =
-      Object.prototype.toString.call(response) === '[object Object]'
-        ? { ...response }
-        : Object.prototype.toString.call(response) === '[object Array]'
-          ? [...response]
-          : response
+    response = deepAssign(response)
 
     const { promise, res, rej } = getPromise()
     const send = () => {

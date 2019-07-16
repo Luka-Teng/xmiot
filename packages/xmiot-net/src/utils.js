@@ -1,35 +1,4 @@
 /*
- * 顺序执行promise
- * handler可以是普通函数和promise
- * 整个sequence的状态是由handler返回值决定的
- * stop: 用于打断队列
- * passedData表示上一个handler的返回值
- */
-export const promiseSequence = (arr, handler) => {
-  let sequence = Promise.resolve()
-  let _stop = false
-  const stop = () => {
-    _stop = true
-  }
-
-  for (let i in arr) {
-    sequence = sequence.then(passedData => {
-      if (!_stop) {
-        if (passedData) {
-          // 每次进来都要重置notAErrorInError，表示在postError回调中不抛出错误
-          passedData.notAErrorInError = false
-          return handler(arr[i], stop, passedData)
-        }
-        return handler(arr[i], stop)
-      } else {
-        return passedData
-      }
-    })
-  }
-  return sequence
-}
-
-/*
  * 用于判断是否过期
  */
 export const isOverTime = (beginning, timeout) => {
@@ -140,4 +109,26 @@ export const getPromise = () => {
     rej = reject
   })
   return { promise, res, rej }
+}
+
+/* 深复制 */
+export const deepAssign = source => {
+  // source如果是数组
+  if (source instanceof Array) {
+    return source.map(s => {
+      return deepAssign(s)
+    })
+  }
+
+  // source如果是对象
+  if (Object.prototype.toString.call(source) === '[object Object]') {
+    const temp = {}
+    Object.keys(source).forEach(key => {
+      temp[key] = deepAssign(source[key])
+    })
+    return temp
+  }
+
+  // source是一个普通的值
+  return source
 }
