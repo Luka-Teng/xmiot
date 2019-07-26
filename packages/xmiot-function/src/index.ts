@@ -1,5 +1,5 @@
 /** 将数字格式化为两位以上，不满 10 在前面添加 0 */
-function fixDigit(num: number) {
+function fixDigit (num: number) {
   return num < 10 ? '0' + num : num
 }
 
@@ -8,7 +8,7 @@ export default {
    * 获取 连接的 中参数
    * @param name 参数 key
    */
-  getQueryString(name: string) {
+  getQueryString (name: string) {
     let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
     let r = window.location.search.substr(1).match(reg)
     if (r != null) {
@@ -21,7 +21,7 @@ export default {
    * 获取 hash 连接中参数值
    * @param name
    */
-  getHashString(name: string) {
+  getHashString (name: string) {
     const hashContent = decodeURI(window.location.hash.slice(2))
     const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
     const r = hashContent.slice(hashContent.indexOf('?') + 1).match(reg)
@@ -36,7 +36,7 @@ export default {
    * 随机生成 n 为数字默认 32
    *
    */
-  generateRandom(n = 32) {
+  generateRandom (n = 32) {
     const chars = '0123456789abcdefghijklmnopqrstuvwxyz'
     let res = ''
     for (let i = 0; i < n; i += 1) {
@@ -53,7 +53,7 @@ export default {
    * char ='-'  2018-11-23
    * char ='/'  2018/11/23
    */
-  formatDate(time: number | string, char = '-') {
+  formatDate (time: number | string, char = '-') {
     const date = new Date(time)
     const y = date.getFullYear()
     const m = `0${date.getMonth() + 1}`
@@ -71,8 +71,7 @@ export default {
    *
    * 完全可以自定义 格式
    */
-  FormatDate(time: number, format = 'YY-MM-DD hh:mm:ss') {
-    console.log(time)
+  FormatDate (time: number, format = 'YY-MM-DD hh:mm:ss') {
     let date = new Date(time)
 
     let year = date.getFullYear()
@@ -87,7 +86,7 @@ export default {
 
     let sec = date.getSeconds()
 
-    let preArr = Array.apply(null, Array(10)).map(function(
+    let preArr = Array.apply(null, Array(10)).map(function (
       elem: any,
       index: number
     ) {
@@ -110,7 +109,7 @@ export default {
    * 入参 是 数字，转换成 时分秒的格式
    *
    */
-  formatDuration(timeValue = 0, withHour = false) {
+  formatDuration (timeValue = 0, withHour = false) {
     if (timeValue === 86400) {
       return '24:00'
     }
@@ -138,7 +137,7 @@ export default {
    * @param {播放的次数} count
    * 播放数 转换
    */
-  transPlayCount(count: number) {
+  transPlayCount (count: number) {
     if (count > 100000000) {
       return `${(count / 100000000).toFixed(1)}亿`
     }
@@ -152,12 +151,12 @@ export default {
    *节流函数
    */
 
-  throttle(fn: Function, delay: number) {
+  throttle (fn: Function, delay: number) {
     let timer: any = null
 
-    return function() {
+    return function () {
       clearTimeout(timer)
-      timer = setTimeout(function() {
+      timer = setTimeout(function () {
         fn()
       }, delay)
     }
@@ -169,7 +168,7 @@ export default {
    * @param fn 方法 或者函数
    * @param capture
    */
-  addEventHandle(
+  addEventHandle (
     target: any,
     type: string,
     fn: Function,
@@ -190,7 +189,7 @@ export default {
    * @param fn 方法 或者函数
    * @param capture
    */
-  removeEventHandle(target: any, type: string, fn: Function, capture: boolean) {
+  removeEventHandle (target: any, type: string, fn: Function, capture: boolean) {
     if (target.addEventListener) {
       // 如果为true的话，进入
       target.removeEventListener(type, fn, capture)
@@ -207,7 +206,7 @@ export default {
    * 滚动 ，入参是 滚动的距离 和时间
    */
 
-  ScrollTop(number = 0, time?: number) {
+  ScrollTop (number = 0, time?: number) {
     if (!time) {
       document.body.scrollTop = (document.documentElement as HTMLElement).scrollTop = number
       return number
@@ -234,7 +233,7 @@ export default {
       callback: 需要回调的异步请求，可以是async function，普通方法（返回常量，promise，不返回都可以）
       timeout: 超时时间，防止promise一直处于pending状态
     */
-  getFetchingLock(timeout: number) {
+  getFetchingLock (timeout: number) {
     let lock = false
 
     const timeOutTrigger = (time: number) =>
@@ -269,7 +268,7 @@ export default {
   //   return
   // },
 
-  getData(key: string) {
+  getData (key: string) {
     let value = localStorage.getItem(key)
     if (value && value != 'undefined' && value != 'null') {
       return JSON.parse(value)
@@ -281,7 +280,7 @@ export default {
    *
    * @param  key
    */
-  removeData(key: string) {
+  removeData (key: string) {
     localStorage.removeItem(key)
   },
 
@@ -291,7 +290,7 @@ export default {
    * @param item 本地存储的 value
    */
 
-  setData(key: string, item: any) {
+  setData (key: string, item: any) {
     return localStorage.setItem(key, JSON.stringify(item))
   },
 
@@ -301,7 +300,7 @@ export default {
    */
 
   // 手机 验证 11为手机号
-  isMobile(str: string) {
+  isMobile (str: string) {
     if (str == null || str === '') return false
     var result = str.match(/0?(13|14|15|18|17)[0-9]{9}/)
     if (result == null) return false
@@ -309,7 +308,7 @@ export default {
   },
 
   // 验证 固定电话
-  isTel(str: string) {
+  isTel (str: string) {
     if (str == null || str === '') return false
     var result = str.match(/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/)
     if (result == null) return false
@@ -318,7 +317,7 @@ export default {
 
   // 身份证号 验证 15位
 
-  isIDCard1(str: string) {
+  isIDCard1 (str: string) {
     if (str == null || str === '') return false
     var result = str.match(
       /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/
@@ -331,7 +330,7 @@ export default {
    * 身份证号验证 18位
    */
 
-  isIDCard2(str: string) {
+  isIDCard2 (str: string) {
     if (str == null || str === '') return false
     var result = str.match(
       /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$/
@@ -352,7 +351,7 @@ export default {
    *
    */
 
-  CharacterVerify(str: string, minnum: string, maxnum: string) {
+  CharacterVerify (str: string, minnum: string, maxnum: string) {
     let reg = ''
     if (str === null || str === '') return false
     if (!maxnum) {
