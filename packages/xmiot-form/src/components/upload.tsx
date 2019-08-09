@@ -32,13 +32,9 @@ const videoTypes = [
 const getFile = (url: string, status: UploadFileStatus) => {
   const ext = extName(url)[0]
 
-  if (!ext) {
-    throw new Error('无法解析的后缀名')
-  }
-
   return {
     uid: '' + Math.random(),
-    type: ext.mime,
+    type: ext ? ext.mime : url,
     name: 'random',
     status,
     size: 0,
@@ -47,7 +43,7 @@ const getFile = (url: string, status: UploadFileStatus) => {
 }
 
 class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
-  constructor(props: FormItemProps<'upload'>) {
+  constructor (props: FormItemProps<'upload'>) {
     super(props)
     const { config = {} } = props
     const { initialValue = [] } = config
@@ -61,7 +57,7 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
 
   uidMapUrl: genObject = {}
 
-  static getDerivedStateFromProps(
+  static getDerivedStateFromProps (
     props: FormItemProps<'upload'>,
     state: UploadStates
   ) {
@@ -93,8 +89,8 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
     const previewType = imageTypes.includes(file.type)
       ? 'image'
       : videoTypes.includes(file.type)
-      ? 'video'
-      : null
+        ? 'video'
+        : null
     if (previewType) {
       this.setState({
         previewUrl: file.url || '',
@@ -187,7 +183,7 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
     }
   }
 
-  render() {
+  render () {
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -204,7 +200,13 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
       form: { getFieldDecorator }
     } = this.props
 
-    const { initialValue = [], rules = [], maxNumber = 1, appendElement, insertElement } = config
+    const {
+      initialValue = [],
+      rules = [],
+      maxNumber = 1,
+      appendElement,
+      insertElement
+    } = config
 
     const { fileList, previewVisible, previewUrl, previewType } = this.state
 
