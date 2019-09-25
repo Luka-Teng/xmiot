@@ -1,1 +1,4 @@
-export default 111
+import React from 'react'
+import Animation from 'rc-animate'
+
+export default {}
