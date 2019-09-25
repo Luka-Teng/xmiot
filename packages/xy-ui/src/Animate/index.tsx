@@ -1,4 +1,4 @@
 import React from 'react'
-import Animation from 'rc-animate'
+import animate from 'rc-animate'
 
 export default {}
