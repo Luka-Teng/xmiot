@@ -21,6 +21,7 @@
     "access": "public"
   },
   "dependencies": {
-    "rc-animate": "^2.10.0"
+    "rc-animate": "^2.10.0",
+    "xmiot-function": "^1.0.12"
   }
 }
