@@ -131,6 +131,7 @@
   },
   "dependencies": {
     "postcss-url": "^8.0.0",
+    "react": "^16.10.2",
     "rollup-plugin-json": "^4.0.0",
     "xmiot-server": "^1.2.11"
   },
