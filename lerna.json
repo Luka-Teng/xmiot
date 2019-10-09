@@ -8,7 +8,8 @@
         "package-lock.json",
         "README.md",
         "rollup.config.js",
-        "packages/*/src/render.tsx"
+        "packages/*/src/render.tsx",
+        "*.test.js"
       ]
     }
   },

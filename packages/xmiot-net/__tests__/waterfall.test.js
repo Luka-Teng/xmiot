@@ -102,34 +102,3 @@ test('使用stop会中断队列', async () => {
   /* 确保结果是符合预期 */
   expect(result).toBe('luka1')
 })
-
-test('主hook与另一个hook通过connect绑定事件，则主hook绑定事件的移除会同步影响到被绑定的hook', async () => {
-  const hook1 = new WaterfallHook('name')
-  const hook2 = new WaterfallHook('name')
-
-  const mockFn1 = jest.fn().mockImplementation(param => param + 1)
-  const mockFn2 = jest.fn().mockImplementation((param, stop) => {
-    stop()
-  })
-  const mockFn3 = jest.fn().mockImplementation(param => param + 1)
-  const mockFn4 = jest.fn().mockImplementation(param => param + 1)
-
-  hook1.listen(mockFn1)
-  hook1.listen(mockFn2)
-  hook2.listen(mockFn1)
-  hook1.connect(hook2)(mockFn3, mockFn3)
-  hook2.listen(mockFn4)
-
-  const result1 = await hook1.run('luka')
-  const result2 = await hook2.run('luka')
-
-  /* 确保各个方法运行的次数 */
-  expect(mockFn1.mock.calls.length).toBe(2)
-  expect(mockFn2.mock.calls.length).toBe(1)
-  expect(mockFn3.mock.calls.length).toBe(0)
-  expect(mockFn4.mock.calls.length).toBe(1)
-
-  /* 确保结果是符合预期 */
-  expect(result1).toBe('luka1')
-  expect(result2).toBe('luka11')
-})
