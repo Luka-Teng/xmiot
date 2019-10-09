@@ -9,7 +9,7 @@
         "README.md",
         "rollup.config.js",
         "packages/*/src/render.tsx",
-        "*.test.js"
+        "__tests__/**"
       ]
     }
   },
