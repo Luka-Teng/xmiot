@@ -1,22 +1,5 @@
-import React, { Component } from 'react'
-import RcAnimate from 'rc-animate'
-import xmf from 'xmiot-function'
-import './index.less'
+import './lib/animate.less'
 
-console.log(xmf.throttle)
-
-class Animate extends Component {
-  render () {
-    return (
-      <RcAnimate 
-        transitionName='xxx'
-        transitionAppear={true}
-      >
-        <p key="1">1</p>
-        <p key="2">2</p>
-      </RcAnimate>
-    )
-  }
-}
-
-export default Animate
+export { default as ScrollTrigger } from './lib/ScrollTrigger'
+export { default as AnimatePreset } from './lib/AnimatePreset'
+export { default as Animate } from 'rc-animate'

@@ -45,6 +45,13 @@ function getOptions (format) {
       chunkFileNames: 'common/[name].js',
       dir: './entry',
       format
+    },
+    external: (id) => {
+      if (
+        /^rc\-/.test(id)
+      ) {
+        return true
+      }
     }
   }
 }

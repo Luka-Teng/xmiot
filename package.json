@@ -31,7 +31,8 @@
       "/node_modules/"
     ],
     "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/packages/$1"
+      "^@/(.*)$": "<rootDir>/packages/$1",
+      "^root/(.*)$": "<rootDir>/$1"
     },
     "setupFiles": [
       "<rootDir>/tests/setup.js"
@@ -54,7 +55,9 @@
     },
     "moduleFileExtensions": [
       "js",
-      "jsx"
+      "jsx",
+      "ts",
+      "tsx"
     ]
   },
   "devDependencies": {
