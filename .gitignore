@@ -12,6 +12,8 @@ node_modules
 # lib in package
 /packages/*/entry/index.common.js
 /packages/*/entry/index.esm.js
+/packages/*/entry/cjs
+/packages/*/entry/es
 
 # misc
 .DS_Store
