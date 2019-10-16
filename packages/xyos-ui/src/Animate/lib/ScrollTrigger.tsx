@@ -30,7 +30,7 @@ class ScrollTrigger extends React.Component<Props, State> {
       const topToViewport = this.ref.getBoundingClientRect().top
       const heightForViewport =
         window.innerHeight || document.documentElement.clientHeight
-      if (topToViewport < heightForViewport) {
+      if (topToViewport <= heightForViewport) {
         /* 延迟后再做渲染 */
         if (this.key !== null) {
           clearTimeout(this.key)
