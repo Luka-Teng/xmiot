@@ -1,6 +1,6 @@
 {
   "name": "xmiot-server",
-  "version": "1.2.14",
+  "version": "1.2.17",
   "description": "xmiot用于测试环境包测试",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "css-loader": "^2.1.1",
     "eslint": "^5.16.0",
     "eslint-loader": "^2.1.2",
+    "file-loader": "^4.2.0",
     "fork-ts-checker-webpack-plugin": "1.0.0-alpha.6",
     "fs-extra": "^7.0.1",
     "get-port": "^5.0.0",
@@ -49,5 +50,5 @@
     "webpack.config.js",
     "README.md"
   ],
-  "gitHead": "b6fa08b4396b67aec90fbc237fce4655b7a5dbda"
+  "gitHead": "4af9e6182d9ee1a7b409725c91ecd115f315de74"
 }

@@ -3,9 +3,6 @@ import { mount } from 'enzyme'
 import { ScrollTrigger } from '../index.tsx'
 import { spyElementPrototype } from 'root/tests/shared/domMock'
 
-/**
- * ScrollTrigger Test
- */
 describe('ScrollTrigger', () => {
 
   let container
@@ -14,7 +11,7 @@ describe('ScrollTrigger', () => {
   beforeAll(() => {
     jest.useFakeTimers()
 
-    /* 根据id值来判断是否是在视窗外 */
+    /* 根据className值来判断是否是在视窗外 */
     domMock = spyElementPrototype(HTMLElement, 'getBoundingClientRect', function () {
       if (this.className === 'outside') {
         return {

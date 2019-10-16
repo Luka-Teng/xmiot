@@ -1,6 +1,6 @@
 {
   "name": "xmiot-function",
-  "version": "1.0.12",
+  "version": "1.0.14",
   "description": "集成 常用的基本方法",
   "main": "entry/index.common.js",
   "module": "entry/index.esm.js",
@@ -14,5 +14,5 @@
     "entry"
   ],
   "types": "entry/index",
-  "gitHead": "4e37851ff59c173c8280f65f987bb6bf234772e5"
+  "gitHead": "4af9e6182d9ee1a7b409725c91ecd115f315de74"
 }

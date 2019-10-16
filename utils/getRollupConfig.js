@@ -14,6 +14,7 @@ const commonjs = require('rollup-plugin-commonjs')
 const url = require('postcss-url')
 const fileAsBlob = require('rollup-plugin-file-as-blob')
 const replace = require('rollup-plugin-replace')
+const { terser } = require('rollup-plugin-terser')
 const { getClientEnvironment } = require('./env')
 const { multiDeepAssign } = require('./function')
 const json = require('rollup-plugin-json')
@@ -58,7 +59,8 @@ module.exports = (options = {}) => {
       // 引入的图片统一用base64输出，后期要做大小限制
       fileAsBlob({
         include: '**/**.png'
-      })
+      }),
+      terser()
     ].filter(e => e !== '')
   }
 
