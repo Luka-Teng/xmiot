@@ -46,7 +46,8 @@ class ScrollTrigger extends React.Component<Props, State> {
 
   componentDidMount () {
     this.ref = document.getElementById('ScrollTriggerWrapper')
-    window.addEventListener('scroll', this.check)
+    /* scroll事件不会向上冒泡，所以要在window捕获需要在捕获阶段触发 */
+    window.addEventListener('scroll', this.check, true)
     this.check()
   }
 
