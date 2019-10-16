@@ -20,5 +20,5 @@
     "axios": "^0.18.0"
   },
   "types": "entry/index",
-  "gitHead": "3157fedc6674c55e472ef8202c4bf4ae6f8d5bae"
+  "gitHead": "4af9e6182d9ee1a7b409725c91ecd115f315de74"
 }

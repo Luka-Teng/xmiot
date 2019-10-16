@@ -14,7 +14,7 @@
     "entry"
   ],
   "devTestType": "react",
-  "gitHead": "4e37851ff59c173c8280f65f987bb6bf234772e5",
+  "gitHead": "4af9e6182d9ee1a7b409725c91ecd115f315de74",
   "dependencies": {
     "axios": "^0.18.0",
     "react": "^16.8.6",

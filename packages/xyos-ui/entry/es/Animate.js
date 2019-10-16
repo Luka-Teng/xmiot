@@ -1,14 +1,39 @@
-'use strict';
-
-
-
 function __$strToBlobUri(str, mime, isBinary) {try {return window.URL.createObjectURL(new Blob([Uint8Array.from(str.split('').map(function(c) {return c.charCodeAt(0)}))], {type: mime}));} catch (e) {return "data:" + mime + (isBinary ? ";base64," : ",") + str;}}
 
-Object.defineProperty(exports, '__esModule', { value: true });
+import Animate from 'rc-animate';
+export { default as Animate } from 'rc-animate';
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+function styleInject(css, ref) {
+  if (ref === void 0) ref = {};
+  var insertAt = ref.insertAt;
 
-var rcAnimate = _interopDefault(require('rc-animate'));
+  if (!css || typeof document === 'undefined') {
+    return;
+  }
+
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var css = "/* 淡入动画 */\n@keyframes xy-fade-in {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes xy-fade-out {\n  from {\n    opacity: 1;\n  }\n  to {\n    opacity: 0;\n  }\n}\n/* 左边滑动淡入淡出动画 */\n@keyframes xy-fade-in-left {\n  from {\n    opacity: 0;\n    transform: translate3d(-100%, 0, 0);\n  }\n  to {\n    opacity: 1;\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes xy-fade-out-left {\n  from {\n    opacity: 1;\n    transform: translate3d(0, 0, 0);\n  }\n  to {\n    opacity: 0;\n    transform: translate3d(-100%, 0, 0);\n  }\n}\n/* 右边滑动淡入淡出动画 */\n@keyframes xy-fade-in-right {\n  from {\n    opacity: 0;\n    transform: translate3d(100%, 0, 0);\n  }\n  to {\n    opacity: 1;\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes xy-fade-out-right {\n  from {\n    opacity: 1;\n    transform: translate3d(0, 0, 0);\n  }\n  to {\n    opacity: 0;\n    transform: translate3d(100%, 0, 0);\n  }\n}\n";
+styleInject(css);
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -61,6 +86,42 @@ function _setPrototypeOf(o, p) {
   };
 
   return _setPrototypeOf(o, p);
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+
+  var target = _objectWithoutPropertiesLoose(source, excluded);
+
+  var key, i;
+
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
 }
 
 function _assertThisInitialized(self) {
@@ -196,6 +257,19 @@ var react = createCommonjsModule(function (module) {
 }
 });
 
+/* 节流函数 */
+var throttle = function throttle(cb, delay) {
+  var key = null;
+  return function () {
+    if (key === null) {
+      key = setTimeout(function () {
+        cb();
+        key = null;
+      }, delay);
+    }
+  };
+};
+
 var ScrollTrigger =
 /*#__PURE__*/
 function (_React$Component) {
@@ -214,6 +288,31 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(ScrollTrigger)).call.apply(_getPrototypeOf2, [this].concat(args)));
     _this.ref = null;
+    _this.key = null;
+    _this.state = {
+      shown: false
+    };
+    _this.check = throttle(function () {
+      if (_this.ref !== null) {
+        var topToViewport = _this.ref.getBoundingClientRect().top;
+
+        var heightForViewport = window.innerHeight || document.documentElement.clientHeight;
+
+        if (topToViewport < heightForViewport) {
+          /* 延迟后再做渲染 */
+          if (_this.key !== null) {
+            clearTimeout(_this.key);
+          }
+
+          _this.key = setTimeout(function () {
+            _this.setState({
+              shown: true
+            });
+          }, _this.props.delay);
+          window.removeEventListener('scroll', _this.check);
+        }
+      }
+    }, 200);
     return _this;
   }
 
@@ -221,19 +320,202 @@ function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.ref = document.getElementById('ScrollTriggerWrapper');
-      console.log(this.ref);
+      window.addEventListener('scroll', this.check);
+      this.check();
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      /* 清理事件 */
+      window.removeEventListener('scroll', this.check);
+
+      if (this.key !== null) {
+        clearTimeout(this.key);
+      }
     }
   }, {
     key: "render",
     value: function render() {
-      return react.createElement("div", {
+      var _this$props = this.props,
+          delay = _this$props.delay,
+          rest = _objectWithoutProperties(_this$props, ["delay"]);
+
+      return react.createElement("div", Object.assign({
         id: "ScrollTriggerWrapper"
-      });
+      }, rest), this.state.shown && this.props.children);
     }
   }]);
 
   return ScrollTrigger;
 }(react.Component);
 
-exports.Animate = rcAnimate;
-exports.ScrollTrigger = ScrollTrigger;
+ScrollTrigger.defaultProps = {
+  delay: 0
+};
+
+var css$1 = "/* fadeInRight */\n.xy-fadeInRight-appear {\n  opacity: 0;\n}\n.xy-fadeInRight-appear-active {\n  animation-name: xy-fade-in-right;\n  animation-duration: 1s;\n}\n.xy-fadeInRight-enter {\n  opacity: 0;\n}\n.xy-fadeInRight-enter-active {\n  animation-name: xy-fade-in-right;\n  animation-duration: 1s;\n}\n.xy-fadeInRight-leave {\n  opacity: 1;\n}\n.xy-fadeInRight-leave-active {\n  animation-name: xy-fade-out-right;\n  animation-duration: 1s;\n}\n/* fadeInLeft */\n.xy-fadeInLeft-appear {\n  opacity: 0;\n}\n.xy-fadeInLeft-appear-active {\n  animation-name: xy-fade-in-left;\n  animation-duration: 1s;\n}\n/* fade */\n.xy-fade-appear {\n  opacity: 0;\n}\n.xy-fade-appear-active {\n  animation-name: xy-fade-in;\n  animation-duration: 1s;\n}\n";
+styleInject(css$1);
+
+var toArrayChildren = function toArrayChildren(children) {
+  var _children = react.Children.map(children, function (child, i) {
+    if (typeof child === 'string') {
+      child = react.createElement('div', {
+        children: child,
+        key: "".concat(i)
+      });
+    }
+
+    return child;
+  });
+
+  if (_children === null || _children === undefined) return [];
+  if (Object.prototype.toString.call(_children) === '[object Array]') return _children;
+  return [_children];
+};
+
+var AnimatePreset =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(AnimatePreset, _React$Component);
+
+  function AnimatePreset() {
+    var _getPrototypeOf2;
+
+    var _this;
+
+    _classCallCheck(this, AnimatePreset);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(AnimatePreset)).call.apply(_getPrototypeOf2, [this].concat(args)));
+    _this.state = {
+      newKeys: [],
+      prevChildren: [],
+      leaveKeys: []
+    };
+    _this.domRefs = [];
+    return _this;
+  }
+
+  _createClass(AnimatePreset, [{
+    key: "componentDidUpdate",
+
+    /* 更新时统一管理delays */
+    value: function componentDidUpdate() {
+      var _this2 = this;
+
+      if (this.props.offset) {
+        var i = 0;
+        Object.keys(this.domRefs).forEach(function (key) {
+          if (_this2.state.leaveKeys.includes(key)) {
+            _this2.domRefs[key].style['animationDelay'] = "0s";
+          }
+
+          if (_this2.state.newKeys.includes(key)) {
+            _this2.domRefs[key].style['animationDelay'] = "".concat(i++ * _this2.props.offset / 1000, "s");
+          }
+        });
+      }
+
+      return null;
+    }
+    /* 第一次挂载时统一管理delays */
+
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this3 = this;
+
+      if (this.props.offset) {
+        var i = 0;
+        Object.keys(this.domRefs).forEach(function (key) {
+          if (_this3.state.newKeys.includes(key)) {
+            _this3.domRefs[key].style['animationDelay'] = "".concat(i++ * _this3.props.offset / 1000, "s");
+          }
+        });
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this4 = this;
+
+      var _this$props = this.props,
+          preset = _this$props.preset,
+          offset = _this$props.offset,
+          duration = _this$props.duration,
+          rest = _objectWithoutProperties(_this$props, ["preset", "offset", "duration"]);
+
+      return react.createElement(Animate, {
+        component: "div",
+        transitionName: "xy-".concat(preset),
+        transitionAppear: true,
+        componentProps: rest
+      }, toArrayChildren(this.props.children).map(function (child, i) {
+        var key = child && child.key || i;
+        return react.createElement("div", {
+          key: key,
+          ref: function ref(_ref) {
+            _this4.domRefs[key] = _ref;
+          },
+          style: {
+            animationDuration: "".concat(duration / 1000, "s")
+          }
+        }, child);
+      }));
+    }
+  }], [{
+    key: "getDerivedStateFromProps",
+    value: function getDerivedStateFromProps(nextProps, prevState) {
+      var newChildren = toArrayChildren(nextProps.children);
+      var leaveChildren = prevState.prevChildren;
+
+      for (var i = 0; i < newChildren.length; i++) {
+        var flag = true;
+
+        for (var j = 0; j < leaveChildren.length; j++) {
+          if (flag === true) flag = false;
+          var newKey = newChildren[i].key || i;
+          var leaveKey = leaveChildren[j].key || j;
+
+          if (newKey === leaveKey) {
+            newChildren.splice(i, 1);
+            leaveChildren.splice(j, 1);
+            i--;
+            j--;
+            break;
+          }
+        }
+
+        if (flag) break;
+      }
+
+      return {
+        newKeys: newChildren.map(function (child) {
+          return child.key;
+        }),
+        leaveKeys: leaveChildren.map(function (child) {
+          return child.key;
+        }),
+        prevChildren: toArrayChildren(nextProps.children)
+      };
+    }
+  }]);
+
+  return AnimatePreset;
+}(react.Component);
+
+AnimatePreset.defaultProps = {
+  preset: 'fadeInRight',
+  offset: 0,
+  duration: 1000
+  /**
+   * 剥离出新增加元素和被移除元素
+   * 如果splice算作O(n), 这个该算法复杂度会达到O(n^3)
+   */
+
+};
+
+export { AnimatePreset, ScrollTrigger };
