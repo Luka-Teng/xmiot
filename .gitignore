@@ -14,6 +14,7 @@ node_modules
 /packages/*/entry/index.esm.js
 /packages/*/entry/cjs
 /packages/*/entry/es
+/packages/*/entry/common
 
 # misc
 .DS_Store
