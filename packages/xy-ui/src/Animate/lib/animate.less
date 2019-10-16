@@ -1,8 +1,5 @@
-body {
-  padding-top: 1000px
-}
 /* 淡入动画 */
-@keyframes xy-fade {
+@keyframes xy-fade-in {
   from {
     opacity: 0;
   }
@@ -12,7 +9,17 @@ body {
   }
 }
 
-/* 左边滑动淡入动画 */
+@keyframes xy-fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+/* 左边滑动淡入淡出动画 */
 @keyframes xy-fade-in-left {
   from {
     opacity: 0;
@@ -25,7 +32,19 @@ body {
   }
 }
 
-/* 右边滑动淡入动画 */
+@keyframes xy-fade-out-left {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+/* 右边滑动淡入淡出动画 */
 @keyframes xy-fade-in-right {
   from {
     opacity: 0;
@@ -35,5 +54,17 @@ body {
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes xy-fade-out-right {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
   }
 }

@@ -1,4 +1,5 @@
 
+/* fadeInRight */
 .xy-fadeInRight-appear {
   opacity: 0;
 }
@@ -8,6 +9,24 @@
   animation-duration: 1s;
 }
 
+.xy-fadeInRight-enter {
+  opacity: 0;
+}
+
+.xy-fadeInRight-enter-active {
+  animation-name: xy-fade-in-right;
+  animation-duration: 1s;
+}
+.xy-fadeInRight-leave {
+  opacity: 1;
+}
+
+.xy-fadeInRight-leave-active {
+  animation-name: xy-fade-out-right;
+  animation-duration: 1s;
+}
+
+/* fadeInLeft */
 .xy-fadeInLeft-appear {
   opacity: 0;
 }
@@ -17,11 +36,12 @@
   animation-duration: 1s;
 }
 
+/* fade */
 .xy-fade-appear {
   opacity: 0;
 }
 
 .xy-fade-appear-active {
-  animation-name: xy-fade;
+  animation-name: xy-fade-in;
   animation-duration: 1s;
 }

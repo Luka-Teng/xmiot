@@ -16,12 +16,113 @@ type Props = {
   duration?: number
 } & React.HTMLAttributes<React.ReactElement>
 
-class AnimatePreset extends React.Component<Props> {
+type State = {
+  newKeys: any[]
+  leaveKeys: any[]
+  prevChildren: React.ReactElement[]
+}
 
+const toArrayChildren = (children: React.ReactNode[] | React.ReactNode) => {
+  const _children = React.Children.map(children, (child, i) => {
+    if (typeof child === 'string') {
+      child = React.createElement('div', {
+        children: child,
+        key: `${i}`
+      })
+    }
+    return child
+  })
+
+  if (_children === null || _children === undefined) return []
+
+  if (Object.prototype.toString.call(_children) === '[object Array]')
+    return _children
+
+  return [_children]
+}
+
+class AnimatePreset extends React.Component<Props, State> {
   static defaultProps = {
     preset: 'fadeInRight',
     offset: 0,
     duration: 1000
+  }
+
+  /**
+   * 剥离出新增加元素和被移除元素
+   * 如果splice算作O(n), 这个该算法复杂度会达到O(n^3)
+   */
+  static getDerivedStateFromProps (nextProps: Props, prevState: State) {
+    const newChildren = toArrayChildren(nextProps.children)
+    const leaveChildren: React.ReactNode[] = prevState.prevChildren
+
+    for (let i = 0; i < newChildren.length; i++) {
+      let flag = true
+
+      for (let j = 0; j < leaveChildren.length; j++) {
+        if (flag === true) flag = false
+
+        const newKey = (newChildren[i] as React.ReactElement).key || i
+        const leaveKey = (leaveChildren[j] as React.ReactElement).key || j
+
+        if (newKey === leaveKey) {
+          newChildren.splice(i, 1)
+          leaveChildren.splice(j, 1)
+          i--
+          j--
+          break
+        }
+      }
+
+      if (flag) break
+    }
+
+    return {
+      newKeys: newChildren.map(child => (child as React.ReactElement).key),
+      leaveKeys: leaveChildren.map(child => (child as React.ReactElement).key),
+      prevChildren: toArrayChildren(nextProps.children)
+    }
+  }
+
+  state: State = {
+    newKeys: [],
+    prevChildren: [],
+    leaveKeys: []
+  }
+
+  domRefs: any[] = []
+
+  /* 更新时统一管理delays */
+  componentDidUpdate () {
+    if (this.props.offset) {
+      let i = 0
+      Object.keys(this.domRefs).forEach(key => {
+        if (this.state.leaveKeys.includes(key)) {
+          this.domRefs[key as any].style['animationDelay'] = `0s`
+        }
+
+        if (this.state.newKeys.includes(key)) {
+          this.domRefs[key as any].style['animationDelay'] = `${(i++ *
+            (this.props.offset as number)) /
+            1000}s`
+        }
+      })
+    }
+    return null
+  }
+
+  /* 第一次挂载时统一管理delays */
+  componentDidMount () {
+    if (this.props.offset) {
+      let i = 0
+      Object.keys(this.domRefs).forEach(key => {
+        if (this.state.newKeys.includes(key)) {
+          this.domRefs[key as any].style['animationDelay'] = `${(i++ *
+            (this.props.offset as number)) /
+            1000}s`
+        }
+      })
+    }
   }
 
   render () {
@@ -33,21 +134,22 @@ class AnimatePreset extends React.Component<Props> {
         transitionAppear={true}
         componentProps={rest}
       >
-        {
-          React.Children.map(this.props.children, (child, i) => {
-            return (
-              <div
-                key={child && (child as React.ReactElement).key || i}
-                style={{
-                  animationDuration: `${(duration as number) / 1000}s`,
-                  animationDelay: `${(offset as number) * i / 1000}s`
-                }}
-              >
-                {child}
-              </div>
-            )
-          })
-        }
+        {toArrayChildren(this.props.children).map((child, i) => {
+          const key = (child && (child as React.ReactElement).key) || i
+          return (
+            <div
+              key={key}
+              ref={ref => {
+                this.domRefs[key as any] = ref
+              }}
+              style={{
+                animationDuration: `${(duration as number) / 1000}s`
+              }}
+            >
+              {child}
+            </div>
+          )
+        })}
       </Animate>
     )
   }
