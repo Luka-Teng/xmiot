@@ -117,10 +117,10 @@ module.exports = ({ webpack, config, isTs, getDevServer }) => {
       /* 向socket client推送消息 */
       if (messages.errors.length > 0) {
         const devServer = getDevServer()
-        devServer.sockWrite(devServer.sockets, 'errors', messages.errors)
+        devServer.sockWrite(devServer.sockets, 'errors', statsData.errors)
       } else if (messages.warnings.length > 0) {
         const devServer = getDevServer()
-        devServer.sockWrite(devServer.sockets, 'warnings', messages.warnings)
+        devServer.sockWrite(devServer.sockets, 'warnings', statsData.warnings)
       }
 
       clearConsole()
