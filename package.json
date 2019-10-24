@@ -108,7 +108,7 @@
     "postcss-url": "^8.0.0",
     "react": "^16.10.2",
     "rollup-plugin-json": "^4.0.0",
-    "xmiot-server": "^1.2.11"
+    "xmiot-server": "^1.2.17"
   },
   "lastCommit": "fd7924b8cc3a19cf89be504dd3967d4df89ac697"
 }

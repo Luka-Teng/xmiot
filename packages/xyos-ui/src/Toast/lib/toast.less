@@ -1,0 +1,67 @@
+@border-radius-base: 2px;
+@message-notice-content-padding: 10px 16px;
+@component-background: rgba(255, 255, 255);
+@shadow-2: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+.message-notice {
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+
+  &-notice {
+    padding: 8px;
+    text-align: center;
+
+    &:first-child {
+      margin-top: -8px;
+    }
+  }
+
+  &-notice-content {
+    font-size: 12px;
+    padding: @message-notice-content-padding;
+    border-radius: @border-radius-base;
+    box-shadow: @shadow-2;
+    background: @component-background;
+    display: inline-block;
+    pointer-events: all;
+  }
+
+
+  &-error {
+    color: red;
+  }
+
+  &-success {
+    color: #333;
+  }
+
+  &-warning {
+    color: #dd99dd;
+  }
+
+
+
+  &-notice.move-up-leave.move-up-leave-active {
+    animation-name: MessageMoveOut;
+    overflow: hidden;
+    animation-duration: 0.3s;
+  }
+}
+
+@keyframes MessageMoveOut {
+  0% {
+    opacity: 1;
+    max-height: 150px;
+    padding: 8px;
+  }
+
+  100% {
+    opacity: 0;
+    max-height: 0;
+    padding: 0;
+  }
+}
