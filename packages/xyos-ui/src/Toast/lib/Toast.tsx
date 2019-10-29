@@ -2,31 +2,31 @@ import React from 'react'
 import Notification from 'rc-notification'
 import './toast.less'
 
-type NoticeType = 'info' | 'success' | 'error' | 'warning' | 'loading';
+type NoticeType = 'info' | 'success' | 'error' | 'warning' | 'loading'
 
 export interface ThenableArgument {
   (_: any): any
 }
 
 export interface MessageType {
-  (): void;
-  then: (fill: ThenableArgument, reject: ThenableArgument) => Promise<void>;
-  promise: Promise<void>;
+  (): void
+  then: (fill: ThenableArgument, reject: ThenableArgument) => Promise<void>
+  promise: Promise<void>
 }
 
 /** 实例 */
 // let notifier: MessageNotify = null
 // let messageInstance: any;
-let defaultDuration = 3;
-let defaultTop: number | null;
-let messageInstance: any;
+let defaultDuration = 3
+let defaultTop: number | null
+let messageInstance: any
 let key: number = 0
 const prefixCls = 'message-notice'
-let transitionName = 'move-up';
-let getContainer: () => HTMLElement;
-let maxCount: number;
+let transitionName = 'move-up'
+let getContainer: () => HTMLElement
+let maxCount: number
 
-function getNotifier(callback: (i: any) => void) {
+function getNotifier (callback: (i: any) => void) {
   if (messageInstance) {
     callback(messageInstance)
     return
@@ -50,24 +50,24 @@ function getNotifier(callback: (i: any) => void) {
 }
 
 export interface MessageType {
-  (): void;
-  then: (fill: ThenableArgument, reject: ThenableArgument) => Promise<void>;
-  promise: Promise<void>;
+  (): void
+  then: (fill: ThenableArgument, reject: ThenableArgument) => Promise<void>
+  promise: Promise<void>
 }
 export interface ArgsProps {
-  content: React.ReactNode;
-  duration: number | null;
-  type: NoticeType;
-  onClose?: () => void;
-  icon?: React.ReactNode;
-  key?: string | number;
+  content: React.ReactNode
+  duration: number | null
+  type: NoticeType
+  onClose?: () => void
+  icon?: React.ReactNode
+  key?: string | number
 }
 
-function notice(args: ArgsProps): MessageType {
+function notice (args: ArgsProps): MessageType {
   const duration = args.duration !== undefined ? args.duration : defaultDuration
   const target = key++
   const closePromise = new Promise<boolean>(resolve => {
-  const callback = () => {
+    const callback = () => {
       if (typeof args.onClose === 'function') {
         args.onClose()
       }
@@ -79,7 +79,11 @@ function notice(args: ArgsProps): MessageType {
         duration,
         style: {},
         content: (
-          <div className={`${prefixCls}-content${args.type ? ` ${prefixCls}-${args.type}` : ''}`}>
+          <div
+            className={`${prefixCls}-content${
+              args.type ? ` ${prefixCls}-${args.type}` : ''
+            }`}
+          >
             <span>{args.content}</span>
           </div>
         ),
@@ -92,7 +96,8 @@ function notice(args: ArgsProps): MessageType {
       messageInstance.removeNotice(target)
     }
   }
-  result.then = (filled: ThenableArgument, rejected: ThenableArgument) => closePromise.then(filled, rejected)
+  result.then = (filled: ThenableArgument, rejected: ThenableArgument) =>
+    closePromise.then(filled, rejected)
   result.promise = closePromise
   return result
 }
@@ -108,8 +113,12 @@ interface MessageApi {
   (content: ConfigContent, onClose: () => void): MessageType
 }
 
-function getApi(type: NoticeType): MessageApi {
-  return (content: ConfigContent, duration?: ConfigDuration, onClose?: ConfigOnClose): MessageType => {
+function getApi (type: NoticeType): MessageApi {
+  return (
+    content: ConfigContent,
+    duration?: ConfigDuration,
+    onClose?: ConfigOnClose
+  ): MessageType => {
     if (typeof duration === 'function') {
       onClose = duration
       duration = undefined
@@ -119,7 +128,7 @@ function getApi(type: NoticeType): MessageApi {
 }
 
 export const open = notice
-export function destroy() {
+export function destroy () {
   if (messageInstance) {
     messageInstance.destroy()
     messageInstance = null

@@ -23,6 +23,7 @@
   "dependencies": {
     "@types/classnames": "^2.2.9",
     "classnames": "^2.2.6",
+    "prop-types": "^15.7.2",
     "rc-animate": "^2.10.0",
     "rc-checkbox": "^2.1.8",
     "rc-notification": "^3.3.1",
