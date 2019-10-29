@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react';
 import { mount, shallow } from 'enzyme'
 import { Button } from '../index.tsx'
 
@@ -26,18 +26,19 @@ describe('Button', () => {
     const wrapper = shallow(
       <Button type={type}>Hello Jest!</Button>
     );
-    expect(wrapper).to.have.lengthOf(1);
+    // expect(wrapper).to.have.lengthOf(1);
+    expect(wrapper.length).toBe(1);
   });
   
   
   test('Button calls doneChange when todo is clicked', () => {
-    const doneChange = jest.fn();
+    const onClick = jest.fn();
     const wrapper = shallow(
-      <Button  onClick={doneChange}>点击</Button>
+      <Button  onClick={onClick}>点击</Button>
     );
     // 判断 props onClick 是否被调用
     wrapper.simulate('click');
-    expect(props.onClick).toBeCalled() 
+    expect(onClick).toBeCalled() 
   });
   
 
@@ -58,26 +59,15 @@ describe('Button', () => {
       <DefaultButton />
     );
     wrapper.simulate('click');
-    expect(wrapper.find('.btn-loading').length).toBe(1);
+    expect(wrapper.hasClass('.button-loading').length).toBe(1);
   });
-
-  // it('should not clickable when button is loading', () => {
-  //   const onClick = jest.fn();
-  //   const wrapper = mount(
-  //     <Button loading onClick={onClick}>
-  //       button
-  //     </Button>,
-  //   );
-  //   wrapper.simulate('click');
-  //   expect(onClick).not.toHaveBeenCalledWith();
-  // });
 
 // 测试 Button props 的type
 test('test Button props type',()=>{
   const wrapper = shallow(
     <Button  type='primary'>点击</Button>
   );
-  expect(wrapper.hasClass('button-primary')).to.equal(true)
+  expect(wrapper.hasClass('button-primary')).toEqual(true)
 })
 
   // 测试 Button props 的type
@@ -85,7 +75,7 @@ test('test Button props type',()=>{
     const wrapper = shallow(
       <Button  type='primary'>点击</Button>
     );
-    expect(wrapper.text()).to.equal('点击')
+    expect(wrapper.text()).toEqual('点击')
   })
 
 })

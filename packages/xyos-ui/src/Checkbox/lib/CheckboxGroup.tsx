@@ -41,6 +41,7 @@ class CheckboxGroup extends React.Component<CheckboxGroupProps, CheckboxGroupSta
     options: [],
   };
 
+  // context  中字段设置类型检查
   static childContextTypes = {
     checkboxGroup: PropTypes.object,
   };

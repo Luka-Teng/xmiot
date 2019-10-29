@@ -66,7 +66,10 @@ export interface ArgsProps {
 function notice (args: ArgsProps): MessageType {
   const duration = args.duration !== undefined ? args.duration : defaultDuration
   const target = key++
+
+  console.log(target, '888')
   const closePromise = new Promise<boolean>(resolve => {
+    console.log('closePromise')
     const callback = () => {
       if (typeof args.onClose === 'function') {
         args.onClose()
@@ -92,13 +95,17 @@ function notice (args: ArgsProps): MessageType {
     })
   })
   const result: any = () => {
+    console.log(messageInstance, 'messageInstance', target)
     if (messageInstance) {
       messageInstance.removeNotice(target)
     }
   }
-  result.then = (filled: ThenableArgument, rejected: ThenableArgument) =>
+  result.then = (filled: ThenableArgument, rejected: ThenableArgument) => {
+    console.log('then')
     closePromise.then(filled, rejected)
-  result.promise = closePromise
+    result.promise = closePromise
+  }
+
   return result
 }
 
@@ -107,9 +114,9 @@ type ConfigDuration = number | (() => void)
 export type ConfigOnClose = () => void
 
 interface MessageApi {
-  (cotent: ConfigContent): MessageType
-  (cotent: ConfigContent, duration: number): MessageType
-  (cotent: ConfigContent, duration: number, onClose: () => void): MessageType
+  (content: ConfigContent): MessageType
+  (content: ConfigContent, duration: number): MessageType
+  (content: ConfigContent, duration: number, onClose: () => void): MessageType
   (content: ConfigContent, onClose: () => void): MessageType
 }
 
@@ -138,10 +145,14 @@ export const success = getApi('success')
 export const error = getApi('error')
 export const loading = getApi('loading')
 export const warning = getApi('warning')
+export const info = getApi('info')
+// export const config=getApi('config')
 
 export default {
   success,
   error,
   loading,
-  warning
+  warning,
+  info,
+  destroy
 }

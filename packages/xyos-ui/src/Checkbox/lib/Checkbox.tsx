@@ -24,6 +24,7 @@ class Checkbox extends React.Component<CheckboxProps> {
     checked: false,
   }
 
+  // 类型检查
   static contextTypes = {
     checkboxGroup: PropTypes.any,
   };
@@ -77,7 +78,7 @@ class Checkbox extends React.Component<CheckboxProps> {
       ...restProps
     } = props;
     const { checkboxGroup } = context;
-    const prefixCls = 'rc-checkbox'
+    const prefixCls = 'rc-checkbox';
     const checkboxProps: CheckboxProps = { ...restProps };
 
     // console.log(props,'props')
