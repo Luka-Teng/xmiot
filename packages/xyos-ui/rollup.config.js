@@ -42,7 +42,7 @@ function getOptions (format) {
     input: mapToInput(format, validDirs),
     output: {
       entryFileNames: `[name].js`,
-      chunkFileNames: 'common/[name].js',
+      chunkFileNames: `${format}/common/[name].js`,
       dir: './entry',
       format
     },

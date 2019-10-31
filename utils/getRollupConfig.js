@@ -23,9 +23,7 @@ const extensions = require('./rollup-plugin-extensions')
 module.exports = (options = {}) => {
   const defaultOptions = {
     plugins: [
-      extensions({
-        extensions: ['.jsx', '.ts', '.tsx']
-      }),
+      extensions(['.jsx', '.ts', '.tsx']),
       replace({
         ...getClientEnvironment().stringified
         // 不包括除了react之外的包

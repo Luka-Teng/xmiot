@@ -1,9 +1,17 @@
 const { basename, dirname, isAbsolute, resolve } = require('path')
 const fs = require('fs')
 
-function isFile (file) {
+function isFile (dest) {
   try {
-    return fs.statSync(file).isFile()
+    return fs.statSync(dest).isFile()
+  } catch (err) {
+    return false
+  }
+}
+
+function isDirectory (dest) {
+  try {
+    return fs.statSync(dest).isDirectory()
   } catch (err) {
     return false
   }
@@ -14,10 +22,22 @@ function addExtensionIfNecessary (file, extensions) {
     const name = basename(file)
     const files = fs.readdirSync(dirname(file))
 
-    if (~files.indexOf(name) && isFile(file)) return file
+    // 如果能直接找到该文件，直接返回该文件
+    if (isFile(file)) return file
+
+    // 如果有以该文件名开头的其他扩展文件，返回该文件
     for (const ext of extensions) {
-      if (~files.indexOf(`${name}${ext}`) && isFile(`${file}${ext}`)) {
+      if (isFile(`${file}${ext}`)) {
         return `${file}${ext}`
+      }
+    }
+
+    // 如果存在该文件名命名的文件夹，查找该文件下的index
+    if (isDirectory(file)) {
+      for (const ext of extensions) {
+        if (isFile(`${file}/index${ext}`)) {
+          return `${file}/index${ext}`
+        }
       }
     }
   } catch (err) {
@@ -27,9 +47,9 @@ function addExtensionIfNecessary (file, extensions) {
   return null
 }
 
-function extensions ({ extensions }) {
+function extensions (extensions) {
   if (!extensions || !extensions.length) {
-    throw new Error(`Must specify { extensions: [..] } as non-empty array!`)
+    throw new Error(`Must specify extensions: [..] as non-empty array!`)
   }
 
   return {
