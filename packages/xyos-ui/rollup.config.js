@@ -47,9 +47,7 @@ function getOptions (format) {
       format
     },
     external: (id) => {
-      if (
-        /^rc\-/.test(id)
-      ) {
+      if (/(^rc\-)|(async\-validator)/.test(id)) {
         return true
       }
     }
