@@ -13,7 +13,6 @@ describe('Toast', () => {
   });
 
   afterEach(() => {
-    console.log(message,'9999')
     message.destroy();
     jest.useRealTimers();  // 使用真正的定时器
   });
@@ -47,15 +46,22 @@ describe('Toast', () => {
   it('should be able to hide manually', () => {
     const hide1 = message.info('whatever', 0);
     const hide2 = message.info('whatever', 0);
-    console.log(document.querySelectorAll('.message-notice-info').length,'8888')
     expect(document.querySelectorAll('.message-notice-info').length).toBe(2);
-    console.log(hide1(),'hide')
     hide1();
-    jest.runAllTimers();
-    expect(document.querySelectorAll('.message-notice-info').length).toBe(1);
-    hide2();
-    jest.runAllTimers();
-    expect(document.querySelectorAll('.message-notice-info').length).toBe(0);
+    hide1.then(()=>{   
+      expect(document.querySelectorAll('.message-notice-info').length).toBe(1);
+       hide2()
+    });
+    
+    hide2.then(()=>{
+      expect(document.querySelectorAll('.message-notice-info').length).toBe(0);
+    })
+    // hide1();
+    // jest.runAllTimers();
+    // expect(document.querySelectorAll('.message-notice-info').length).toBe(1);
+    // hide2();
+    // jest.runAllTimers();
+    // expect(document.querySelectorAll('.message-notice-info').length).toBe(0);
   });
 
 
@@ -92,7 +98,6 @@ describe('Toast', () => {
     expect(document.querySelectorAll('.message-notice-loading').length).toBe(1);
     hide();
     jest.runAllTimers();
-    console.log(document.querySelectorAll('.message-notice').length,'3456890')
     expect(document.querySelectorAll('.message-notice-loading').length).toBe(0);
   });
 
