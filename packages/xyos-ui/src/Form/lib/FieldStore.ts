@@ -10,13 +10,9 @@ type Field<T extends string = string> = {
   errors: string[]
 }
 
-type Fields = {
-  [key in string] : Field<key>
-}
+type Fields = { [key in string]: Field<key> }
 
-type ValidateDescriptor = { 
-  [key in string]: RuleItem[]
-}
+type ValidateDescriptor = { [key in string]: RuleItem[] }
 
 /* 实际上错误是会返回undefined */
 type ActualErrorList = ErrorList | undefined
@@ -25,12 +21,16 @@ class FieldStore {
   fields: Fields = {}
 
   /* set a field */
-  setField = (name: string, options?: Partial<Omit<Fields[string], 'name'>>) => {
-    const field = this.fields[name]  = this.fields[name] || {}
+  setField = (
+    name: string,
+    options?: Partial<Omit<Fields[string], 'name'>>
+  ) => {
+    const field = (this.fields[name] = this.fields[name] || {})
     field.name = name
     field.dirty = (options && options.dirty) || field.dirty || false
     field.trigger = (options && options.trigger) || field.trigger || 'onChange'
-    field.valuePropName = (options && options.valuePropName) || field.valuePropName ||'value'
+    field.valuePropName =
+      (options && options.valuePropName) || field.valuePropName || 'value'
     field.validates = (options && options.validates) || field.validates || []
     field.value = (options && options.value) || field.value || null
     field.errors = (options && options.errors) || field.errors || []
@@ -61,7 +61,7 @@ class FieldStore {
 
   /* reset a set of fields */
   resetFieldsValue = (names: string[]) => {
-    names.forEach((name) => {
+    names.forEach(name => {
       this.resetFieldValue(name)
     })
   }
@@ -75,19 +75,23 @@ class FieldStore {
 
   /* get values of a set of fields */
   getFieldsValue = (names: string[]) => {
-    return names.map((name) => {
+    return names.map(name => {
       return this.getFieldValue(name)
     })
   }
 
   /* set the value of a field */
   setFieldValue = (field: {
-    name: string, value: any, checkDirty?: boolean,
+    name: string
+    value: any
+    checkDirty?: boolean
   }) => {
     const { name, checkDirty = false, value } = field
 
     if (checkDirty && this.fields[name]) {
-      this.fields[name].value = this.fields[name].dirty ? this.fields[name].value : value
+      this.fields[name].value = this.fields[name].dirty
+        ? this.fields[name].value
+        : value
     }
 
     if (!checkDirty && this.fields[name]) {
@@ -96,10 +100,14 @@ class FieldStore {
   }
 
   /* set values of a set of fields */
-  setFieldsValue = (fields: {
-    name: string, value: any, checkDirty?: boolean
-  }[]) => {
-    fields.forEach((field) => {
+  setFieldsValue = (
+    fields: {
+      name: string
+      value: any
+      checkDirty?: boolean
+    }[]
+  ) => {
+    fields.forEach(field => {
       this.setFieldValue(field)
     })
   }
@@ -108,17 +116,21 @@ class FieldStore {
   updateFieldErrors = (errors: ActualErrorList) => {
     if (errors === undefined) return
 
-    const errorMap = errors.reduce<{ [key in string]: string[] }>((acc, error) => {
-      const { field, message } = error
-      if (!acc[field]) acc[field] = []
-      acc[field].push(message)
-      return acc
-    }, {})
+    const errorMap = errors.reduce<{ [key in string]: string[] }>(
+      (acc, error) => {
+        const { field, message } = error
+        if (!acc[field]) acc[field] = []
+        acc[field].push(message)
+        return acc
+      },
+      {}
+    )
 
     Object.keys(errorMap).forEach(name => {
-      this.getField(name) && this.setField(name, {
-        errors: errorMap[name]
-      })
+      this.getField(name) &&
+        this.setField(name, {
+          errors: errorMap[name]
+        })
     })
   }
 
@@ -126,9 +138,13 @@ class FieldStore {
   validateField = (name: string) => {
     if (this.fields[name] && this.fields[name].validates.length > 0) {
       const validator = new schema({ [name]: this.fields[name].validates })
-      validator.validate({ [name]: this.fields[name].value }, {}, (errors: ActualErrorList) => {
-        this.updateFieldErrors(errors)
-      })
+      validator.validate(
+        { [name]: this.fields[name].value },
+        {},
+        (errors: ActualErrorList) => {
+          this.updateFieldErrors(errors)
+        }
+      )
     }
   }
 
@@ -137,7 +153,7 @@ class FieldStore {
     let descriptor: ValidateDescriptor = {}
     let values: { [key in string]: any } = {}
 
-    names.forEach((name) => {
+    names.forEach(name => {
       if (this.fields[name] && this.fields[name].validates.length > 0) {
         descriptor[name] = this.fields[name].validates
         values[name] = this.fields[name].value

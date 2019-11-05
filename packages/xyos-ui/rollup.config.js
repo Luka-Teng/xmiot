@@ -47,7 +47,11 @@ function getOptions (format) {
       format
     },
     external: (id) => {
-      if (/(^rc\-)|(async\-validator)/.test(id)) {
+      if (/(^rc\-)/.test(id)) {
+        return true
+      }
+
+      if (['react', 'react-dom', 'async-validator'].includes(id)) {
         return true
       }
     }
