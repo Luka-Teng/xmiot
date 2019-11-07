@@ -54,7 +54,6 @@ function extensions (extensions) {
 
   return {
     name: 'extensions',
-
     resolveId (importee, importer) {
       // absolute paths are left untouched
       if (isAbsolute(importee)) {
