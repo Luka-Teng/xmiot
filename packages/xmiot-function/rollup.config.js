@@ -15,14 +15,12 @@ function getOptions (module) {
   }
 }
 
-const extraOptions = {
-  type: 'global',
-  isTypeScript: true,
-  noCss: true,
-  packageDir: __dirname
-}
+const extraOptions = format => ({
+  packageDir: __dirname,
+  format: format
+})
 
 export default [
-  getRollupConfig(getOptions('cjs'), extraOptions),
-  getRollupConfig(getOptions('es'), extraOptions)
+  getRollupConfig(getOptions('cjs'), extraOptions()),
+  getRollupConfig(getOptions('es'), extraOptions())
 ]
