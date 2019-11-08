@@ -60,18 +60,26 @@ function getOptions (format) {
   }
 }
 
-const styleOptions = {
-  extract: [{
-    test: /src\/Animate/,
-    filename: 'Animate/index.css'
-  }]
-}
+const extraOptions = (format) => ({
+  buildPaths: [path.resolve(__dirname, 'entry', format)],
+  styleOptions: {
+    extract: [{
+      test: /src\/Animate/,
+      filename: 'Animate/index.css'
+    }, {
+      test: /src\/Button/,
+      filename: 'Button/index.css'
+    }, {
+      test: /src\/Checkbox/,
+      filename: 'Checkbox/index.css'
+    }, {
+      test: /src\/Radio/,
+      filename: 'Radio/index.css'
+    }]
+  }
+})
 
 export default [
-  getRollupConfig(getOptions('cjs'), {
-    styleOptions
-  }),
-  getRollupConfig(getOptions('es'), {
-    styleOptions
-  })
+  getRollupConfig(getOptions('cjs'), extraOptions('cjs')),
+  getRollupConfig(getOptions('es'), extraOptions('es'))
 ]

@@ -1,3 +1,4 @@
+const path = require('path')
 const getRollupConfig = require('../../utils/getRollupConfig')
 
 const fileName = {
@@ -22,14 +23,11 @@ function getOptions (module) {
   }
 }
 
-const extraOptions = {
-  type: 'global',
-  isTypeScript: false,
-  noCss: true,
-  packageDir: __dirname
-}
+const extraOptions = (format) => ({
+  buildPaths: [path.resolve(__dirname, 'entry', fileName[format])]
+})
 
 export default [
-  getRollupConfig(getOptions('cjs'), extraOptions),
-  getRollupConfig(getOptions('es'), extraOptions)
+  getRollupConfig(getOptions('cjs'), extraOptions('cjs')),
+  getRollupConfig(getOptions('es'), extraOptions('es'))
 ]
