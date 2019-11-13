@@ -39,7 +39,7 @@ const [Form, FormItem] = createForm()
 <Form ref={this.ref}>
   <FormItem
     name="required"
-    rules="not required"
+    validates="not required"
     initialValue="not required"
     trigger="not required"
     valuePropName="not required"
@@ -54,9 +54,11 @@ const Component = (props) => {
   const { getFieldDecorator } = form
 
   return getFieldDecorator({
-    name:"",
-    rules:"",
-    initialValue:""
+    name: "required"
+    rules: "not required"
+    initialValue: "not required"
+    trigger: "not required"
+    valuePropName: "not required"
   })(WrappedElement)
 }
 
