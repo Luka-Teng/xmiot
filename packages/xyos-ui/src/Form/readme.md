@@ -1,16 +1,36 @@
 ### 使用介绍
 
-###### Form
+#### Form
 
 封装表单和store交互的数据逻辑
 
-###### FormItem
+|props|description|
+|:----|:----------|
+|null|null|
+---
+
+#### FormItem
 
 创建field，绑定事件, 处理props逻辑
 
-###### WrappedElement
+|props|description|
+|:----|:----------|
+|name|field的name，必须|
+|initialValue|初始值|
+|validates|校验|
+|valuePropName|绑定的子元素value名，默认value|
+|trigger|绑定的子元素事件触发名，默认onChange|
+---
 
-实现onChange接口，并传递value
+#### WrappedElement
+
+各自组件自己实现
+
+注意：onChange接口，value的拦截
+
+---
+
+#### 使用方式
 
 ```javascript
 // xyos-ui的实现方式
@@ -24,9 +44,7 @@ const [Form, FormItem] = createForm()
     trigger="not required"
     valuePropName="not required"
   >
-    <div>
-      <WrappedElement />
-    </div>
+    <WrappedElement />
   </FormItem>
 </Form>
 
@@ -39,7 +57,7 @@ const Component = (props) => {
     name:"",
     rules:"",
     initialValue:""
-  })(component)
+  })(WrappedElement)
 }
 
 creatForm(options)(Component)
