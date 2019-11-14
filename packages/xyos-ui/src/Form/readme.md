@@ -20,6 +20,7 @@
 |validates|校验|
 |valuePropName|绑定的子元素value名，默认value|
 |trigger|绑定的子元素事件触发名，默认onChange|
+|errorComponent|展示错误的组件|
 ---
 
 #### WrappedElement
