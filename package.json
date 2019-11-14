@@ -109,7 +109,7 @@
     "react": "^16.10.2",
     "rollup-plugin-json": "^4.0.0",
     "save-dev": "0.0.1-security",
-    "xmiot-server": "^1.2.18"
+    "xmiot-server": "^1.2.19"
   },
   "lastCommit": "fd7924b8cc3a19cf89be504dd3967d4df89ac697"
 }
