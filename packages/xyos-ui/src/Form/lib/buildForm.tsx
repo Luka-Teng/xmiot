@@ -5,19 +5,31 @@ import FieldStore, { Field } from './FieldStore'
 type FormFuncs = {
   addField: (
     name: string,
-    options: Pick<Field<string>, "value"> & Partial<Pick<Field<string>, "validates" | 'ref' | 'valuePropName' | 'trigger'>>) => void
+    options: Pick<Field<string>, 'value'> &
+      Partial<
+        Pick<Field<string>, 'validates' | 'ref' | 'valuePropName' | 'trigger'>
+      >
+  ) => void
   removeField: (name: string) => void
   getFieldValue: (name: string) => any
   getFieldsValue: (names: string[]) => any[]
   getFieldErrors: (name: string) => any[]
-  getCriticalProps: (name: string) => { trigger: string, valuePropName: string, errors: string[] }
+  getCriticalProps: (
+    name: string
+  ) => { trigger: string; valuePropName: string; errors: string[] }
   setFieldValue: (name: string, value: any) => void
   setFieldsValue: (fields: { [x: string]: any }) => void
   setFieldValueWithDirty: (name: string, value: any) => void
-  setFieldValidates: (name: string, validates: Field<string>['validates']) => void
+  setFieldValidates: (
+    name: string,
+    validates: Field<string>['validates']
+  ) => void
   validateField: (name: string, callback?: Function) => void
   validateFields: (names: string[], callback?: Function | undefined) => void
-  validateFieldsToScroll: (names: string[], callback?: Function | undefined) => void
+  validateFieldsToScroll: (
+    names: string[],
+    callback?: Function | undefined
+  ) => void
 }
 
 type State = {
@@ -26,47 +38,54 @@ type State = {
 
 type Props = Partial<JSX.IntrinsicElements['div']>
 
-export type ExportedFunc = Pick<FormFuncs, 
-  'addField' | 'removeField' | 'getFieldValue' | 'getCriticalProps' | 'setFieldValue' | 'setFieldValueWithDirty' | 'setFieldValidates' | 'validateField'
+export type ExportedFunc = Pick<
+  FormFuncs,
+  | 'addField'
+  | 'removeField'
+  | 'getFieldValue'
+  | 'getCriticalProps'
+  | 'setFieldValue'
+  | 'setFieldValueWithDirty'
+  | 'setFieldValidates'
+  | 'validateField'
 >
 
 const buildForm = (Provider: React.Provider<ExportedFunc>) => {
-
   return class Form extends Component<Props, State> {
     fieldStore = new FieldStore()
-    
+
     state = {
       hasError: false
     }
 
-    static getDerivedStateFromError(error: any) {
+    static getDerivedStateFromError (error: any) {
       if (error) {
         return { hasError: true }
       } else {
         return { hasError: false }
       }
     }
-  
+
     addField: FormFuncs['addField'] = (name, options) => {
       if (this.fieldStore.getField(name)) {
         throw new Error('存在相同的fieldName')
       }
       this.fieldStore.setField(name, options)
     }
-  
-    removeField: FormFuncs['removeField'] = (name) => {
+
+    removeField: FormFuncs['removeField'] = name => {
       this.removeField(name)
     }
-  
-    getFieldValue: FormFuncs['getFieldValue'] = (name) => {
+
+    getFieldValue: FormFuncs['getFieldValue'] = name => {
       return this.fieldStore.getFieldValue(name)
     }
-  
-    getFieldsValue: FormFuncs['getFieldsValue'] = (names) => {
+
+    getFieldsValue: FormFuncs['getFieldsValue'] = names => {
       return this.fieldStore.getFieldsValue(names)
     }
 
-    getFieldErrors: FormFuncs['getFieldErrors'] = (name) => {
+    getFieldErrors: FormFuncs['getFieldErrors'] = name => {
       return this.fieldStore.getFieldErrors(name)
     }
 
@@ -78,41 +97,49 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
         errors: field ? field.errors : []
       }
     }
-  
+
     setFieldValue: FormFuncs['setFieldValue'] = (name, value) => {
       // 需要把field设置为dirty
-      this.fieldStore.setFieldDirty('name')
-      this.fieldStore.setFieldValue({
-        name,
-        value
-      }, (field) => {
-        field && this.fieldStore.updateField(name)
-      })
+      this.fieldStore.setFieldDirty(name)
+      this.fieldStore.setFieldValue(
+        {
+          name,
+          value
+        },
+        field => {
+          field && this.fieldStore.updateField(name)
+        }
+      )
     }
 
-    setFieldValueWithDirty: FormFuncs['setFieldValueWithDirty'] = (name, value) => {
+    setFieldValueWithDirty: FormFuncs['setFieldValueWithDirty'] = (
+      name,
+      value
+    ) => {
       // 需要把field设置为dirty
-      this.fieldStore.setFieldDirty(name)
       this.fieldStore.setFieldValue({
         name,
         value,
         checkDirty: true
       })
     }
-  
-    setFieldsValue: FormFuncs['setFieldsValue'] = (fields) => {
+
+    setFieldsValue: FormFuncs['setFieldsValue'] = fields => {
       const names = Object.keys(fields)
 
       // 需要把field设置为dirty
       this.fieldStore.setFieldsDirty(names)
 
       names.forEach(name => {
-        this.fieldStore.setFieldValue({
-          name,
-          value: fields[name]
-        }, (field) => {
-          field && this.fieldStore.updateField(name)
-        })
+        this.fieldStore.setFieldValue(
+          {
+            name,
+            value: fields[name]
+          },
+          field => {
+            field && this.fieldStore.updateField(name)
+          }
+        )
       })
     }
 
@@ -121,12 +148,12 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
         validates: validates
       })
     }
-  
+
     validateField: FormFuncs['validateField'] = (name, callback) => {
       this.fieldStore.validateField(name, callback)
       this.fieldStore.updateField(name)
     }
-  
+
     validateFields: FormFuncs['validateFields'] = (names, callback) => {
       this.fieldStore.validateFields(names, callback)
       names.forEach(name => {
@@ -134,16 +161,20 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
       })
     }
 
-    validateFieldsToScroll: FormFuncs['validateFieldsToScroll'] = (names, callback) => {
+    validateFieldsToScroll: FormFuncs['validateFieldsToScroll'] = (
+      names,
+      callback
+    ) => {
       this.fieldStore.validateFields(names, (errors: any) => {
         if (errors) {
           const firstError = errors[0]
           const firstErrorField = this.fieldStore.getField(firstError.field)
           if (firstErrorField && firstErrorField.ref) {
             const dom = ReactDom.findDOMNode(firstErrorField.ref)
-            dom && window.scrollTo({
-              top: (dom as HTMLElement).getBoundingClientRect().top
-            })
+            dom &&
+              window.scrollTo({
+                top: (dom as HTMLElement).getBoundingClientRect().top
+              })
           }
         }
         callback && callback(errors)
@@ -152,31 +183,29 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
         this.fieldStore.updateField(name)
       })
     }
-  
+
     render () {
       const { children, ...rest } = this.props
-      return (
-        !this.state.hasError ?
-        <Provider value={{
-          addField: this.addField,
-          removeField: this.removeField,
-          setFieldValue: this.setFieldValue,
-          setFieldValueWithDirty: this.setFieldValueWithDirty,
-          setFieldValidates: this.setFieldValidates,
-          getFieldValue: this.getFieldValue,
-          getCriticalProps: this.getCriticalProps,
-          validateField: this.validateField
-        }}>
-          <div {...rest} >
-            { children }
-          </div>
+      return !this.state.hasError ? (
+        <Provider
+          value={{
+            addField: this.addField,
+            removeField: this.removeField,
+            setFieldValue: this.setFieldValue,
+            setFieldValueWithDirty: this.setFieldValueWithDirty,
+            setFieldValidates: this.setFieldValidates,
+            getFieldValue: this.getFieldValue,
+            getCriticalProps: this.getCriticalProps,
+            validateField: this.validateField
+          }}
+        >
+          <div {...rest}>{children}</div>
         </Provider>
-        : <div>Something went wrong</div>
+      ) : (
+        <div>Something went wrong</div>
       )
     }
   }
 }
-
-
 
 export default buildForm
