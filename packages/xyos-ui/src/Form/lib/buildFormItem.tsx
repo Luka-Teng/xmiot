@@ -35,10 +35,18 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
       this.context.setFieldValue(this.props.name, e.target.value)
       this.context.validateField(this.props.name)
     }
-  
-    manageProps = (props: Props) => {
+
+    /** 
+     * react在render中抛出错误，会再实例化一遍Component，并render
+     * 导致render方法会在不同实例内render两次、、、
+     */
+    manageProps = () => {
       if (!this.context) {
         throw new Error('FormItem should be inside the Form Component')
+      }
+
+      if (this.props.children instanceof Array) {
+        throw new Error('FormItem的只能存在一个子元素')
       }
 
       const { name, initialValue, validates, valuePropName, trigger } = this.props
@@ -63,12 +71,12 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
         this.context.setFieldValidates(name, validates || [])
         this.context.setFieldValueWithDirty(name, initialValue)
       }
-
+    
       this.prevProps = this.props
     }
 
     buildChildren = (children: React.ReactNode) => {
-      const { valuePropName, trigger, errors } = this.context.getCriticalProps(this.props.name)
+      const { valuePropName, trigger } = this.context.getCriticalProps(this.props.name)
       const value = this.context.getFieldValue(this.props.name)
       
       if (React.isValidElement(children)) {
@@ -79,18 +87,17 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
           },
           [valuePropName]: value
         })
-      } else if (children instanceof Array) {
-        throw new Error('FormItem的只能存在一个子元素')
       }
-      
+
       return children
     }
   
     render () {
-      this.manageProps(this.props)
-      const children = this.buildChildren(this.props.children)
+      const { children } = this.props
+      this.manageProps()
+      let builtChildren = this.buildChildren(children)
 
-      return <div>{children}</div>
+      return builtChildren
     }
   }
 }

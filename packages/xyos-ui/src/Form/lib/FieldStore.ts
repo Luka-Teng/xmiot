@@ -1,6 +1,6 @@
 import schema, { RuleItem, ErrorList } from 'async-validator'
 import React from 'react'
-import { is } from './utils'
+import { is, params } from './utils'
 
 export type Field<T extends string = string> = {
   name: T
@@ -24,13 +24,11 @@ class FieldStore {
   fields: Fields = {}
 
   /* set a field */
+  @params('string', ['object', 'undefined'])
   setField = (
     name: string,
     options?: Partial<Omit<Fields[string], 'name'>>
   ) => {
-    is(name, 'string', 'name must be a string')
-    is(options, ['object', 'undefined'], 'options must be a object')
-
     const field = (this.fields[name] = this.fields[name] || {})
     field.name = name
     field.dirty = (options && options.dirty) || field.dirty || false
@@ -44,27 +42,24 @@ class FieldStore {
   }
 
   /* get a field */
+  @params('string')
   getField = (name: string) => {
-    is(name, 'string', 'name must be a string')
-
     if (this.fields[name]) {
       return this.fields[name]
     }
   }
 
   /* remove a field */
-  removeField = (name: string) => {
-    is(name, 'string', 'name must be a string')
-
+  @params('string')
+  removeField =(name: string) => {
     if (this.fields[name]) {
       delete this.fields[name]
     }
   }
 
   /* reset a field */
+  @params('string')
   resetFieldValue = (name: string) => {
-    is(name, 'string', 'name must be a string')
-
     if (this.fields[name]) {
       this.fields[name].dirty = false
       this.fields[name].value = null
@@ -73,40 +68,36 @@ class FieldStore {
   }
 
   /* reset a set of fields */
+  @params('array')
   resetFieldsValue = (names: string[]) => {
-    is(names, 'array', 'names must be an array')
-
     names.forEach(name => {
       this.resetFieldValue(name)
     })
   }
 
   /* get the value of a field */
+  @params('string')
   getFieldValue = (name: string) => {
-    is(name, 'string', 'name must be a string')
-
     if (this.fields[name]) {
       return this.fields[name].value
     }
   }
 
   /* get values of a set of fields */
+  @params('array')
   getFieldsValue = (names: string[]) => {
-    is(names, 'array', 'names must be an array')
-
     return names.map(name => {
       return this.getFieldValue(name)
     })
   }
 
   /* set the value of a field */
+  @params('object', ['function', 'undefined'])
   setFieldValue = (field: {
     name: string
     value: any
     checkDirty?: boolean
   }, callback?: (field: Field | undefined) => void) => {
-    is(field, 'object', 'field must be a object')
-
     const { name, checkDirty = false, value } = field
     is(name, 'string', 'name must be a string')
     is(checkDirty, ['boolean', 'undefined'], 'checkDirty must be a boolean')
@@ -122,6 +113,13 @@ class FieldStore {
     }
 
     callback && callback(this.fields[name])
+  }
+
+  /* get the errors of a field */
+  @params('string')
+  getFieldErrors = (name: string) => {
+    const field = this.getField(name)
+    return field ? field.errors : []
   }
 
   /* update errors for a field, remove old errors, and apply new errors */
@@ -147,10 +145,8 @@ class FieldStore {
   }
 
   /* validate a field */
+  @params('string', ['function', 'undefined'])
   validateField = (name: string, callback?: Function) => {
-    is(name, 'string', 'name must be a string')
-    is(callback, ['function', 'undefined'], 'callback must be a function')
-
     if (this.fields[name] && this.fields[name].validates.length > 0) {
       const validator = new schema({ [name]: this.fields[name].validates })
       validator.validate(
@@ -165,10 +161,8 @@ class FieldStore {
   }
 
   /* validate fields */
+  @params('array', ['function', 'undefined'])
   validateFields = (names: string[], callback?: Function) => {
-    is(names, 'array', 'names must be an array')
-    is(callback, ['function', 'undefined'], 'callback must be a function')
-
     let descriptor: ValidateDescriptor = {}
     let values: { [key in string]: any } = {}
 
@@ -188,31 +182,28 @@ class FieldStore {
   }
 
   /* update the field */
+  @params('string')
   updateField = (name: string) => {
-    is(name, 'string', 'name must be a string')
-
     const field = this.getField(name)
     field && field.ref && field.ref.forceUpdate()
   }
   
   /* set a field dirty */
+  @params('string')
   setFieldDirty = (name: string) => {
-    is(name, 'string', 'name must be a string')
-
     this.getField(name) && this.setField(name, { dirty: true })
   }
 
   /* set a set of fields dirty */
+  @params('array')
   setFieldsDirty = (names: string[]) => {
-    is(names, 'array', 'names must be an array')
     names.forEach(name => {
       this.setFieldDirty(name)
     })
   }
 
+  @params('string')
   isDirty = (name: string) => {
-    is(name, 'string', 'name must be a string')
-
     if (this.fields[name]) {
       return this.fields[name].dirty
     }

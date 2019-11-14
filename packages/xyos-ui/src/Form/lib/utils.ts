@@ -46,3 +46,79 @@ export const is = (
 
   throw new Error(errorMessage)
 }
+
+/* 在装饰器中判断类型 */
+type extendedPropertyDescriptor = PropertyDescriptor & {
+  initializer: Function | null
+}
+
+export const params = (...types: MatchTypes[]) => {
+  return (((
+    target: any,
+    name: string,
+    descriptor: extendedPropertyDescriptor
+  ) => {
+    const { initializer } = descriptor
+
+    if (!initializer) {
+      throw new Error('该装饰器只能装饰初始化属性')
+    }
+
+    if (initializer && typeof initializer !== 'function') {
+      throw new Error('装饰函数目前仅支持实例方法')
+    }
+
+    descriptor.initializer = function () {
+      return (...args: any[]) => {
+        types.forEach((type, index) => {
+          is(
+            args[index],
+            type,
+            `argument-${index} should be one of the types [${type}] in ${name} in ${
+              target.constructor.name
+            }`
+          )
+        })
+        return initializer.call(this)(...args)
+      }
+    }
+
+    return descriptor
+  }) as unknown) as ((target: any, propertyKey: string) => void)
+}
+
+/* 深比较 */
+const isObject = (source: any) => {
+  return Object.prototype.toString.call(source) === '[object Object]'
+}
+
+const isArray = (source: any) => {
+  return Array.isArray(source)
+}
+
+export const deepEqual = (source: any, target: any): Boolean => {
+  const typeOfSource = Object.prototype.toString.call(source)
+  const typeOfTarget = Object.prototype.toString.call(target)
+
+  if (typeOfSource !== typeOfTarget) return false
+
+  if (!isObject(source) && !isArray(source)) {
+    return source === target
+  }
+
+  if (isObject(source)) {
+    const sKeys = Object.keys(source)
+    const tKeys = Object.keys(target)
+    const keys = sKeys > tKeys ? sKeys : tKeys
+    return keys.every(key => deepEqual(source[key], target[key]))
+  }
+
+  if (isArray(source)) {
+    const pickedOne = source.length > target.length ? source : target
+    return pickedOne.every((s: any, i: number) =>
+      deepEqual(source[i], target[i])
+    )
+  }
+
+  return false
+}

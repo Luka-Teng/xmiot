@@ -9,6 +9,7 @@ type FormFuncs = {
   removeField: (name: string) => void
   getFieldValue: (name: string) => any
   getFieldsValue: (names: string[]) => any[]
+  getFieldErrors: (name: string) => any[]
   getCriticalProps: (name: string) => { trigger: string, valuePropName: string, errors: string[] }
   setFieldValue: (name: string, value: any) => void
   setFieldsValue: (fields: { [x: string]: any }) => void
@@ -19,14 +20,30 @@ type FormFuncs = {
   validateFieldsToScroll: (names: string[], callback?: Function | undefined) => void
 }
 
+type State = {
+  hasError: boolean
+}
+
 export type ExportedFunc = Pick<FormFuncs, 
   'addField' | 'removeField' | 'getFieldValue' | 'getCriticalProps' | 'setFieldValue' | 'setFieldValueWithDirty' | 'setFieldValidates' | 'validateField'
 >
 
 const buildForm = (Provider: React.Provider<ExportedFunc>) => {
 
-  return class Form extends Component {
+  return class Form extends Component<{}, State> {
     fieldStore = new FieldStore()
+    
+    state = {
+      hasError: false
+    }
+
+    static getDerivedStateFromError(error: any) {
+      if (error) {
+        return { hasError: true }
+      } else {
+        return { hasError: false }
+      }
+    }
   
     addField: FormFuncs['addField'] = (name, options) => {
       if (this.fieldStore.getField(name)) {
@@ -45,6 +62,10 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
   
     getFieldsValue: FormFuncs['getFieldsValue'] = (names) => {
       return this.fieldStore.getFieldsValue(names)
+    }
+
+    getFieldErrors: FormFuncs['getFieldErrors'] = (name) => {
+      return this.fieldStore.getFieldErrors(name)
     }
 
     getCriticalProps: FormFuncs['getCriticalProps'] = (name: string) => {
@@ -131,8 +152,9 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
     }
   
     render () {
-      (window as any).i = this
+      const { children } = this.props
       return (
+        !this.state.hasError ?
         <Provider value={{
           addField: this.addField,
           removeField: this.removeField,
@@ -143,8 +165,9 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
           getCriticalProps: this.getCriticalProps,
           validateField: this.validateField
         }}>
-          { this.props.children }
+          { children }
         </Provider>
+        : <div>Something went wrong</div>
       )
     }
   }
