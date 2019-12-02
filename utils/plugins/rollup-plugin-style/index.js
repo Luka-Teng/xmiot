@@ -10,7 +10,7 @@ const { is } = require('./utils')
 module.exports = ({ extract, plugins = [] } = {}) => {
   is(extract, ['array', 'undefined'], 'extract should be an array')
   is(plugins, 'array', 'plugins should be an array')
-  
+
   const extractedStyles = {}
 
   return {
@@ -88,20 +88,22 @@ module.exports = ({ extract, plugins = [] } = {}) => {
       const newAssets = {}
       const extractedStylesKeys = Object.keys(extractedStyles)
       const extractKeys = Object.keys(extract)
-      
+
       for (let extractedStylesKey of extractedStylesKeys) {
         for (let extractKey of extractKeys) {
           if (extract[extractKey].test.test(extractedStylesKey)) {
-            newAssets[extract[extractKey].filename] = newAssets[extract[extractKey].filename] || ''
-            newAssets[extract[extractKey].filename] += ('\n' + extractedStyles[extractedStylesKey])
+            newAssets[extract[extractKey].filename] =
+              newAssets[extract[extractKey].filename] || ''
+            newAssets[extract[extractKey].filename] +=
+              '\n' + extractedStyles[extractedStylesKey]
             delete extractedStyles[extractedStylesKey]
             break
           }
         }
 
         if (extractedStyles[extractedStylesKey] !== undefined) {
-          newAssets['remainingCss.css'] = newAssets['remainingCss.css'] || ''
-          newAssets['remainingCss.css'] += ('\n' + extractedStyles[extractedStylesKey])
+          newAssets['common.css'] = newAssets['common.css'] || ''
+          newAssets['common.css'] += '\n' + extractedStyles[extractedStylesKey]
         }
       }
 

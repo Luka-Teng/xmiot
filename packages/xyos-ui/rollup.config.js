@@ -60,8 +60,10 @@ function getOptions (format) {
   }
 }
 
-const styleOptions = {
-  extract: [{
+const extraOptions = (format) => ({
+  buildPaths: [path.resolve(__dirname, 'entry', format)],
+  styleOptions: {
+    extract: [{
       test: /src\/Animate/,
       filename: 'Animate/index.css'
     },
@@ -82,13 +84,10 @@ const styleOptions = {
       filename: 'Toast/index.css'
     },
   ]
-}
+  }
+})
 
 export default [
-  getRollupConfig(getOptions('cjs'), {
-    styleOptions
-  }),
-  getRollupConfig(getOptions('es'), {
-    styleOptions
-  })
+  getRollupConfig(getOptions('cjs'), extraOptions('cjs')),
+  getRollupConfig(getOptions('es'), extraOptions('es'))
 ]

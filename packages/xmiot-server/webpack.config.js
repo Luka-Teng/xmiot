@@ -89,7 +89,7 @@ module.exports = ({ isTs, entry, workDir: _workDir }) => {
                   {
                     plugins: [
                       ['@babel/plugin-proposal-decorators', { legacy: true }],
-                      ['@babel/plugin-proposal-class-properties'],
+                      ['@babel/plugin-proposal-class-properties', { loose : true }],
                       [
                         'import',
                         {

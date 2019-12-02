@@ -62,7 +62,12 @@ class Fields extends PureComponent<FieldsProps> {
       if (!this[option.type]) {
         throw new Error(`不存在该类型 ${option.type}`)
       }
-      views.push(<div key={index}>{this[option.type](option)}</div>)
+      views.push(
+        <div key={index}>
+          {this[option.type](option)}
+          <div style={{ clear: 'both' }} />
+        </div>
+      )
     })
     return views
   }
