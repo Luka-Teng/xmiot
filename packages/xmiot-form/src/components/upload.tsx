@@ -234,7 +234,7 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
         {getFieldDecorator(name, {
           initialValue,
           rules
-        })(<Input hidden placeholder={label} {...props} />)}
+        })(<Input hidden placeholder={label} />)}
         <Modal
           destroyOnClose
           visible={previewVisible}

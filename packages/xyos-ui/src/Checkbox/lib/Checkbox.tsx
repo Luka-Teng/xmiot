@@ -3,11 +3,11 @@ import RcCheckBox, { Props as RcCheckBoxProps } from 'rc-checkbox'
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './checkbox.less'
+import { ThemeContext } from './CheckboxGroup'
 
 type X = Pick<RcCheckBoxProps, Exclude<keyof RcCheckBoxProps, 'onChange'>>;
 
 interface CheckboxProps extends X {
-  label?: string
   radiobutton?: boolean
   disabled?: boolean
   value?: any
@@ -20,17 +20,13 @@ class Checkbox extends React.Component<CheckboxProps> {
     defaultChecked: false,
   }
 
-  public readonly state = {
-    checked: false,
-  }
+  static contextType=ThemeContext
 
-  static contextTypes = {
-    checkboxGroup: PropTypes.any,
-  };
+  // public readonly state = {
+  //   checked: false,
+  // }
 
-  public checked = 'checked' in this.props ? this.props.checked : this.props.defaultChecked;
-
-  context: any;
+  // public checked = 'checked' in this.props ? this.props.checked : this.props.defaultChecked;
 
   private rcCheckbox: any;
 
@@ -77,16 +73,11 @@ class Checkbox extends React.Component<CheckboxProps> {
       ...restProps
     } = props;
     const { checkboxGroup } = context;
-    const prefixCls = 'rc-checkbox'
+    const prefixCls = 'rc-checkbox';
     const checkboxProps: CheckboxProps = { ...restProps };
-
-    // console.log(props,'props')
-    // console.log(context,'context')
-    // console.log(checkboxGroup,'checkboxGroup')
 
     if (checkboxGroup) {
       checkboxProps.onChange = (...args) => {
-        console.log(restProps, '9999')
         if (restProps.onChange) {
           restProps.onChange(...args);
         }
@@ -96,8 +87,7 @@ class Checkbox extends React.Component<CheckboxProps> {
       checkboxProps.checked = checkboxGroup.value.indexOf(props.value) !== -1;
       checkboxProps.disabled = props.disabled || checkboxGroup.disabled;
     }
-    const classString = classNames(className, {
-      [`${prefixCls}-wrapper`]: true,
+    const classString = classNames(className,[`${prefixCls}-wrapper`], {
       [`${prefixCls}-wrapper-checked`]: checkboxProps.checked,
       [`${prefixCls}-wrapper-disabled`]: checkboxProps.disabled,
     });

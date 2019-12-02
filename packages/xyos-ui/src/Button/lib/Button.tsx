@@ -45,8 +45,7 @@ class Button extends React.Component<ButtonProps, ButtonState> {
   render() {
     const { children } = this.props
     const { className, type, htmlType, size, disabled, loading, icon } = this.props
-    const _className = classnames(['button', 'button-' + type, className], {
-      ['button-' + size]: size,
+    const _className = classnames(['button', 'button-' + type, 'button-' + size, className], {
       ['button-disabled']: disabled,
       [`button-loading`]: !!loading,
     })

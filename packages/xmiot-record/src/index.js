@@ -1,5 +1,5 @@
 import React from 'react'
-import Recorder from './recorder.min'
+import * as Recorder from './recorder.min'
 /**
  *
  * @param {*} Component  react组件

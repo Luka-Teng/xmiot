@@ -8,12 +8,6 @@ export interface ThenableArgument {
   (_: any): any
 }
 
-export interface MessageType {
-  (): void
-  then: (fill: ThenableArgument, reject: ThenableArgument) => Promise<void>
-  promise: Promise<void>
-}
-
 /** 实例 */
 // let notifier: MessageNotify = null
 // let messageInstance: any;
@@ -96,9 +90,11 @@ function notice (args: ArgsProps): MessageType {
       messageInstance.removeNotice(target)
     }
   }
-  result.then = (filled: ThenableArgument, rejected: ThenableArgument) =>
+  result.then = (filled: ThenableArgument, rejected: ThenableArgument) => {
     closePromise.then(filled, rejected)
-  result.promise = closePromise
+    result.promise = closePromise
+  }
+
   return result
 }
 
@@ -107,9 +103,9 @@ type ConfigDuration = number | (() => void)
 export type ConfigOnClose = () => void
 
 interface MessageApi {
-  (cotent: ConfigContent): MessageType
-  (cotent: ConfigContent, duration: number): MessageType
-  (cotent: ConfigContent, duration: number, onClose: () => void): MessageType
+  (content: ConfigContent): MessageType
+  (content: ConfigContent, duration: number): MessageType
+  (content: ConfigContent, duration: number, onClose: () => void): MessageType
   (content: ConfigContent, onClose: () => void): MessageType
 }
 
@@ -138,10 +134,14 @@ export const success = getApi('success')
 export const error = getApi('error')
 export const loading = getApi('loading')
 export const warning = getApi('warning')
+export const info = getApi('info')
+// export const config=getApi('config')
 
 export default {
   success,
   error,
   loading,
-  warning
+  warning,
+  info,
+  destroy
 }

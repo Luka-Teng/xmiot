@@ -33,30 +33,53 @@ const validDirs = srcContents.map((content, index) => {
 
 const mapToInput = (dir, modules) => {
   return modules.reduce((result, module) => {
-    result[`${dir}/${module[0]}`] = `${src}/${module[0]}/${module[1]}`
+    result[`${dir}/${module[0]}/${module[0]}`] = `${src}/${module[0]}/${module[1]}`
     return result
   }, {})
 }
+
 function getOptions (format) {
   return {
     input: mapToInput(format, validDirs),
     output: {
       entryFileNames: `[name].js`,
-      chunkFileNames: 'common/[name].js',
+      chunkFileNames: `${format}/common/[name].js`,
+      assetFileNames: `${format}/[name][extname]`,
       dir: './entry',
       format
     },
     external: (id) => {
-      if (
-        /^rc\-/.test(id)
-      ) {
+      if (/(^rc\-)/.test(id)) {
+        return true
+      }
+
+      if (['react', 'react-dom', 'async-validator'].includes(id)) {
         return true
       }
     }
   }
 }
 
+const extraOptions = (format) => ({
+  buildPaths: [path.resolve(__dirname, 'entry', format)],
+  styleOptions: {
+    extract: [{
+      test: /src\/Animate/,
+      filename: 'Animate/index.css'
+    }, {
+      test: /src\/Button/,
+      filename: 'Button/index.css'
+    }, {
+      test: /src\/Checkbox/,
+      filename: 'Checkbox/index.css'
+    }, {
+      test: /src\/Radio/,
+      filename: 'Radio/index.css'
+    }]
+  }
+})
+
 export default [
-  getRollupConfig(getOptions('cjs')),
-  getRollupConfig(getOptions('es'))
+  getRollupConfig(getOptions('cjs'), extraOptions('cjs')),
+  getRollupConfig(getOptions('es'), extraOptions('es'))
 ]

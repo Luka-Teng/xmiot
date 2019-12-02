@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import Checkbox from './Checkbox';
 
 export type CheckboxValueType = string | number | boolean;
-
+export const ThemeContext = React.createContext({});
 export interface CheckboxOptionType {
   label: React.ReactNode;
   value: CheckboxValueType;
@@ -41,17 +41,6 @@ class CheckboxGroup extends React.Component<CheckboxGroupProps, CheckboxGroupSta
     options: [],
   };
 
-  static childContextTypes = {
-    checkboxGroup: PropTypes.object,
-  };
-
-  static propTypes = {
-    onChange: PropTypes.func,
-    defaultValue: PropTypes.array,
-    value: PropTypes.array,
-    options: PropTypes.array.isRequired,
-  }
-
   constructor(props: CheckboxGroupProps) {
     super(props);
     this.state = {
@@ -60,7 +49,7 @@ class CheckboxGroup extends React.Component<CheckboxGroupProps, CheckboxGroupSta
     };
   }
 
-  getChildContext() {
+  ProviderValue() {
     return {
       checkboxGroup: {
         toggleOption: this.toggleOption,
@@ -133,26 +122,27 @@ class CheckboxGroup extends React.Component<CheckboxGroupProps, CheckboxGroupSta
 
     if (options && options.length > 0) {
       children = this.getOptions().map(option => (
-        <Checkbox
-          prefixCls={prefixCls}
-          key={option.value.toString()}
-          disabled={'disabled' in option ? option.disabled : props.disabled}
-          value={option.value}
-          checked={state.value.indexOf(option.value) !== -1}
-          onChange={option.onChange}
-          className={`${groupPrefixCls}-wrapper`}
-        >
-          {option.label}
-        </Checkbox>
+      <Checkbox
+        prefixCls={prefixCls}
+        key={option.value.toString()}
+        disabled={'disabled' in option ? option.disabled : props.disabled}
+        value={option.value}
+        checked={state.value.indexOf(option.value) !== -1}
+        onChange={option.onChange}
+        className={`${groupPrefixCls}-wrapper`}
+      >
+        {option.label}
+      </Checkbox>
       ));
     }
     const classString = classNames(groupPrefixCls, className);
     return (
       <div className={classString} style={style} >
-        {children}
+        <ThemeContext.Provider value={this.ProviderValue()}>
+          {children}
+        </ThemeContext.Provider>
       </div>
     );
-
   }
 }
 
