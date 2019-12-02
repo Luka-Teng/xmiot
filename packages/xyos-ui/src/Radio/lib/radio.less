@@ -1,10 +1,26 @@
+@import '../../common.less';
+
 @radioWarpPrefixCls: rc-radio;
 @radioWrapPrefixCls: rc-radio-wrapper;
 @checkboxInnerPrefixCls: ~"@{radioWarpPrefixCls}-inner";
 @duration: .3s;
 @ease-in-out-circ: cubic-bezier(0.78, 0.14, 0.15, 0.86);
 @ease-out-back: cubic-bezier(0.18, 0.89, 0.32, 1.28);
-@radioCheckColor: #1890ff;
+@activeColor: #1890ff;
+
+// .@{radioWrapPrefixCls}{
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// }
+
+/* 文字样式*/
+.rc-radio-text{
+  color: @mainFontColor;
+  margin: 0 20px 0 4px;
+  font-size: 12px;
+  vertical-align: middle;
+}
 
 /* 一般状态 */
 .@{radioWarpPrefixCls} {
@@ -12,14 +28,28 @@
   outline: none;
   display: inline-block;
   position: relative;
+  vertical-align: middle;
+  height: 16px;
 
   &:hover {
     .@{checkboxInnerPrefixCls} {
-      border-color: #bcbcbc;
+      border-color: @activeColor;
     }
   }
 
   &-inner {
+    position: relative;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    display: table-cell;
+    width: 14px;
+    height: 14px;
+    border: 1px solid @borderColor;
+    border-radius: 14px;
+    background-color: #ffffff;
+    transition: border-color @duration @ease-in-out-circ,
+    background-color @duration @ease-in-out-circ;
     &:after {
       position: absolute;
       width: 8px;
@@ -31,27 +61,13 @@
       border-top: 0;
       border-left: 0;
       content: ' ';
-      background-color: #4a90e2;
+      background-color: @activeColor;
       transform: scale(0);
       -webkit-transform: scale(0);
       opacity: 0;
       transition: transform @duration @ease-in-out-circ, opacity @duration @ease-in-out-circ, background-color @duration @ease-in-out-circ;
       -webkit-transition: -webkit-transform @duration @ease-in-out-circ, opacity @duration @ease-in-out-circ, background-color @duration @ease-in-out-circ;
     }
-
-    position: relative;
-    top: 0;
-    left: 0;
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 14px;
-    border-color: #d9d9d9;
-    background-color: #ffffff;
-    transition: border-color @duration @ease-in-out-circ,
-    background-color @duration @ease-in-out-circ;
   }
 
   &-input {
@@ -70,7 +86,7 @@
 .@{radioWarpPrefixCls}-checked {
 
   .@{checkboxInnerPrefixCls} {
-    border-color: #d9d9d9;
+    border-color: @activeColor;
 
     &:after {
       transform: scale(1);
@@ -120,36 +136,36 @@
 
   &.@{radioWrapPrefixCls}-checked:not(.@{radioWrapPrefixCls}-disabled) {
     z-index: 1;
-    color: @radioCheckColor;
+    color: @activeColor;
     background: #fff;
-    border-color: @radioCheckColor;
-    -webkit-box-shadow: -1px 0 0 0 @radioCheckColor;
-    box-shadow: -1px 0 0 0 @radioCheckColor
+    border-color: @activeColor;
+    -webkit-box-shadow: -1px 0 0 0 @activeColor;
+    box-shadow: -1px 0 0 0 @activeColor
   }
 
   &.@{radioWrapPrefixCls}-checked:not(.@{radioWrapPrefixCls}-disabled)::before {
-    background-color: @radioCheckColor  !important;
+    background-color: @activeColor  !important;
     opacity: .1
   }
 
   &.@{radioWrapPrefixCls}-checked:not(.@{radioWrapPrefixCls}-disabled):first-child {
-    border-color: @radioCheckColor;
+    border-color: @activeColor;
     -webkit-box-shadow: none !important;
     box-shadow: none !important
   }
 
   &.@{radioWrapPrefixCls}-checked:not(.@{radioWrapPrefixCls}-disabled):hover {
-    color: #40a9ff;
-    border-color: #40a9ff;
-    -webkit-box-shadow: -1px 0 0 0 #40a9ff;
-    box-shadow: -1px 0 0 0 #40a9ff
+    color: @activeColor;
+    border-color: @activeColor;
+    -webkit-box-shadow: -1px 0 0 0 @activeColor;
+    box-shadow: -1px 0 0 0 @activeColor
   }
 
   &.@{radioWrapPrefixCls}-checked:not(.@{radioWrapPrefixCls}-disabled):active {
-    color: #096dd9;
-    border-color: #096dd9;
-    -webkit-box-shadow: -1px 0 0 0 #096dd9;
-    box-shadow: -1px 0 0 0 #096dd9
+    color: @activeColor;
+    border-color: @activeColor;
+    -webkit-box-shadow: -1px 0 0 0 @activeColor;
+    box-shadow: -1px 0 0 0 @activeColor
   }
 
   &.@{radioWrapPrefixCls}-checked:not(.@{radioWrapPrefixCls}-disabled):focus-within {

@@ -1,71 +1,110 @@
-@mainColor: #4a90e2;
-@disableBgColor:#ccc;
-@disableColor:rgba(0, 0, 0, 0.25);
+@import '../../common.less';
 
 .button {
-  font-size: 14px;
-  text-align: center;
+  font-size: 12px;
   position: relative;
   display: inline-block;
-  font-weight: 400;
-  white-space: nowrap;
-  text-align: center;
   background-image: none;
+  padding: 0 20px;
+  border-radius: 16px;
+  border: 1px solid @borderColor;
+  box-sizing: border-box;
   height: 30px;
   line-height: 28px;
-  padding: 0 15px;
-  font-size: 14px;
-  border-radius: 4px;
-  border: 1px solid #d9d9d9;
-  box-sizing: border-box;
   outline: 0;
+  overflow: hidden;
+  text-align: center;
+  background-color: @clickBgColor;
+  min-width: 80px;
 
   span {
     display: inline-block;
     pointer-events: none;
+    font-size: 12px;
+    color: @textColor;
   }
 
   &:focus,
   &:active {
     outline: 0;
-    border-color: @mainColor;
+    border-color: @activeColor;
+
+    span {
+      color: @activeColor;
+    }
   }
 
   &+.button {
     margin-left: 20px;
   }
 
+  // large
   &.button-large {
-    height: 40px;
-    line-height: 38px;
-    padding: 0 15px;
-    font-size: 16px;
-    border-radius: 4px;
+    height: 30px;
+    line-height: 28px;
+    border-radius: 15px;
   }
 
+  // medium
+  &.button-medium {
+    height: 28px;
+    line-height: 26px;
+    padding: 0 20px;
+    border-radius: 14px;
+  }
+
+  // small
   &.button-small {
     height: 24px;
     line-height: 22px;
-    padding: 0 7px;
-    font-size: 14px;
-    border-radius: 4px;
-
+    padding: 0 15px;
+    border-radius: 12px;
   }
 
+  // primary
   &.button-primary {
-    background-color: @mainColor;
+    background-color: @activeColor;
     color: #ffffff;
     border-radius: 6px;
     border-radius: 20px;
+
+    span {
+      color: #fff;
+    }
   }
 
+  // diabled
   &.button-disabled {
-    background-color: @disableBgColor;
-    color: @disableColor;
-    background-color: #f5f5f5;
-    border-color: #d9d9d9;
+    background-color: @disabledColor;
+    border-color: #EEF0F4;
     text-shadow: none;
     cursor: not-allowed;
+
+    span {
+      color: #BBBBBB;
+    }
+  }
+
+  // dashed
+  &.button-dashed {
+    background-color: #fff;
+    border: 1px dashed @borderColor;
+
+    &:active,
+    &:focus {
+      border-color: @activeColor
+    }
+  }
+
+  // danger
+  &.button-danger {
+    span {
+      color: @dangerColor;
+    }
+    &:active,
+    &:focus {
+      border-color: @dangerColor;
+    }
   }
 
   .action-loading {

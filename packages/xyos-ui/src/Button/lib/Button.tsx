@@ -5,7 +5,7 @@ export const tuple = <T extends string[]>(...args: T) => args;
 
 export type ButtonType = 'default' | 'primary' | 'ghost' | 'dashed' | 'danger'
 type ButtonHtmlType = 'submit' | 'button' | 'reset'
-type ButtonSize = 'normal' | 'large' | 'small'
+type ButtonSize = 'medium' | 'large' | 'small'
 
 export interface ButtonProps {
   type?: ButtonType;

@@ -62,9 +62,26 @@ function getOptions (format) {
 
 const styleOptions = {
   extract: [{
-    test: /src\/Animate/,
-    filename: 'Animate/index.css'
-  }]
+      test: /src\/Animate/,
+      filename: 'Animate/index.css'
+    },
+    {
+      test: /src\/Button/,
+      filename: 'Button/index.css'
+    },
+    {
+      test: /src\/Checkbox/,
+      filename: 'Checkbox/index.css'
+    },
+    {
+      test: /src\/Radio/,
+      filename: 'Radio/index.css'
+    },
+    {
+      test: /src\/Toast/,
+      filename: 'Toast/index.css'
+    },
+  ]
 }
 
 export default [
