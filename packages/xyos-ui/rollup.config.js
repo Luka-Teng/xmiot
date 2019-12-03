@@ -35,7 +35,7 @@ const validDirs = srcContents
 
 const mapToInput = (dir, modules) => {
   return modules.reduce((result, module) => {
-    result[`${dir}/${module[0]}/${module[0]}`] = `${src}/${module[0]}/${
+    result[`${dir}/${module[0]}/index`] = `${src}/${module[0]}/${
       module[1]
     }`
     return result
