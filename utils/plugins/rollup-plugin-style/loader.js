@@ -21,9 +21,9 @@ module.exports = {
 
     /* 目前只开放less注册, 最后要统一经过postcss处理 */
     registerLoader(lessLoader)
-    loaders.push(code => {
+    loaders.push((code, options) => {
       return postcss(poscssPlugins)
-        .process(code, postcssOpts)
+        .process(code, options)
         .then(data => {
           return data.css
         })
@@ -56,7 +56,7 @@ module.exports = {
       map: false
     }
 
-    return series(loaders, code).then(code => {
+    return series(loaders, code, postcssOpts).then(code => {
       /* 默认是注入形式 */
       if (!extract) {
         code = `import styleInject from 'xmiotStyleInject'\nstyleInject('${code}')`
