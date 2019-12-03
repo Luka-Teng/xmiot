@@ -3,6 +3,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { tuple } from '../type'
 import { InputProps, InputSizes, getInputClassName } from './Input';
+import Icon from './Icon'
 const ClearableInputType = tuple('text', 'input');
 
 export function hasPrefixSuffix(props: InputProps | ClearableInputProps) {
@@ -42,19 +43,19 @@ class ClearableLabeledInput extends React.Component<ClearableInputProps> {
     if (!allowClear || disabled || value === undefined || value === null || value === '') {
       return null;
     }
+
     const className =
       inputType === ClearableInputType[0]
         ? `${prefixCls}-textarea-clear-icon`
         : `${prefixCls}-clear-icon`;
     return (
-      // <Icon
-      //   type="close-circle"
-      //   theme="filled"
-      //   onClick={handleReset}
-      //   className={className}
-      //   role="button"
-      // />
-      <div> icon </div>
+      <Icon
+        type="close-circle"
+        onClick={handleReset}
+        className={className}
+        role="button"
+      />
+      
     );
   }
 

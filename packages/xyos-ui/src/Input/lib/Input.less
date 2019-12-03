@@ -1,16 +1,79 @@
+
 input{
-  height: 28px;
-  width: 100px;
-
-}
-
-.input-lg{
-  height: 30px;
-}
-
-.input-sm{
   height: 26px;
+  width: 100px;
+  outline: none;
+  border: none;
+  &:first-child:last-child{
+    border: 1px solid #DBDEE2;
+    border-radius: 4px;
+    padding: 0 8px;
+    &.xy-input-lg{
+      height: 30px;
+      padding: 0 10px;
+    }
+    &.xy-input-sm{
+      height: 20px;
+      padding: 0 6px;
+    }
+    &:hover,&:focus{
+      border-color: #4A90E2;
+    }
+  }
 }
-.input-disabled{
-  
+
+
+.xy-input-sm{
+  height: 20px;
+}
+.xy-input-wrapper,.xy-input-affix-wrapper{
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid #DBDEE2;
+  border-radius: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 12px;
+  input{
+    position: relative;
+    width: 100%;
+    padding: 0 8px;
+    &.xy-input-lg{
+      height: 30px;
+      padding: 0 10px;
+    }
+    &.xy-input-sm{
+      height: 20px;
+      padding: 0 6px;
+    }
+    
+    &:not(:first-child){
+      padding-left: 30px;
+    }
+    &:not(:last-child){
+      padding-right: 30px;
+    }
+    
+    &:not(:first-child):not(:last-child) {
+      padding: 0 30px;
+    }
+    
+  }
+  &:hover,&:focus{
+    border-color: #4A90E2;
+  }
+
+}
+.xy-input-affix-wrapper{
+  .xy-input-prefix{
+    position: absolute;
+    left: 8px;
+    z-index: 2;
+  }
+  .xy-input-suffix{
+    position: absolute;
+    right: 8px;
+    z-index: 2;
+  }
 }

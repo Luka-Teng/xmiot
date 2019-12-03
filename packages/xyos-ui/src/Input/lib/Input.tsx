@@ -1,144 +1,91 @@
-// import React from "react";
-
-// type Event = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-
-// export interface Props {
-//   value?: string;
-//   onChange?: (e: Event) => void;
-//   defaultValue?: string;
-// }
-
-// export interface State {
-//   value: any
-// }
-
-// function fixControlledValue<T>(value: T) {
-//   if (typeof value === 'undefined' || value === null) {
-//     return '';
-//   }
-//   return value;
-// }
-
-// class Input extends React.Component<Props, State> {
-//   static getDerivedStateFromProps(nextProps: Props) {
-//     if ("value" in nextProps) {
-//       console.log(nextProps.value);
-//       return {
-//         value: nextProps.value
-//       };
-//     }
-//     return null;
-//   }
-//   constructor(props: Props) {
-//     super(props);
-//     const value = typeof props.value === "undefined" ? props.defaultValue : props.value;
-//     this.state = {
-//       value
-//     };
-//   }
-
-//   setValue(value: string, e: Event) {
-//     if (!("value" in this.props)) {
-//       this.setState({ value });
-//     }
-//     const { onChange } = this.props;
-//     if (onChange) {
-//       onChange(e);
-//     }
-//   }
-
-//   handleChange = (e: Event): void =>{
-//     this.setValue(e.target && e.target.value, e);
-//   };
-
-//   render() {
-//     return (
-//       <div>
-//         <input
-//           onChange={this.handleChange}
-//           value={fixControlledValue(this.state.value)}
-//           type="text"
-//         />
-//       </div>
-//     );
-//   }
-// }
-
-// export default Input
-
-  
-import * as React from 'react';
-import * as PropTypes from 'prop-types';
-import classNames from 'classnames';
-import ClearableLabeledInput, { hasPrefixSuffix } from './ClearableInput';
+import * as React from 'react'
+import * as PropTypes from 'prop-types'
+import classNames from 'classnames'
+import ClearableLabeledInput, { hasPrefixSuffix } from './ClearableInput'
 import './Input.less'
 
 import { tuple, Omit } from '../type'
-const omit = (source: {[propName: string]: any}, target: string[]):object => {
-  let tempSource = {...source}
-  target.map((item) => delete tempSource[item])
+const omit = (
+  source: { [propName: string]: any },
+  target: string[]
+): object => {
+  let tempSource = { ...source }
+  target.map(item => delete tempSource[item])
   return tempSource
 }
-export const InputSizes = tuple('small', 'default', 'large');
-
-export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement|HTMLTextAreaElement>, 'size' | 'prefix'> {
-  prefixCls?: string;
-  size?: (typeof InputSizes)[number];
-  onPressEnter?: React.KeyboardEventHandler<HTMLInputElement|HTMLTextAreaElement>;
-  addonBefore?: React.ReactNode;
-  addonAfter?: React.ReactNode;
-  prefix?: React.ReactNode;
-  suffix?: React.ReactNode;
-  allowClear?: boolean;
+export const InputSizes = tuple('small', 'default', 'large')
+export type GetPrefixCls = (
+  suffixCls: string,
+  customizePrefixCls?: string
+) => string
+export interface InputProps
+  extends Omit<
+      React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>,
+      'size' | 'prefix'
+    > {
+  prefixCls?: string
+  size?: (typeof InputSizes)[number]
+  onPressEnter?: React.KeyboardEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  >
+  addonBefore?: React.ReactNode
+  addonAfter?: React.ReactNode
+  prefix?: React.ReactNode
+  suffix?: React.ReactNode
+  allowClear?: boolean
 }
 
-export function fixControlledValue<T>(value: T) {
+export function fixControlledValue<T> (value: T) {
   if (typeof value === 'undefined' || value === null) {
-    return '';
+    return ''
   }
-  return value;
+  return value
 }
 
-export function resolveOnChange(
+export function resolveOnChange (
   target: HTMLInputElement | HTMLTextAreaElement,
   e:
     | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
     | React.MouseEvent<HTMLElement, MouseEvent>,
-  onChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
+  onChange?: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void
 ) {
   if (onChange) {
-    let event = e;
+    let event = e
     if (e.type === 'click') {
       // click clear icon
-      event = Object.create(e);
-      event.target = target;
-      event.currentTarget = target;
-      const originalInputValue = target.value;
+      event = Object.create(e)
+      event.target = target
+      event.currentTarget = target
+      const originalInputValue = target.value
       // change target ref value cause e.target.value should be '' when clear input
-      target.value = '';
-      onChange(event as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
+      target.value = ''
+      onChange(event as React.ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement
+      >)
       // reset target ref value
-      target.value = originalInputValue;
-      return;
+      target.value = originalInputValue
+      return
     }
-    onChange(event as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
+    onChange(event as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
   }
 }
 
-export function getInputClassName(
+export function getInputClassName (
   prefixCls?: string,
   size?: (typeof InputSizes)[number],
-  disabled?: boolean,
+  disabled?: boolean
 ) {
   return classNames(prefixCls, {
     [`${prefixCls}-sm`]: size === 'small',
     [`${prefixCls}-lg`]: size === 'large',
-    [`${prefixCls}-disabled`]: disabled,
-  });
+    [`${prefixCls}-disabled`]: disabled
+  })
 }
 
 export interface InputState {
-  value: any;
+  value: any
 }
 
 class Input extends React.Component<InputProps, InputState> {
@@ -151,8 +98,8 @@ class Input extends React.Component<InputProps, InputState> {
   // static Password: typeof Password;
 
   static defaultProps = {
-    type: 'text',
-  };
+    type: 'text'
+  }
 
   static propTypes = {
     type: PropTypes.string,
@@ -173,34 +120,35 @@ class Input extends React.Component<InputProps, InputState> {
     onBlur: PropTypes.func,
     prefix: PropTypes.node,
     suffix: PropTypes.node,
-    allowClear: PropTypes.bool,
-  };
-
-  input!: HTMLInputElement;
-
-
-  constructor(props: InputProps) {
-    super(props);
-    const value = typeof props.value === 'undefined' ? props.defaultValue : props.value;
-    this.state = {
-      value,
-    };
+    allowClear: PropTypes.bool
   }
 
-  static getDerivedStateFromProps(nextProps: InputProps) {
+  input!: HTMLInputElement
+  clearableInput!: ClearableLabeledInput
+
+  constructor (props: InputProps) {
+    super(props)
+    const value =
+      typeof props.value === 'undefined' ? props.defaultValue : props.value
+    this.state = {
+      value
+    }
+  }
+
+  static getDerivedStateFromProps (nextProps: InputProps) {
     if ('value' in nextProps) {
       return {
-        value: nextProps.value,
-      };
+        value: nextProps.value
+      }
     }
-    return null;
+    return null
   }
 
   // Since polyfill `getSnapshotBeforeUpdate` need work with `componentDidUpdate`.
   // We keep an empty function here.
-  componentDidUpdate() {}
+  componentDidUpdate () {}
 
-  getSnapshotBeforeUpdate(prevProps: InputProps) {
+  getSnapshotBeforeUpdate (prevProps: InputProps) {
     if (hasPrefixSuffix(prevProps) !== hasPrefixSuffix(this.props)) {
       // warning(
       //   this.input !== document.activeElement,
@@ -208,40 +156,40 @@ class Input extends React.Component<InputProps, InputState> {
       //   `When Input is focused, dynamic add or remove prefix / suffix will make it lose focus caused by dom structure change. Read more: https://ant.design/components/input/#FAQ`,
       // );
     }
-    return null;
+    return null
   }
 
-  focus() {
-    this.input.focus();
+  focus () {
+    this.input.focus()
   }
 
-  blur() {
-    this.input.blur();
+  blur () {
+    this.input.blur()
   }
 
-  select() {
-    this.input.select();
+  select () {
+    this.input.select()
   }
 
   saveInput = (input: HTMLInputElement) => {
-    this.input = input;
-  };
+    this.input = input
+  }
 
-  setValue(value: string, callback?: () => void) { 
+  setValue (value: string, callback?: () => void) {
     if (!('value' in this.props)) {
-      this.setState({ value }, callback);
+      this.setState({ value }, callback)
     }
   }
 
   handleReset = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     this.setValue('', () => {
-      this.focus();
-    });
-    resolveOnChange(this.input, e, this.props.onChange);
-  };
+      this.focus()
+    })
+    resolveOnChange(this.input, e, this.props.onChange)
+  }
 
   renderInput = (prefixCls: string) => {
-    const { className, addonBefore, addonAfter, size, disabled } = this.props;
+    const { className, addonBefore, addonAfter, size, disabled } = this.props
     // Fix https://fb.me/react-unknown-prop
     const otherProps = omit(this.props, [
       'prefixCls',
@@ -255,62 +203,72 @@ class Input extends React.Component<InputProps, InputState> {
       // specify either the value prop, or the defaultValue prop, but not both.
       'defaultValue',
       'size',
-      'inputType',
-    ]);
-
-    const { value } = this.state;
-    // const { prefixCls: customizePrefixCls } = this.props;
+      'inputType'
+    ])
     return (
       <input
         {...otherProps}
         onChange={this.handleChange}
         onKeyDown={this.handleKeyDown}
         className={classNames(getInputClassName(prefixCls, size, disabled), {
-          [className!]: className && !addonBefore && !addonAfter,
+          [className!]: className && !addonBefore && !addonAfter
         })}
-        value={fixControlledValue(value)}
         ref={this.saveInput}
       />
-    );
-  };
+    )
+  }
 
-  // renderComponent = ({ getPrefixCls }: ConfigConsumerProps) => {
-  //   const { value } = this.state;
-  //   const { prefixCls: customizePrefixCls } = this.props;
-  //   const prefixCls = getPrefixCls('input', customizePrefixCls);
-  //   return (
-  //     <ClearableLabeledInput
-  //       {...this.props}
-  //       prefixCls={prefixCls}
-  //       inputType="input"
-  //       value={fixControlledValue(value)}
-  //       element={this.renderInput(prefixCls)}
-  //       handleReset={this.handleReset}
-  //       ref={this.saveClearableInput}
-  //     />
-  //   );
-  // };
+  saveClearableInput = (input: ClearableLabeledInput) => {
+    this.clearableInput = input
+  }
 
-  handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    this.setValue(e.target.value);
-    resolveOnChange(this.input, e, this.props.onChange);
-  };
+  getPrefixCls = (suffixCls: string, customizePrefixCls?: string) => {
+    const prefixCls = 'xy'
 
-  handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { onPressEnter, onKeyDown } = this.props;
+    if (customizePrefixCls) return customizePrefixCls
+
+    return suffixCls ? `${prefixCls}-${suffixCls}` : prefixCls
+  }
+
+  renderComponent = () => {
+    const { value } = this.state
+    const { prefixCls: customizePrefixCls } = this.props
+    const prefixCls = this.getPrefixCls('input', customizePrefixCls)
+    return (
+      <ClearableLabeledInput
+        {...this.props}
+        prefixCls={prefixCls}
+        inputType="input"
+        value={fixControlledValue(value)}
+        element={this.renderInput(prefixCls)}
+        handleReset={this.handleReset}
+        ref={this.saveClearableInput}
+      />
+    )
+  }
+
+  handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    this.setValue(e.target.value)
+    resolveOnChange(this.input, e, this.props.onChange)
+  }
+
+  handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { onPressEnter, onKeyDown } = this.props
     if (e.keyCode === 13 && onPressEnter) {
-      onPressEnter(e);
+      onPressEnter(e)
     }
     if (onKeyDown) {
-      onKeyDown(e);
+      onKeyDown(e)
     }
-  };
+  }
 
-
-  render() {
-    return this.renderInput('input');
+  render () {
+    return this.renderComponent()
   }
 }
-
 
 export default Input
