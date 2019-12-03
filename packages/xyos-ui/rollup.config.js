@@ -7,33 +7,37 @@ const src = path.resolve(__dirname, './src')
 /* 读取src文件下的目录 */
 const srcContents = fs.readdirSync(src)
 
-const validDirs = srcContents.map((content, index) => {
-  const dir = path.join(src, content)
+const validDirs = srcContents
+  .map((content, index) => {
+    const dir = path.join(src, content)
 
-  /* 判断是否是文件夹 */
-  if (fs.statSync(dir).isFile()) {
+    /* 判断是否是文件夹 */
+    if (fs.statSync(dir).isFile()) {
+      return null
+    }
+
+    /* 判断文件夹内部是否有入口文件 */
+    try {
+      if (fs.statSync(path.join(dir, 'index.ts')).isFile()) {
+        return [content, 'index.ts']
+      }
+    } catch {}
+
+    try {
+      if (fs.statSync(path.join(dir, 'index.tsx')).isFile()) {
+        return [content, 'index.tsx']
+      }
+    } catch {}
+
     return null
-  }
-
-  /* 判断文件夹内部是否有入口文件 */
-  try {
-    if (fs.statSync(path.join(dir, 'index.ts')).isFile()) {
-      return [content, 'index.ts']
-    }
-  } catch {}
-
-  try {
-    if (fs.statSync(path.join(dir, 'index.tsx')).isFile()) {
-      return [content, 'index.tsx']
-    }
-  } catch {}
-
-  return null
-}).filter(Boolean)
+  })
+  .filter(Boolean)
 
 const mapToInput = (dir, modules) => {
   return modules.reduce((result, module) => {
-    result[`${dir}/${module[0]}/${module[0]}`] = `${src}/${module[0]}/${module[1]}`
+    result[`${dir}/${module[0]}/${module[0]}`] = `${src}/${module[0]}/${
+      module[1]
+    }`
     return result
   }, {})
 }
@@ -48,7 +52,7 @@ function getOptions (format) {
       dir: './entry',
       format
     },
-    external: (id) => {
+    external: id => {
       if (/(^rc\-)/.test(id)) {
         return true
       }
@@ -60,30 +64,35 @@ function getOptions (format) {
   }
 }
 
-const extraOptions = (format) => ({
+const extraOptions = format => ({
   buildPaths: [path.resolve(__dirname, 'entry', format)],
   styleOptions: {
-    extract: [{
-      test: /src\/Animate/,
-      filename: 'Animate/index.css'
-    },
-    {
-      test: /src\/Button/,
-      filename: 'Button/index.css'
-    },
-    {
-      test: /src\/Checkbox/,
-      filename: 'Checkbox/index.css'
-    },
-    {
-      test: /src\/Radio/,
-      filename: 'Radio/index.css'
-    },
-    {
-      test: /src\/Toast/,
-      filename: 'Toast/index.css'
-    },
-  ]
+    extract: [
+      {
+        test: /src\/Animate/,
+        filename: 'Animate/index.css'
+      },
+      {
+        test: /src\/Button/,
+        filename: 'Button/index.css'
+      },
+      {
+        test: /src\/Checkbox/,
+        filename: 'Checkbox/index.css'
+      },
+      {
+        test: /src\/Radio/,
+        filename: 'Radio/index.css'
+      },
+      {
+        test: /src\/Toast/,
+        filename: 'Toast/index.css'
+      },
+      {
+        test: /src\/Select/,
+        filename: 'Select/index.css'
+      }
+    ]
   }
 })
 
