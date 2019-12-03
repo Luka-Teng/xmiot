@@ -1,0 +1,17 @@
+.yx-label-wrapper{
+  display: flex;
+  &.align-center{
+    align-items: center;
+  }
+  .yx-label-name{
+    margin-right: 5px;
+  }
+  .required{
+    &::before{
+      display: inline-block;
+      content: '*';
+      color: red;
+      margin-right: 5px;
+    }
+  }
+}
