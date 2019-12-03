@@ -73,7 +73,7 @@ import classNames from 'classnames';
 import ClearableLabeledInput, { hasPrefixSuffix } from './ClearableInput';
 import './Input.less'
 
-import { tuple, Omit } from '../../../utils/type'
+import { tuple, Omit } from '../type'
 const omit = (source: {[propName: string]: any}, target: string[]):object => {
   let tempSource = {...source}
   target.map((item) => delete tempSource[item])
@@ -273,6 +273,23 @@ class Input extends React.Component<InputProps, InputState> {
       />
     );
   };
+
+  // renderComponent = ({ getPrefixCls }: ConfigConsumerProps) => {
+  //   const { value } = this.state;
+  //   const { prefixCls: customizePrefixCls } = this.props;
+  //   const prefixCls = getPrefixCls('input', customizePrefixCls);
+  //   return (
+  //     <ClearableLabeledInput
+  //       {...this.props}
+  //       prefixCls={prefixCls}
+  //       inputType="input"
+  //       value={fixControlledValue(value)}
+  //       element={this.renderInput(prefixCls)}
+  //       handleReset={this.handleReset}
+  //       ref={this.saveClearableInput}
+  //     />
+  //   );
+  // };
 
   handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     this.setValue(e.target.value);

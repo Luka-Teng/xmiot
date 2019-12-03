@@ -1,9 +1,8 @@
 import * as React from 'react';
 // import { polyfill } from 'react-lifecycles-compat';
 import classNames from 'classnames';
-// import { tuple } from '../../../utils/type';
+import { tuple } from '../type'
 import { InputProps, InputSizes, getInputClassName } from './Input';
-export const tuple = <T extends string[]>(...args: T) => args;
 const ClearableInputType = tuple('text', 'input');
 
 export function hasPrefixSuffix(props: InputProps | ClearableInputProps) {
