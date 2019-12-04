@@ -20,7 +20,7 @@ class Icon extends React.Component<IconProps>{
 
   render () {
     return (
-      <span onClick={this.props.onClick} style={{color: 'red'}}>X</span>
+      <span onClick={this.props.onClick} style={{color: 'red', cursor: 'pointer'}}>X</span>
     )
   }
 }

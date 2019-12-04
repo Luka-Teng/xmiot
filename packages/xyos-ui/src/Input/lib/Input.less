@@ -1,10 +1,12 @@
 
-input{
+.xy-input{
   height: 26px;
   width: 100px;
   outline: none;
   border: none;
   &:first-child:last-child{
+    width: 100%;
+    box-sizing: border-box;
     border: 1px solid #DBDEE2;
     border-radius: 4px;
     padding: 0 8px;
@@ -19,13 +21,15 @@ input{
     &:hover,&:focus{
       border-color: #4A90E2;
     }
+    &.xy-input-disabled{
+      cursor: not-allowed;
+      background: #F5F6F8;
+      color: #BBBBBB;
+    }
   }
 }
 
 
-.xy-input-sm{
-  height: 20px;
-}
 .xy-input-wrapper,.xy-input-affix-wrapper{
   position: relative;
   display: flex;

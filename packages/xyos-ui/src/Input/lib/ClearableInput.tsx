@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import { polyfill } from 'react-lifecycles-compat';
 import classNames from 'classnames';
 import { tuple } from '../type'
 import { InputProps, InputSizes, getInputClassName } from './Input';
@@ -40,7 +39,7 @@ interface ClearableInputProps extends BasicProps {
 class ClearableLabeledInput extends React.Component<ClearableInputProps> {
   renderClearIcon(prefixCls: string) {
     const { allowClear, value, disabled, inputType, handleReset } = this.props;
-    if (!allowClear || disabled || value === undefined || value === null || value === '') {
+    if (!allowClear || disabled || value === '') {
       return null;
     }
 
@@ -176,6 +175,5 @@ class ClearableLabeledInput extends React.Component<ClearableInputProps> {
   }
 }
 
-// polyfill(ClearableLabeledInput);
 
 export default ClearableLabeledInput;

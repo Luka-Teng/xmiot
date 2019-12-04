@@ -2,17 +2,9 @@ import * as React from 'react'
 import * as PropTypes from 'prop-types'
 import classNames from 'classnames'
 import ClearableLabeledInput, { hasPrefixSuffix } from './ClearableInput'
+import { tuple, Omit, omit } from '../type'
 import './Input.less'
 
-import { tuple, Omit } from '../type'
-const omit = (
-  source: { [propName: string]: any },
-  target: string[]
-): object => {
-  let tempSource = { ...source }
-  target.map(item => delete tempSource[item])
-  return tempSource
-}
 export const InputSizes = tuple('small', 'default', 'large')
 export type GetPrefixCls = (
   suffixCls: string,
@@ -58,14 +50,12 @@ export function resolveOnChange (
       event = Object.create(e)
       event.target = target
       event.currentTarget = target
-      const originalInputValue = target.value
       // change target ref value cause e.target.value should be '' when clear input
       target.value = ''
+      target.focus()
       onChange(event as React.ChangeEvent<
         HTMLInputElement | HTMLTextAreaElement
       >)
-      // reset target ref value
-      target.value = originalInputValue
       return
     }
     onChange(event as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
@@ -167,9 +157,9 @@ class Input extends React.Component<InputProps, InputState> {
     this.input.blur()
   }
 
-  select () {
-    this.input.select()
-  }
+  // select () {
+  //   this.input.select()
+  // }
 
   saveInput = (input: HTMLInputElement) => {
     this.input = input
@@ -260,6 +250,7 @@ class Input extends React.Component<InputProps, InputState> {
     const { onPressEnter, onKeyDown } = this.props
     if (e.keyCode === 13 && onPressEnter) {
       onPressEnter(e)
+      this.blur()
     }
     if (onKeyDown) {
       onKeyDown(e)
