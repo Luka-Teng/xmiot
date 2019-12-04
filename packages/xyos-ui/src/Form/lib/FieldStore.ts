@@ -1,6 +1,6 @@
 import schema, { RuleItem, ErrorList } from 'async-validator'
 import React from 'react'
-import { is, params } from './utils'
+import { is, params, isArray, isFunction } from './utils'
 
 export type Field<T extends string = string> = {
   name: T
@@ -16,6 +16,60 @@ export type Field<T extends string = string> = {
 type Fields = { [key in string]: Field<key> }
 
 type ValidateDescriptor = { [key in string]: RuleItem[] }
+
+/* resetFieldsValue重载方法，只能放在外边写？ */
+function resetFieldsValue (names: string[], callback?: (field: Field) => void): void
+function resetFieldsValue (callback?: (field: Field) => void): void
+function resetFieldsValue (this: FieldStore, arg1: any, arg2?: any) {
+  let names: string[] = []
+  let callback: Function | null = null
+
+  if (isArray(arg1)) {
+    names = names
+    callback = arg2 || callback
+  } else {
+    callback = arg1 || callback
+    names = Object.keys(this.fields)
+  }
+
+  names.forEach(name => {
+    this.resetFieldValue(name, field => {
+      callback && callback(field)
+    })
+  })
+}
+
+/* validateFields重载方法 */
+function validateFields (names: string[], callback?: (names: string[], errors: any) => void): void
+function validateFields (callback?: (names: string[], errors: any) => void): void
+function validateFields (this: FieldStore, arg1: any, arg2?: any) {
+  let descriptor: ValidateDescriptor = {}
+  let values: { [key in string]: any } = {}
+  let names: string[] = []
+  let callback: Function | null = null
+
+  if (isArray(arg1)) {
+    names = names
+    callback = arg2 || callback
+  } else {
+    callback = arg1 || callback
+    names = Object.keys(this.fields)
+  }
+
+  names.forEach(name => {
+    if (this.fields[name] && this.fields[name].validates.length > 0) {
+      descriptor[name] = this.fields[name].validates
+      values[name] = this.fields[name].value
+    }
+  })
+
+  const validator = new schema(descriptor)
+  
+  validator.validate(values, {}, (errors: ActualErrorList) => {
+    this.updateFieldErrors(errors, names as string[])
+    callback && callback(names, errors)
+  })
+}
 
 /* 实际上错误是会返回undefined */
 type ActualErrorList = ErrorList | undefined
@@ -69,18 +123,8 @@ class FieldStore {
   }
 
   /* reset a set of fields */
-  @params(['array', 'string'])
-  resetFieldsValue = (
-    names: string[] | 'all',
-    callback?: (field: Field) => void
-  ) => {
-    if (names === 'all') names = Object.keys(this.fields)
-    names.forEach(name => {
-      this.resetFieldValue(name, field => {
-        callback && callback(field)
-      })
-    })
-  }
+  @params(['array', 'function', 'undefined'], ['function', 'undefined'])
+  resetFieldsValue = resetFieldsValue.bind(this)
 
   /* get the value of a field */
   @params('string')
@@ -173,40 +217,23 @@ class FieldStore {
 
   /* validate a field */
   @params('string', ['function', 'undefined'])
-  validateField = (name: string, callback?: Function) => {
+  validateField = (name: string, callback?: (name: string, errors: any) => void) => {
     if (this.fields[name] && this.fields[name].validates.length > 0) {
       const validator = new schema({ [name]: this.fields[name].validates })
       validator.validate(
         { [name]: this.fields[name].value },
         {},
         (errors: ActualErrorList) => {
-          callback && callback(errors)
           this.updateFieldErrors(errors, [name])
+          callback && callback(name, errors)
         }
       )
     }
   }
 
   /* validate fields */
-  @params('array', ['function', 'undefined'])
-  validateFields = (names: string[], callback?: Function) => {
-    let descriptor: ValidateDescriptor = {}
-    let values: { [key in string]: any } = {}
-
-    names.forEach(name => {
-      if (this.fields[name] && this.fields[name].validates.length > 0) {
-        descriptor[name] = this.fields[name].validates
-        values[name] = this.fields[name].value
-      }
-    })
-
-    const validator = new schema(descriptor)
-
-    validator.validate(values, {}, (errors: ActualErrorList) => {
-      callback && callback(errors)
-      this.updateFieldErrors(errors, names)
-    })
-  }
+  @params(['array', 'function', 'undefined'], ['function', 'undefined'])
+  validateFields = validateFields.bind(this)
 
   /* update the field */
   @params('string')
