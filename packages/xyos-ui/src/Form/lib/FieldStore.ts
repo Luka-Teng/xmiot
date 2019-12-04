@@ -70,7 +70,8 @@ class FieldStore {
 
   /* reset a set of fields */
   @params('array')
-  resetFieldsValue = (names: string[], callback?: (field: Field) => void) => {
+  resetFieldsValue = (names: string[] | 'all', callback?: (field: Field) => void) => {
+    if (names === 'all') names = Object.keys(this.fields)
     names.forEach(name => {
       this.resetFieldValue(name, (field) => {
         callback && callback(field)
