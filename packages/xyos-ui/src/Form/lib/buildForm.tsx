@@ -197,10 +197,12 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
           const firstError = errors[0]
           const firstErrorField = this.fieldStore.getField(firstError.field)
           if (firstErrorField && firstErrorField.ref) {
-            const dom = ReactDom.findDOMNode(firstErrorField.ref)
+            const dom = ReactDom.findDOMNode(firstErrorField.ref) as Element
             dom &&
-              window.scrollTo({
-                top: (dom as HTMLElement).getBoundingClientRect().top
+              dom.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'nearest'
               })
           }
         }
