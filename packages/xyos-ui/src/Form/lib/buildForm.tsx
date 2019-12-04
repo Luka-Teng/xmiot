@@ -31,7 +31,7 @@ type FormFuncs = {
     callback?: Function | undefined
   ) => void
   resetFieldValue: (name: string) => void
-  resetFieldsValue: (names: string[]) => void
+  resetFieldsValue: (names?: string[]) => void
 }
 
 type State = {
@@ -189,7 +189,7 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
     }
 
     resetFieldsValue: FormFuncs['resetFieldsValue'] = names => {
-      this.fieldStore.resetFieldsValue(names, field => {
+      this.fieldStore.resetFieldsValue(names || 'all', field => {
         field && this.fieldStore.updateField(field.name)
       })
     }
