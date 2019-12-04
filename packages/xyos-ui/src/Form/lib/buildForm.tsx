@@ -109,7 +109,7 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
           value
         },
         field => {
-          field && this.fieldStore.updateField(name)
+          field && this.fieldStore.updateField(field.name)
         }
       )
     }
@@ -128,20 +128,16 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
 
     setFieldsValue: FormFuncs['setFieldsValue'] = fields => {
       const names = Object.keys(fields)
+      const mappedFields = names.map(name => ({
+        name,
+        value: fields[name]
+      }))
 
       // 需要把field设置为dirty
       this.fieldStore.setFieldsDirty(names)
 
-      names.forEach(name => {
-        this.fieldStore.setFieldValue(
-          {
-            name,
-            value: fields[name]
-          },
-          field => {
-            field && this.fieldStore.updateField(name)
-          }
-        )
+      this.fieldStore.setFieldsValue(mappedFields, field => {
+        field && this.fieldStore.updateField(field.name)
       })
     }
 
@@ -187,11 +183,15 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
     }
 
     resetFieldValue: FormFuncs['resetFieldValue'] = name => {
-      this.fieldStore.resetFieldValue(name)
+      this.fieldStore.resetFieldValue(name, field => {
+        field && this.fieldStore.updateField(field.name)
+      })
     }
 
     resetFieldsValue: FormFuncs['resetFieldsValue'] = names => {
-      this.fieldStore.resetFieldsValue(names)
+      this.fieldStore.resetFieldsValue(names, field => {
+        field && this.fieldStore.updateField(field.name)
+      })
     }
 
     render () {

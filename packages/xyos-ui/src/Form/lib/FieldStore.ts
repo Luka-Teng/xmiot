@@ -59,19 +59,22 @@ class FieldStore {
 
   /* reset a field */
   @params('string')
-  resetFieldValue = (name: string) => {
+  resetFieldValue = (name: string, callback?: (field: Field) => void) => {
     if (this.fields[name]) {
       this.fields[name].dirty = false
       this.fields[name].value = null
       this.fields[name].errors = []
+      callback && callback(this.fields[name])
     }
   }
 
   /* reset a set of fields */
   @params('array')
-  resetFieldsValue = (names: string[]) => {
+  resetFieldsValue = (names: string[], callback?: (field: Field) => void) => {
     names.forEach(name => {
-      this.resetFieldValue(name)
+      this.resetFieldValue(name, (field) => {
+        callback && callback(field)
+      })
     })
   }
 
@@ -113,6 +116,20 @@ class FieldStore {
     }
 
     callback && callback(this.fields[name])
+  }
+
+  /* set the value of a set of field */
+  @params('array', ['function', 'undefined'])
+  setFieldsValue = (fields: {
+    name: string
+    value: any
+    checkDirty?: boolean
+  }[], callback?: (field: Field | undefined) => void) => {
+    fields.forEach(field => {
+      this.setFieldValue(field, (_field) => {
+        callback && callback(_field)
+      })
+    })
   }
 
   /* get the errors of a field */
