@@ -1,7 +1,19 @@
 @import '../../common.less'; 
+.xy-sm(){
+  height: 20px;
+  padding: 0 6px;
+}
+.xy-lg(){
+  height: 30px;
+  padding: 0 10px;
+}
+.xy-disabled(){
+  cursor: not-allowed;
+  background: @disabledColor;
+  color: @placeholderColor;
+}
 .xy-input,.xy-error-input{
   height: 26px;
-  width: 100px;
   outline: none;
   border: none;
   &:first-child:last-child{
@@ -11,24 +23,19 @@
     border-radius: 4px;
     padding: 0 8px;
     &.xy-input-lg{
-      height: 30px;
-      padding: 0 10px;
+      .xy-lg()
     }
     &.xy-input-sm{
-      height: 20px;
-      padding: 0 6px;
+      .xy-sm()
     }
     &:hover,&:focus{
       border-color: @activeColor;
     }
     &.xy-input-disabled{
-      cursor: not-allowed;
-      background: @disabledColor;
-      color: @placeholderColor;
+      .xy-disabled()
     }
   }
 }
-
 .xy-error-input{
   &:first-child:last-child{
     border-color: @dangerColor;
@@ -44,20 +51,17 @@
   align-items: center;
   border: 1px solid @borderColor;
   border-radius: 4px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 0 8px;
   font-size: 12px;
   input{
     position: relative;
     width: 100%;
     padding: 0 8px;
     &.xy-input-lg{
-      height: 30px;
-      padding: 0 10px;
+      .xy-lg()
     }
     &.xy-input-sm{
-      height: 20px;
-      padding: 0 6px;
+      .xy-sm()
     }
     
     &:not(:first-child){
