@@ -1,6 +1,6 @@
 import schema, { RuleItem, ErrorList } from 'async-validator'
 import React from 'react'
-import { is, params, isArray, isFunction } from './utils'
+import { is, params } from './utils'
 
 export type Field<T extends string = string> = {
   name: T
@@ -17,65 +17,20 @@ type Fields = { [key in string]: Field<key> }
 
 type ValidateDescriptor = { [key in string]: RuleItem[] }
 
-/* resetFieldsValue重载方法，只能放在外边写？ */
-function resetFieldsValue (names: string[], callback?: (field: Field) => void): void
-function resetFieldsValue (callback?: (field: Field) => void): void
-function resetFieldsValue (this: FieldStore, arg1: any, arg2?: any) {
-  let names: string[] = []
-  let callback: Function | null = null
-
-  if (isArray(arg1)) {
-    names = names
-    callback = arg2 || callback
-  } else {
-    callback = arg1 || callback
-    names = Object.keys(this.fields)
-  }
-
-  names.forEach(name => {
-    this.resetFieldValue(name, field => {
-      callback && callback(field)
-    })
-  })
-}
-
-/* validateFields重载方法 */
-function validateFields (names: string[], callback?: (names: string[], errors: any) => void): void
-function validateFields (callback?: (names: string[], errors: any) => void): void
-function validateFields (this: FieldStore, arg1: any, arg2?: any) {
-  let descriptor: ValidateDescriptor = {}
-  let values: { [key in string]: any } = {}
-  let names: string[] = []
-  let callback: Function | null = null
-
-  if (isArray(arg1)) {
-    names = names
-    callback = arg2 || callback
-  } else {
-    callback = arg1 || callback
-    names = Object.keys(this.fields)
-  }
-
-  names.forEach(name => {
-    if (this.fields[name] && this.fields[name].validates.length > 0) {
-      descriptor[name] = this.fields[name].validates
-      values[name] = this.fields[name].value
-    }
-  })
-
-  const validator = new schema(descriptor)
-  
-  validator.validate(values, {}, (errors: ActualErrorList) => {
-    this.updateFieldErrors(errors, names as string[])
-    callback && callback(names, errors)
-  })
-}
-
 /* 实际上错误是会返回undefined */
 type ActualErrorList = ErrorList | undefined
 
 class FieldStore {
   fields: Fields = {}
+
+  /* 获取fields的keys，用做于缓存 */
+  keys: string[] =  []
+
+  updateFieldsKeys = () => {
+    this.keys = Object.keys(this.fields)
+  }
+
+  getFieldsKeys = () => this.keys
 
   /* set a field */
   @params('string', ['object', 'undefined'])
@@ -93,6 +48,8 @@ class FieldStore {
     field.value = (options && options.value) || field.value || ''
     field.errors = (options && options.errors) || field.errors || []
     field.ref = (options && options.ref) || field.ref || null
+
+    this.updateFieldsKeys()
   }
 
   /* get a field */
@@ -108,6 +65,7 @@ class FieldStore {
   removeField = (name: string) => {
     if (this.fields[name]) {
       delete this.fields[name]
+      this.updateFieldsKeys()
     }
   }
 
@@ -123,8 +81,14 @@ class FieldStore {
   }
 
   /* reset a set of fields */
-  @params(['array', 'function', 'undefined'], ['function', 'undefined'])
-  resetFieldsValue = resetFieldsValue.bind(this)
+  @params('array', ['function', 'undefined'])
+  resetFieldsValue = (names: string[], callback?: (field: Field) => void) => {
+    names.forEach(name => {
+      this.resetFieldValue(name, field => {
+        callback && callback(field)
+      })
+    })
+  }
 
   /* get the value of a field */
   @params('string')
@@ -232,8 +196,25 @@ class FieldStore {
   }
 
   /* validate fields */
-  @params(['array', 'function', 'undefined'], ['function', 'undefined'])
-  validateFields = validateFields.bind(this)
+  @params(['array'], ['function', 'undefined'])
+  validateFields = (names: string[], callback?: (names: string[], errors: any) => void) => {
+    let descriptor: ValidateDescriptor = {}
+    let values: { [key in string]: any } = {}
+  
+    names.forEach(name => {
+      if (this.fields[name] && this.fields[name].validates.length > 0) {
+        descriptor[name] = this.fields[name].validates
+        values[name] = this.fields[name].value
+      }
+    })
+  
+    const validator = new schema(descriptor)
+    
+    validator.validate(values, {}, (errors: ActualErrorList) => {
+      this.updateFieldErrors(errors, names as string[])
+      callback && callback(names, errors)
+    })
+  }
 
   /* update the field */
   @params('string')

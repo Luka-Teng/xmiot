@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import ReactDom from 'react-dom'
 import FieldStore, { Field } from './FieldStore'
+import { isArray } from './utils'
 
 type FormFuncs = {
   addField: (
@@ -25,11 +26,13 @@ type FormFuncs = {
     validates: Field<string>['validates']
   ) => void
   validateField: (name: string, callback?: Function) => void
-  validateFields: (names?: string[], callback?: Function | undefined) => void
-  validateFieldsToScroll: (
-    names?: string[],
+  validateFields: ((names: string[], callback?: Function | undefined) => void) &
+    ((callback?: Function | undefined) => void)
+  validateFieldsToScroll: ((
+    names: string[],
     callback?: Function | undefined
-  ) => void
+  ) => void) &
+    ((callback?: Function | undefined) => void)
   resetFieldValue: (name: string) => void
   resetFieldsValue: (names?: string[]) => void
 }
@@ -154,25 +157,42 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
       })
     }
 
-    validateFields: FormFuncs['validateFields'] = (names, callback) => {
-      const _callback = (_names: string[], errors: any) => {
+    validateFields: FormFuncs['validateFields'] = (arg1?: any, arg2?: any) => {
+      let names: string[] = []
+      let callback: Function | null = null
+
+      if (isArray(arg1)) {
+        names = arg1
+        callback = arg2 || callback
+      } else {
+        names = this.fieldStore.getFieldsKeys()
+        callback = arg1 || callback
+      }
+
+      this.fieldStore.validateFields(names, (_names, errors) => {
         _names.forEach(name => {
           this.fieldStore.updateField(name)
         })
         callback && callback(errors)
-      }
-      if (names) {
-        this.fieldStore.validateFields(names, _callback)
-      } else {
-        this.fieldStore.validateFields(_callback)
-      } 
+      })
     }
 
     validateFieldsToScroll: FormFuncs['validateFieldsToScroll'] = (
-      names,
-      callback
+      arg1?: any,
+      arg2?: any
     ) => {
-      const _callback = (_names: string[], errors: any) => {
+      let names: string[] = []
+      let callback: Function | null = null
+
+      if (isArray(arg1)) {
+        names = arg1
+        callback = arg2 || callback
+      } else {
+        names = this.fieldStore.getFieldsKeys()
+        callback = arg1 || callback
+      }
+
+      this.fieldStore.validateFields(names, (_names: string[], errors: any) => {
         if (errors) {
           const firstError = errors[0]
           const firstErrorField = this.fieldStore.getField(firstError.field)
@@ -188,12 +208,7 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
           this.fieldStore.updateField(name)
         })
         callback && callback(errors)
-      }
-      if (names) {
-        this.fieldStore.validateFields(names, _callback)
-      } else {
-        this.fieldStore.validateFields(_callback)
-      } 
+      })
     }
 
     resetFieldValue: FormFuncs['resetFieldValue'] = name => {
@@ -203,14 +218,10 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
     }
 
     resetFieldsValue: FormFuncs['resetFieldsValue'] = names => {
-      const callback = (field: Field )=> {
+      names = names || this.fieldStore.getFieldsKeys()
+      this.fieldStore.resetFieldsValue(names, field => {
         field && this.fieldStore.updateField(field.name)
-      }
-      if (names) {
-        this.fieldStore.resetFieldsValue(names, callback)
-      } else {
-        this.fieldStore.resetFieldsValue(callback)
-      }  
+      })
     }
 
     render () {
