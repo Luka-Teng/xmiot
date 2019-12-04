@@ -51,7 +51,7 @@ class FieldStore {
 
   /* remove a field */
   @params('string')
-  removeField =(name: string) => {
+  removeField = (name: string) => {
     if (this.fields[name]) {
       delete this.fields[name]
     }
@@ -69,11 +69,14 @@ class FieldStore {
   }
 
   /* reset a set of fields */
-  @params('array')
-  resetFieldsValue = (names: string[] | 'all', callback?: (field: Field) => void) => {
+  @params(['array', 'string'])
+  resetFieldsValue = (
+    names: string[] | 'all',
+    callback?: (field: Field) => void
+  ) => {
     if (names === 'all') names = Object.keys(this.fields)
     names.forEach(name => {
-      this.resetFieldValue(name, (field) => {
+      this.resetFieldValue(name, field => {
         callback && callback(field)
       })
     })
@@ -97,11 +100,14 @@ class FieldStore {
 
   /* set the value of a field */
   @params('object', ['function', 'undefined'])
-  setFieldValue = (field: {
-    name: string
-    value: any
-    checkDirty?: boolean
-  }, callback?: (field: Field | undefined) => void) => {
+  setFieldValue = (
+    field: {
+      name: string
+      value: any
+      checkDirty?: boolean
+    },
+    callback?: (field: Field | undefined) => void
+  ) => {
     const { name, checkDirty = false, value } = field
     is(name, 'string', 'name must be a string')
     is(checkDirty, ['boolean', 'undefined'], 'checkDirty must be a boolean')
@@ -121,13 +127,16 @@ class FieldStore {
 
   /* set the value of a set of field */
   @params('array', ['function', 'undefined'])
-  setFieldsValue = (fields: {
-    name: string
-    value: any
-    checkDirty?: boolean
-  }[], callback?: (field: Field | undefined) => void) => {
+  setFieldsValue = (
+    fields: {
+      name: string
+      value: any
+      checkDirty?: boolean
+    }[],
+    callback?: (field: Field | undefined) => void
+  ) => {
     fields.forEach(field => {
-      this.setFieldValue(field, (_field) => {
+      this.setFieldValue(field, _field => {
         callback && callback(_field)
       })
     })
@@ -205,7 +214,7 @@ class FieldStore {
     const field = this.getField(name)
     field && field.ref && field.ref.forceUpdate()
   }
-  
+
   /* set a field dirty */
   @params('string')
   setFieldDirty = (name: string) => {
