@@ -1,4 +1,4 @@
-
+@import '../../common.less'; 
 .xy-input,.xy-error-input{
   height: 26px;
   width: 100px;
@@ -7,7 +7,7 @@
   &:first-child:last-child{
     width: 100%;
     box-sizing: border-box;
-    border: 1px solid #DBDEE2;
+    border: 1px solid @borderColor;
     border-radius: 4px;
     padding: 0 8px;
     &.xy-input-lg{
@@ -19,21 +19,21 @@
       padding: 0 6px;
     }
     &:hover,&:focus{
-      border-color: #4A90E2;
+      border-color: @activeColor;
     }
     &.xy-input-disabled{
       cursor: not-allowed;
-      background: #F5F6F8;
-      color: #BBBBBB;
+      background: @disabledColor;
+      color: @placeholderColor;
     }
   }
 }
 
 .xy-error-input{
   &:first-child:last-child{
-    border-color: lightcoral;
+    border-color: @dangerColor;
     &:hover,&:focus{
-      border-color: lightcoral;
+      border-color: @dangerColor;
     }
   }
 }
@@ -42,7 +42,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  border: 1px solid #DBDEE2;
+  border: 1px solid @borderColor;
   border-radius: 4px;
   padding-left: 10px;
   padding-right: 10px;
@@ -73,14 +73,14 @@
     
   }
   &:hover,&:focus{
-    border-color: #4A90E2;
+    border-color: @activeColor;
   }
 
 }
 .y-error-input-wrapper,.xy-error-input-affix-wrapper{
-  border-color: lightcoral;
+  border-color: @dangerColor;
   &:hover,&:focus{
-    border-color: lightcoral;
+    border-color: @dangerColor;
   }
 }
 .xy-input-affix-wrapper,.xy-error-input-affix-wrapper{
