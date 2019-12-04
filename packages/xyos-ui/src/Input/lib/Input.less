@@ -1,5 +1,5 @@
 
-.xy-input{
+.xy-input,.xy-error-input{
   height: 26px;
   width: 100px;
   outline: none;
@@ -29,8 +29,16 @@
   }
 }
 
+.xy-error-input{
+  &:first-child:last-child{
+    border-color: lightcoral;
+    &:hover,&:focus{
+      border-color: lightcoral;
+    }
+  }
+}
 
-.xy-input-wrapper,.xy-input-affix-wrapper{
+.xy-input-wrapper,.xy-input-affix-wrapper,.y-error-input-wrapper,.xy-error-input-affix-wrapper{
   position: relative;
   display: flex;
   align-items: center;
@@ -69,7 +77,13 @@
   }
 
 }
-.xy-input-affix-wrapper{
+.y-error-input-wrapper,.xy-error-input-affix-wrapper{
+  border-color: lightcoral;
+  &:hover,&:focus{
+    border-color: lightcoral;
+  }
+}
+.xy-input-affix-wrapper,.xy-error-input-affix-wrapper{
   .xy-input-prefix{
     position: absolute;
     left: 8px;

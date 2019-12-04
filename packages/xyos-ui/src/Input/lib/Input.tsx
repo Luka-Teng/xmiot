@@ -25,6 +25,7 @@ export interface InputProps
   prefix?: React.ReactNode
   suffix?: React.ReactNode
   allowClear?: boolean
+  errors?: []
 }
 
 export function fixControlledValue<T> (value: T) {
@@ -179,7 +180,15 @@ class Input extends React.Component<InputProps, InputState> {
   }
 
   renderInput = (prefixCls: string) => {
-    const { className, addonBefore, addonAfter, size, disabled } = this.props
+    const {
+      className,
+      addonBefore,
+      addonAfter,
+      size,
+      disabled,
+      errors
+    } = this.props
+    console.log(errors, 'errors')
     // Fix https://fb.me/react-unknown-prop
     const otherProps = omit(this.props, [
       'prefixCls',
@@ -213,7 +222,8 @@ class Input extends React.Component<InputProps, InputState> {
   }
 
   getPrefixCls = (suffixCls: string, customizePrefixCls?: string) => {
-    const prefixCls = 'xy'
+    const { errors } = this.props
+    const prefixCls = errors && errors.length ? 'xy-error' : 'xy'
 
     if (customizePrefixCls) return customizePrefixCls
 
