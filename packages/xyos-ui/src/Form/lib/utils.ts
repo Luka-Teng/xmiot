@@ -88,12 +88,16 @@ export const params = (...types: MatchTypes[]) => {
 }
 
 /* 深比较 */
-const isObject = (source: any) => {
+export const isObject = (source: any) => {
   return Object.prototype.toString.call(source) === '[object Object]'
 }
 
-const isArray = (source: any) => {
+export const isArray = (source: any) => {
   return Array.isArray(source)
+}
+
+export const isFunction = (source: any) => {
+  return Object.prototype.toString.call(source) === '[object Function]'
 }
 
 export const deepEqual = (source: any, target: any): Boolean => {

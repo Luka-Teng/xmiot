@@ -85,7 +85,7 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
       if (React.isValidElement(children)) {
         return React.cloneElement(children, {
           [trigger]: (e: CompositeSyntheticEvent) => {
-            children.props.onChange && children.props.onChange(e)
+            children.props[trigger] && children.props[trigger](e)
             this.onChange(e)
           },
           [valuePropName]: value,

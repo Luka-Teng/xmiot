@@ -25,9 +25,9 @@ type FormFuncs = {
     validates: Field<string>['validates']
   ) => void
   validateField: (name: string, callback?: Function) => void
-  validateFields: (names: string[], callback?: Function | undefined) => void
+  validateFields: (names?: string[], callback?: Function | undefined) => void
   validateFieldsToScroll: (
-    names: string[],
+    names?: string[],
     callback?: Function | undefined
   ) => void
   resetFieldValue: (name: string) => void
@@ -148,22 +148,31 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
     }
 
     validateField: FormFuncs['validateField'] = (name, callback) => {
-      this.fieldStore.validateField(name, callback)
-      this.fieldStore.updateField(name)
+      this.fieldStore.validateField(name, (_name: string, errors: any) => {
+        this.fieldStore.updateField(_name)
+        callback && callback(errors)
+      })
     }
 
     validateFields: FormFuncs['validateFields'] = (names, callback) => {
-      this.fieldStore.validateFields(names, callback)
-      names.forEach(name => {
-        this.fieldStore.updateField(name)
-      })
+      const _callback = (_names: string[], errors: any) => {
+        _names.forEach(name => {
+          this.fieldStore.updateField(name)
+        })
+        callback && callback(errors)
+      }
+      if (names) {
+        this.fieldStore.validateFields(names, _callback)
+      } else {
+        this.fieldStore.validateFields(_callback)
+      } 
     }
 
     validateFieldsToScroll: FormFuncs['validateFieldsToScroll'] = (
       names,
       callback
     ) => {
-      this.fieldStore.validateFields(names, (errors: any) => {
+      const _callback = (_names: string[], errors: any) => {
         if (errors) {
           const firstError = errors[0]
           const firstErrorField = this.fieldStore.getField(firstError.field)
@@ -175,11 +184,16 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
               })
           }
         }
+        _names.forEach(name => {
+          this.fieldStore.updateField(name)
+        })
         callback && callback(errors)
-      })
-      names.forEach(name => {
-        this.fieldStore.updateField(name)
-      })
+      }
+      if (names) {
+        this.fieldStore.validateFields(names, _callback)
+      } else {
+        this.fieldStore.validateFields(_callback)
+      } 
     }
 
     resetFieldValue: FormFuncs['resetFieldValue'] = name => {
@@ -189,9 +203,14 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
     }
 
     resetFieldsValue: FormFuncs['resetFieldsValue'] = names => {
-      this.fieldStore.resetFieldsValue(names || 'all', field => {
+      const callback = (field: Field )=> {
         field && this.fieldStore.updateField(field.name)
-      })
+      }
+      if (names) {
+        this.fieldStore.resetFieldsValue(names, callback)
+      } else {
+        this.fieldStore.resetFieldsValue(callback)
+      }  
     }
 
     render () {
