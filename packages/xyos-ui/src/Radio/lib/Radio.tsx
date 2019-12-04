@@ -67,7 +67,7 @@ class Radio extends React.Component<Props> {
                   onChange={optional.onChange}
                   value={defaultValue}
                 />
-                <span>{children}</span>
+                <span className="rc-radio-text">{children}</span>
               </label>
             )
           }

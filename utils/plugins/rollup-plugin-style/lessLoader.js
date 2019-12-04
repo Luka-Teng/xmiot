@@ -8,9 +8,12 @@ const chalk = require('chalk')
 
 module.exports = {
   test: /\.less$/,
-  process: (code) => {
+  process: (code, options) => {
     /* 直接返回code */
-    return less.render(code).then(data => {
+    return less.render(code, {
+      javascriptEnabled: true,
+      filename: options.from
+    }).then(data => {
       return data.css
     }).catch(e => {
       console.warn(chalk.red('errors in lessLoader, please check the less files'))

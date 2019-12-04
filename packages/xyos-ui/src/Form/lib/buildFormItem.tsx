@@ -77,7 +77,7 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
     }
 
     buildChildren = (children: React.ReactNode) => {
-      const { valuePropName, trigger } = this.context.getCriticalProps(
+      const { valuePropName, trigger, errors } = this.context.getCriticalProps(
         this.props.name
       )
       const value = this.context.getFieldValue(this.props.name)
@@ -88,7 +88,8 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
             children.props.onChange && children.props.onChange(e)
             this.onChange(e)
           },
-          [valuePropName]: value
+          [valuePropName]: value,
+          errors: errors
         })
       }
 

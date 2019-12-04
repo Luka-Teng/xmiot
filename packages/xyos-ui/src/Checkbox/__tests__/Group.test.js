@@ -61,20 +61,6 @@ describe('Checkbox',()=>{
     expect(onChange).toHaveBeenCalledTimes(1);// 不应当有响应
   })
 
-  // 控制value
-  // test(' controlled by value',()=>{
-  //   const options = [{ label: 'Lei', value: 'lei' }, { label: 'Yan', value: 'yan' }];
-  //   const onChange=jest.fn()
-  //   const groupWrapper=mount(
-  //     <CheckboxGroup options={options} onChange={onChange} />,
-  //   );
-  //   expect(groupWrapper.instance().state.value).toEqual([]); // groupWrapper.instance() 返回组件实例
-  //   groupWrapper.setProps({ value: ['lei'] });             // groupWrapper.setProps() 设置组件属性
-  //   expect(groupWrapper.instance().state.value).toEqual(['lei']);
-  // })
-
-
-
 
   //  测试 默认选中 
   test('defaultValue',()=>{

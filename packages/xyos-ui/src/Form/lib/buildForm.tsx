@@ -30,6 +30,8 @@ type FormFuncs = {
     names: string[],
     callback?: Function | undefined
   ) => void
+  resetFieldValue: (name: string) => void
+  resetFieldsValue: (names: string[]) => void
 }
 
 type State = {
@@ -182,6 +184,14 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
       names.forEach(name => {
         this.fieldStore.updateField(name)
       })
+    }
+
+    resetFieldValue: FormFuncs['resetFieldValue'] = name => {
+      this.fieldStore.resetFieldValue(name)
+    }
+
+    resetFieldsValue: FormFuncs['resetFieldsValue'] = names => {
+      this.fieldStore.resetFieldsValue(names)
     }
 
     render () {
