@@ -45,7 +45,7 @@
   }
 }
 
-.xy-input-wrapper,.xy-input-affix-wrapper,.y-error-input-wrapper,.xy-error-input-affix-wrapper{
+.xy-input-wrapper,.xy-input-affix-wrapper,.xy-error-input-wrapper,.xy-error-input-affix-wrapper{
   position: relative;
   display: flex;
   align-items: center;
@@ -57,6 +57,7 @@
     position: relative;
     width: 100%;
     padding: 0 8px;
+    border: none;
     &.xy-input-lg{
       .xy-lg()
     }
@@ -81,7 +82,7 @@
   }
 
 }
-.y-error-input-wrapper,.xy-error-input-affix-wrapper{
+.xy-error-input-wrapper,.xy-error-input-affix-wrapper{
   border-color: @dangerColor;
   &:hover,&:focus{
     border-color: @dangerColor;
