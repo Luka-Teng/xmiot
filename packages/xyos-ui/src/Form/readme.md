@@ -42,8 +42,13 @@ FormItem默认是对value分发，对onChange事件进行拦截，所以各自�
 
 ```javascript
 // xyos-ui的实现方式
+import { createForm, createFormRef } from 'xyou-ui/Form/es'
 const [Form, FormItem] = createForm()
 
+/* 挂载自己的实例上 */
+this.ref = createFormRef()
+
+/* 返回form组件 */
 <Form ref={this.ref}>
   <FormItem
     name="required"
@@ -55,6 +60,11 @@ const [Form, FormItem] = createForm()
     <WrappedElement />
   </FormItem>
 </Form>
+
+/* 使用暴露的form方法 */
+this.ref.current.getFieldValue...
+
+---
 
 // rc的实现方式
 const Component = (props) => {
