@@ -89,6 +89,14 @@ const extraOptions = format => ({
       {
         test: /src\/Select/,
         filename: 'Select/index.css'
+      },
+      {
+        test: /src\/Label/,
+        filename: 'Label/index.css'
+      },
+      {
+        test: /src\/Input/,
+        filename: 'Input/index.css'
       }
     ]
   }
