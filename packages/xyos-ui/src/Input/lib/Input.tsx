@@ -188,7 +188,6 @@ class Input extends React.Component<InputProps, InputState> {
       disabled,
       errors
     } = this.props
-    console.log(errors, 'errors')
     // Fix https://fb.me/react-unknown-prop
     const otherProps = omit(this.props, [
       'prefixCls',
