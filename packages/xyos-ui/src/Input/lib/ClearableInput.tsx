@@ -1,6 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { tuple } from '../type'
+import { tuple } from './type'
 import { InputProps, InputSizes, getInputClassName } from './Input';
 import Icon from './Icon'
 const ClearableInputType = tuple('text', 'input');
