@@ -1,6 +1,6 @@
 {
   "name": "xyos-ui",
-  "version": "1.1.5",
+  "version": "1.1.7",
   "description": "小雅OS开放平台业务组件库",
   "scripts": {
     "prepublishOnly": "rollup -c"
@@ -29,7 +29,7 @@
     "rc-checkbox": "^2.1.8",
     "rc-notification": "^3.3.1",
     "rc-select": "^10.0.0-alpha.28",
-    "xmiot-function": "^1.0.18"
+    "xmiot-function": "^1.0.19"
   },
   "gitHead": "d094142a9d9d3148accca6746e5064419a4c634b"
 }

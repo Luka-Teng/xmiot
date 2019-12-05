@@ -56,14 +56,14 @@ module.exports = (options = {}, extraOptions = {}) => {
       style(styleOptions),
       // 引入的图片统一用base64输出，后期要做大小限制
       fileAsBlob({
-        include: '**/**.png'
+        include: '**/**.(png|gif|jpg)'
       }),
       terser(),
       clear({
-          // required, point out which directories should be clear.
-          targets: buildPaths,
-          // optional, whether clear the directores when rollup recompile on --watch mode.
-          watch: true, // default: false
+        // required, point out which directories should be clear.
+        targets: buildPaths,
+        // optional, whether clear the directores when rollup recompile on --watch mode.
+        watch: true // default: false
       })
     ].filter(e => e !== '')
   }
