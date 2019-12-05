@@ -10,7 +10,7 @@ export type Field<T extends string = string> = {
   validates: RuleItem[]
   value: any
   errors: string[]
-  ref: React.Component
+  ref: React.Component | null
 }
 
 type Fields = { [key in string]: Field<key> }
@@ -38,16 +38,24 @@ class FieldStore {
     name: string,
     options?: Partial<Omit<Fields[string], 'name'>>
   ) => {
-    const field = (this.fields[name] = this.fields[name] || {})
-    field.name = name
-    field.dirty = (options && options.dirty) || field.dirty || false
-    field.trigger = (options && options.trigger) || field.trigger || 'onChange'
-    field.valuePropName =
-      (options && options.valuePropName) || field.valuePropName || 'value'
-    field.validates = (options && options.validates) || field.validates || []
-    field.value = (options && options.value) || field.value || ''
-    field.errors = (options && options.errors) || field.errors || []
-    field.ref = (options && options.ref) || field.ref || null
+    if (this.fields[name]) {
+      this.fields[name] = {
+        ...this.fields[name],
+        ...options
+      }
+    } else {
+      this.fields[name] = {
+        name,
+        dirty: false,
+        trigger: 'onChange',
+        valuePropName: 'value',
+        validates: [],
+        value: '',
+        errors: [],
+        ref: null,
+        ...options
+      }
+    }
 
     this.updateFieldsKeys()
   }

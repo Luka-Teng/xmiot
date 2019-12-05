@@ -34,6 +34,8 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
     onChange = (e: CompositeSyntheticEvent) => {
       // 添加变化事件依赖
       this.context.setFieldValue(this.props.name, e.target.value)
+
+      // TODO: 应启慧要求，这边的validate不默认绑定onchange
       this.context.validateField(this.props.name)
     }
 
