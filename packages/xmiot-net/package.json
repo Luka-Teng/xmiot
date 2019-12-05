@@ -1,6 +1,6 @@
 {
   "name": "xmiot-net",
-  "version": "1.4.8",
+  "version": "1.4.11",
   "description": "喜马声联网net封装",
   "main": "entry/index.common.js",
   "module": "entry/index.esm.js",
@@ -20,5 +20,5 @@
     "axios": "^0.18.0"
   },
   "types": "entry/index",
-  "gitHead": "4af9e6182d9ee1a7b409725c91ecd115f315de74"
+  "gitHead": "d094142a9d9d3148accca6746e5064419a4c634b"
 }

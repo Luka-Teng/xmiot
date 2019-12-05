@@ -1,6 +1,6 @@
 {
   "name": "xmiot-form",
-  "version": "1.3.0",
+  "version": "1.3.3",
   "description": "声联网后台管理统一form表单",
   "main": "entry/index.common.js",
   "module": "entry/index.esm.js",
@@ -43,5 +43,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "9a8bb9c3b55bfc608fc7774ed47b297ff6d9fe9c"
+  "gitHead": "d094142a9d9d3148accca6746e5064419a4c634b"
 }

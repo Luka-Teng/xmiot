@@ -21,13 +21,13 @@ const validDirs = srcContents
       if (fs.statSync(path.join(dir, 'index.ts')).isFile()) {
         return [content, 'index.ts']
       }
-    } catch {}
+    } catch (e) {}
 
     try {
       if (fs.statSync(path.join(dir, 'index.tsx')).isFile()) {
         return [content, 'index.tsx']
       }
-    } catch {}
+    } catch (e) {}
 
     return null
   })
@@ -35,9 +35,7 @@ const validDirs = srcContents
 
 const mapToInput = (dir, modules) => {
   return modules.reduce((result, module) => {
-    result[`${dir}/${module[0]}/index`] = `${src}/${module[0]}/${
-      module[1]
-    }`
+    result[`${dir}/${module[0]}/index`] = `${src}/${module[0]}/${module[1]}`
     return result
   }, {})
 }
