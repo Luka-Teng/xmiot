@@ -1,5 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
+import loadingGif from './loading.gif'
 
 export const tuple = <T extends string[]>(...args: T) => args;
 
@@ -54,7 +55,7 @@ class Button extends React.Component<ButtonProps, ButtonState> {
     return (
       <button className={_className} onClick={this.onClick} type={htmlType}>
         {
-          loading && <img className='action-loading' src={require('./loading.gif')} alt="" />
+          loading && <img className='action-loading' src={loadingGif} alt="" />
         }
         <span>{children}</span>
       </button>

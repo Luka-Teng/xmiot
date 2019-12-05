@@ -56,7 +56,7 @@ module.exports = (options = {}, extraOptions = {}) => {
       style(styleOptions),
       // 引入的图片统一用base64输出，后期要做大小限制
       fileAsBlob({
-        include: '**/**.(png|gif|jpg)'
+        include: ['**/**.{png,gif,jpg}']
       }),
       terser(),
       clear({
