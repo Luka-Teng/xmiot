@@ -24,7 +24,7 @@ class FieldStore {
   fields: Fields = {}
 
   /* 获取fields的keys，用做于缓存 */
-  keys: string[] =  []
+  keys: string[] = []
 
   updateFieldsKeys = () => {
     this.keys = Object.keys(this.fields)
@@ -34,10 +34,7 @@ class FieldStore {
 
   /* set a field */
   @params('string', ['object', 'undefined'])
-  setField = (
-    name: string,
-    options?: Partial<Omit<Fields[string], 'name'>>
-  ) => {
+  setField = (name: string, options: Partial<Omit<Fields[string], 'name'>>) => {
     if (this.fields[name]) {
       this.fields[name] = {
         ...this.fields[name],
@@ -46,14 +43,13 @@ class FieldStore {
     } else {
       this.fields[name] = {
         name,
-        dirty: false,
-        trigger: 'onChange',
-        valuePropName: 'value',
-        validates: [],
-        value: '',
-        errors: [],
-        ref: null,
-        ...options
+        dirty: options.dirty || false,
+        trigger: options.trigger || 'onChange',
+        valuePropName: options.valuePropName || 'value',
+        validates: options.validates || [],
+        value: options.value || '',
+        errors: options.errors || [],
+        ref: options.ref || null
       }
     }
 
@@ -189,7 +185,10 @@ class FieldStore {
 
   /* validate a field */
   @params('string', ['function', 'undefined'])
-  validateField = (name: string, callback?: (name: string, errors: any) => void) => {
+  validateField = (
+    name: string,
+    callback?: (name: string, errors: any) => void
+  ) => {
     if (this.fields[name] && this.fields[name].validates.length > 0) {
       const validator = new schema({ [name]: this.fields[name].validates })
       validator.validate(
@@ -205,19 +204,22 @@ class FieldStore {
 
   /* validate fields */
   @params(['array'], ['function', 'undefined'])
-  validateFields = (names: string[], callback?: (names: string[], errors: any) => void) => {
+  validateFields = (
+    names: string[],
+    callback?: (names: string[], errors: any) => void
+  ) => {
     let descriptor: ValidateDescriptor = {}
     let values: { [key in string]: any } = {}
-  
+
     names.forEach(name => {
       if (this.fields[name] && this.fields[name].validates.length > 0) {
         descriptor[name] = this.fields[name].validates
         values[name] = this.fields[name].value
       }
     })
-  
+
     const validator = new schema(descriptor)
-    
+
     validator.validate(values, {}, (errors: ActualErrorList) => {
       this.updateFieldErrors(errors, names as string[])
       callback && callback(names, errors)
