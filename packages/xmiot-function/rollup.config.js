@@ -17,16 +17,6 @@ function getOptions (module) {
 }
 
 const extraOptions = format => ({
-  packageDir: __dirname,
-  format: format
-})
-
-export default [
-  getRollupConfig(getOptions('cjs'), extraOptions()),
-  getRollupConfig(getOptions('es'), extraOptions())
-]
-
-const extraOptions = (format) => ({
   buildPaths: [path.resolve(__dirname, 'entry', fileName[format])]
 })
 
