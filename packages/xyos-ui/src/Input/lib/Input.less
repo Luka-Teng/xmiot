@@ -82,6 +82,7 @@
   border-color: @dangerColor;
   &:hover,&:focus{
     border-color: @dangerColor;
+    animation: ChangeOpacity 3s;
   }
 }
 .xy-input-affix-wrapper,.xy-error-input-affix-wrapper{
@@ -94,5 +95,14 @@
     position: absolute;
     right: 8px;
     z-index: 2;
+  }
+}
+
+@keyframes ChangeOpacity {
+  from{
+    opacity: 0.3;
+  }
+  to{
+    opacity: 1;
   }
 }

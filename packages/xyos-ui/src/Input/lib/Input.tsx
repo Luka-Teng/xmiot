@@ -25,7 +25,7 @@ export interface InputProps
   prefix?: React.ReactNode
   suffix?: React.ReactNode
   allowClear?: boolean
-  errors?: []
+  errors?: string[]
 }
 
 export function fixControlledValue<T> (value: T) {
