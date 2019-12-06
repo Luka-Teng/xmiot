@@ -39,7 +39,7 @@ class ScrollTrigger extends React.Component<Props, State> {
           this.setState({ shown: true })
         }, this.props.delay)
 
-        window.removeEventListener('scroll', this.check)
+        window.removeEventListener('scroll', this.check, true)
       }
     }
   }, 200)
@@ -53,7 +53,7 @@ class ScrollTrigger extends React.Component<Props, State> {
 
   componentWillUnmount () {
     /* 清理事件 */
-    window.removeEventListener('scroll', this.check)
+    window.removeEventListener('scroll', this.check, true)
     if (this.key !== null) {
       clearTimeout(this.key)
     }
