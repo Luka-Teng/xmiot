@@ -165,7 +165,7 @@ class Upload extends Component<FormItemProps<'upload'>, UploadStates> {
       passed = false
     }
 
-    if (accept && !accept.includes(file.type)) {
+    if (accept && (accept !== 'file') && !accept.includes(file.type) ) {
       message.error(`非法的文件后缀`)
       passed = false
     }

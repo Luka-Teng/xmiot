@@ -117,7 +117,7 @@ export type Config = {
     onUpload?: Function
     maxSize?: number // kb
     /* 文件类型或image video */
-    accept?: Array<string> | 'image' | 'video'
+    accept?: Array<string> | 'image' | 'video' | 'file'
   }
   RadioGroupConfig: BasicConfig<string | number> & {
     data: {
