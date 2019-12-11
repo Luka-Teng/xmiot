@@ -22,6 +22,7 @@
   border-radius: 4px;
   padding: 0 8px;
   color: @textColor;
+  transition: border-color 0.3s;
   &.xy-input-lg{
     .xy-lg()
   }
@@ -31,8 +32,13 @@
   &:hover,&:focus{
     border-color: @activeColor;
   }
+  
   &.xy-input-disabled{
-    .xy-disabled()
+    .xy-disabled();
+    &:hover,&:focus{
+      border-color: @borderColor;
+    }
+    
   }
 }
 .xy-error-input{
@@ -46,14 +52,13 @@
   position: relative;
   display: flex;
   align-items: center;
-  border: 1px solid @borderColor;
   border-radius: 4px;
   font-size: 12px;
+  transition: border-color 0.3s;
   input{
     position: relative;
     width: 100%;
     padding: 0 8px;
-    border: none;
     &.xy-input-lg{
       .xy-lg()
     }
@@ -82,27 +87,18 @@
   border-color: @dangerColor;
   &:hover,&:focus{
     border-color: @dangerColor;
-    animation: ChangeOpacity 3s;
+    
   }
 }
 .xy-input-affix-wrapper,.xy-error-input-affix-wrapper{
-  .xy-input-prefix{
+  .xy-input-prefix,.xy-error-input-prefix{
     position: absolute;
     left: 8px;
     z-index: 2;
   }
-  .xy-input-suffix{
+  .xy-input-suffix,.xy-error-input-suffix{
     position: absolute;
     right: 8px;
     z-index: 2;
-  }
-}
-
-@keyframes ChangeOpacity {
-  from{
-    opacity: 0.3;
-  }
-  to{
-    opacity: 1;
   }
 }
