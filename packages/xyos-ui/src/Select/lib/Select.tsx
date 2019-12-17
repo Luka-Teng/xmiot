@@ -1,9 +1,14 @@
 import React, { Children } from 'react'
 import classNames from 'classnames'
-import RcSelect, { Option as RcOption, SelectProps } from 'rc-select'
+import RcSelect, {
+  Option as RcOption,
+  OptGroup as RcOptionGroup,
+  SelectProps
+} from 'rc-select'
 import { OptionData } from 'rc-select/lib/interface/index'
-// import 'rc-select/assets/index.less'
 import './select.less'
+
+type X = Pick<SelectProps, Exclude<keyof SelectProps, 'onChange'>>
 
 interface OptionProps extends OptionData {
   label?: string
@@ -11,15 +16,25 @@ interface OptionProps extends OptionData {
   className?: string
 }
 
-interface Props extends SelectProps {
+interface Props extends X {
   size?: string
   optionLabelProp?: string
+  onChange?: (e: Event) => void
+}
+
+export interface OptGroupProps {
+  label?: React.ReactNode
 }
 
 const Option = (RcOption as {}) as React.FC<OptionProps>
 
+const OptionGroup = (RcOptionGroup as {}) as React.FC<OptGroupProps>
+
 class Select extends React.Component<Props> {
   static Option = (Option as {}) as React.FC<OptionProps>
+
+  static OptGroup = (OptionGroup as {}) as React.FC<OptGroupProps>
+
   private rcSelect: any
 
   isCombobox = () => {
@@ -43,12 +58,12 @@ class Select extends React.Component<Props> {
       prefixCls: customizePrefixCls,
       className = '',
       size,
-      mode,
       getPopupContainer,
       removeIcon,
       clearIcon,
       menuItemSelectedIcon,
       showArrow,
+      onChange,
       ...restProps
     } = this.props
 
@@ -57,29 +72,68 @@ class Select extends React.Component<Props> {
       {
         [`${prefixCls}-lg`]: size === 'large',
         [`${prefixCls}-sm`]: size === 'small',
+        [`${prefixCls}-mid`]: size === 'mid',
         [`${prefixCls}-show-arrow`]: showArrow
       },
       className
     )
 
+    const finalRemoveIcon = (removeIcon &&
+      (React.isValidElement<{ className?: string }>(removeIcon)
+        ? React.cloneElement(removeIcon, {
+            className: classNames(
+              removeIcon.props.className,
+              `${prefixCls}-remove-icon`
+            )
+          })
+        : removeIcon)) || <span className={`${prefixCls}-remove-icon`} />
+
+    const finalClearIcon = (clearIcon &&
+      (React.isValidElement<{ className?: string }>(clearIcon)
+        ? React.cloneElement(clearIcon, {
+            className: classNames(
+              clearIcon.props.className,
+              `${prefixCls}-clear-icon`
+            )
+          })
+        : clearIcon)) || <span className={`${prefixCls}-clear-icon`}>ii</span>
+
     const modeConfig = {
-      multiple: mode === 'multiple',
-      tags: mode === 'tags',
+      multiple: this.props.mode === 'multiple',
+      tags: this.props.mode === 'tags',
       combobox: this.isCombobox()
     }
 
-    const { ...rest } = this.props
     let { optionLabelProp } = this.props
+    const { ...rest } = this.props
 
     if (this.isCombobox()) {
       // children 带 dom 结构时，无法填入输入框
       optionLabelProp = optionLabelProp || 'value'
     }
 
+    const restChange = (value: any) => {
+      if (onChange) {
+        onChange({
+          target: {
+            value: value
+          }
+        } as any)
+      }
+    }
+
     return (
       <RcSelect
+        dropdownClassName={
+          this.props.mode === 'tags' || this.props.mode === 'multiple'
+            ? 'rc-select-groupTag'
+            : ''
+        }
         showArrow={showArrow}
-        {...rest}
+        clearIcon={finalClearIcon}
+        removeIcon={finalRemoveIcon}
+        {...restProps}
+        onChange={restChange}
         {...modeConfig}
         prefixCls={prefixCls}
         className={cls}
@@ -91,9 +145,3 @@ class Select extends React.Component<Props> {
 }
 
 export default Select
-
-/**
- * 1、符合基本的使用
- * 2、
- *
- */

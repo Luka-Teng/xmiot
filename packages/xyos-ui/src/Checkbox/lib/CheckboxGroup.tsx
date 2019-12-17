@@ -9,7 +9,7 @@ export interface CheckboxOptionType {
   label: React.ReactNode;
   value: CheckboxValueType;
   disabled?: boolean;
-  onChange?: (e: Event) => void;
+  onChange?: (e: Event, ) => void;
 }
 
 export interface CheckboxGroupState {
@@ -27,7 +27,7 @@ export interface CheckboxGroupContext {
 
 interface CheckboxGroupProps {
   options?: Array<CheckboxOptionType | string>;
-  onChange?: (checkedValue: Array<CheckboxValueType>) => void;
+  onChange?: (e: Event, checkedValue: Array<CheckboxValueType>) => void;
   defaultValue?: Array<CheckboxValueType>;
   value?: Array<CheckboxValueType>;
   disabled?: boolean;
@@ -36,6 +36,7 @@ interface CheckboxGroupProps {
 }
 
 class CheckboxGroup extends React.Component<CheckboxGroupProps, CheckboxGroupState> {
+  private rcCheckboxGroup: any;
 
   static defaultProps = {
     options: [],
@@ -48,6 +49,9 @@ class CheckboxGroup extends React.Component<CheckboxGroupProps, CheckboxGroupSta
       registeredValues: [],
     };
   }
+  saveCheckboxGroup = (node: any) => {
+    this.rcCheckboxGroup = node;
+  };
 
   ProviderValue() {
     return {
@@ -61,7 +65,7 @@ class CheckboxGroup extends React.Component<CheckboxGroupProps, CheckboxGroupSta
     };
   }
 
-  toggleOption = (option: CheckboxOptionType) => {
+  toggleOption = (e: any, option: CheckboxOptionType) => {
     const { registeredValues } = this.state;
     const optionIndex = this.state.value.indexOf(option.value);
     const value = [...this.state.value];
@@ -76,15 +80,18 @@ class CheckboxGroup extends React.Component<CheckboxGroupProps, CheckboxGroupSta
     const { onChange } = this.props;
     if (onChange) {
       const options = this.getOptions();
-      onChange(
-        value
-          .filter(val => registeredValues.indexOf(val) !== -1)
-          .sort((a, b) => {
-            const indexA = options.findIndex(opt => opt.value === a);
-            const indexB = options.findIndex(opt => opt.value === b);
-            return indexA - indexB;
-          }),
-      );
+      const params = value.filter(val => registeredValues.indexOf(val) !== -1).sort((a, b) => {
+        const indexA = options.findIndex(opt => opt.value === a);
+        const indexB = options.findIndex(opt => opt.value === b);
+        return indexA - indexB;
+      })
+      this.setState({
+        value: params
+      })
+      let event = e
+      event.target = this.rcCheckboxGroup;
+      event.target.value = params
+      onChange(event, params);
     }
   }
 
@@ -122,22 +129,22 @@ class CheckboxGroup extends React.Component<CheckboxGroupProps, CheckboxGroupSta
 
     if (options && options.length > 0) {
       children = this.getOptions().map(option => (
-      <Checkbox
-        prefixCls={prefixCls}
-        key={option.value.toString()}
-        disabled={'disabled' in option ? option.disabled : props.disabled}
-        value={option.value}
-        checked={state.value.indexOf(option.value) !== -1}
-        onChange={option.onChange}
-        className={`${groupPrefixCls}-wrapper`}
-      >
-        {option.label}
-      </Checkbox>
+        <Checkbox
+          prefixCls={prefixCls}
+          key={option.value.toString()}
+          disabled={'disabled' in option ? option.disabled : props.disabled}
+          value={option.value}
+          checked={state.value.indexOf(option.value) !== -1}
+          onChange={option.onChange}
+          className={`${groupPrefixCls}-wrapper`}
+        >
+          {option.label}
+        </Checkbox>
       ));
     }
     const classString = classNames(groupPrefixCls, className);
     return (
-      <div className={classString} style={style} >
+      <div className={classString} style={style} ref={this.saveCheckboxGroup}>
         <ThemeContext.Provider value={this.ProviderValue()}>
           {children}
         </ThemeContext.Provider>

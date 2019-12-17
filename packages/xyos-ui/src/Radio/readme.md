@@ -10,9 +10,20 @@
 |className| 用于类名扩展定义业务样式|
 |style| 用于样式扩展|
 | className| 用于类名扩展 |
+| options | 配置子元素 |
+| value  | 设置当前选中的值|
 
 ----
 
+## Radio
+
+|props| description       |
+|:----|:------------------|
+| checked  | 默认选中 |
+|onChange | 触发多选的状态，可直接获取到 checkedValues 是选中之后的value 数组|
+|disabled| 不可用的勾选 （boolean）|
+|className| 用于类名扩展定义业务样式|
+| value  | 设置当前选中的值|
 
 ```
 
@@ -46,6 +57,13 @@
   <Radio value="APP">选项二</Radio>
   <Radio value="WAP">选项三</Radio>
 </RadioGroup>
+
+// 添加
+
+  <Radio.Group options={optionsWithDisabled} onChange={this.onChange1} value={this.state.value3} />
+
+  <Radio.Group radiobutton options={optionsWithDisabled} onChange={this.onChange1} value={this.state.value3} />
+
 
 
 ```

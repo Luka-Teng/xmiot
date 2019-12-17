@@ -6,7 +6,7 @@
 @duration: .3s;
 @ease-in-out-circ: cubic-bezier(0.78, 0.14, 0.15, 0.86);
 @ease-out-back: cubic-bezier(0.18, 0.89, 0.32, 1.28);
-@activeColor: #1890ff;
+
 
 // .@{radioWrapPrefixCls}{
 //   display: flex;
@@ -29,7 +29,7 @@
   display: inline-block;
   position: relative;
   vertical-align: middle;
-  height: 16px;
+  height: 14px;
 
   &:hover {
     .@{checkboxInnerPrefixCls} {
@@ -46,6 +46,7 @@
     width: 14px;
     height: 14px;
     border: 1px solid @borderColor;
+    box-sizing: border-box;
     border-radius: 14px;
     background-color: #ffffff;
     transition: border-color @duration @ease-in-out-circ,
@@ -54,9 +55,11 @@
       position: absolute;
       width: 8px;
       height: 8px;
-      left: 3px;
-      top: 3px;
-      border-radius: 10px;
+      left: 50%;
+      top: 50%;
+      margin-left: -4px;
+      margin-top: -4px;
+      border-radius: 50%;
       display: table;
       border-top: 0;
       border-left: 0;
@@ -79,6 +82,7 @@
     top: 0;
     bottom: 0;
     right: 0;
+    margin: 0;
   }
 }
 
@@ -101,21 +105,27 @@
 .@{radioWarpPrefixCls}-disabled {
   &:hover {
     .@{checkboxInnerPrefixCls} {
-      border-color: #d9d9d9;
+      border-color: #EEF0F4;
     }
   }
 
   .@{checkboxInnerPrefixCls} {
-    border-color: #d9d9d9;
-    background-color: #f3f3f3;
+    border-color: #EEF0F4;
+    background-color: @disabledColor;
 
     &:after {
-      background-color: #cccccc;
+      background-color: @borderColor;
     }
   }
-
   .@{checkboxInnerPrefixCls}-input {
     cursor: default;
+  }
+}
+
+/*disabled*/
+.@{radioWrapPrefixCls}-disabled{
+  .rc-radio-text{
+    color: @placeholderColor;
   }
 }
 
@@ -138,13 +148,18 @@
     z-index: 1;
     color: @activeColor;
     background: #fff;
+    color: #fff;
     border-color: @activeColor;
     -webkit-box-shadow: -1px 0 0 0 @activeColor;
-    box-shadow: -1px 0 0 0 @activeColor
+    box-shadow: -1px 0 0 0 @activeColor;
+  }
+
+  &.@{radioWrapPrefixCls}-checked .rc-radio-text{
+    color: @activeColor;
   }
 
   &.@{radioWrapPrefixCls}-checked:not(.@{radioWrapPrefixCls}-disabled)::before {
-    background-color: @activeColor  !important;
+    background-color: @activeColor !important;
     opacity: .1
   }
 

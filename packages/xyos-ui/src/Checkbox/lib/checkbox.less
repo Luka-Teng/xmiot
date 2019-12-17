@@ -1,6 +1,7 @@
 /* Default state */
+@import '../../common.less';
 
-@checkboxColor: #1890ff;
+@checkboxColor: @activeColor;
 @checkboxWarpPrefixCls: rc-checkbox;
 
 .@{checkboxWarpPrefixCls} {
@@ -13,7 +14,12 @@
   vertical-align: middle;
 
   +span {
-    margin: 0 10px;
+    margin: 0 18px 0 4px;
+    color: @mainFontColor;
+    font-size: 12px;
+    margin-bottom: 1px;
+    display: inline-block;
+    vertical-align: middle;
   }
 
   &-inner {
@@ -23,10 +29,10 @@
     display: inline-block;
     width: 14px;
     height: 14px;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 3px;
-    border-color: #d9d9d9;
+    box-sizing: border-box;
+    border: 1px solid @borderColor;
+    box-sizing: border-box;
+    border-radius: 2px;
     background-color: #ffffff;
     transition: border-color 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55), background-color 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 
@@ -34,11 +40,11 @@
       -webkit-transform: rotate(45deg);
       transform: rotate(45deg);
       position: absolute;
-      left: 4px;
-      top: 1px;
+      left: 3px;
+      top: 0px;
       display: table;
-      width: 5px;
-      height: 8px;
+      width: 4px;
+      height: 7px;
       border: 2px solid #ffffff;
       border-top: 0;
       border-left: 0;
@@ -58,6 +64,7 @@
     top: 0;
     bottom: 0;
     right: 0;
+    margin: 0;
   }
 }
 
@@ -80,11 +87,11 @@
 .@{checkboxWarpPrefixCls}-checked .@{checkboxWarpPrefixCls}-inner:after {
   transform: rotate(45deg);
   position: absolute;
-  left: 4px;
-  top: 1px;
+  left: 3px;
+  top: 0px;
   display: table;
-  width: 5px;
-  height: 8px;
+  width: 4px;
+  height: 7px;
   border: 2px solid #ffffff;
   border-top: 0;
   border-left: 0;
@@ -124,19 +131,20 @@
   border-color: #d9d9d9;
 }
 
+// disabled
 .@{checkboxWarpPrefixCls}-disabled {
   .@{checkboxWarpPrefixCls}-inner {
-    border-color: #d9d9d9;
-    background-color: #f3f3f3;
+    border-color: #EEF0F4;
+    background-color: #F5F6F8;
 
     &:after {
       animation-name: none;
-      border-color: #f3f3f3;
+      border-color: @borderColor;
     }
   }
 
   +span {
-    color: #d9d9d9;
+    color: @placeholderColor;
   }
 
   .@{checkboxWarpPrefixCls}-inner-input {

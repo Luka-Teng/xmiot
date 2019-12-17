@@ -20,7 +20,7 @@ class Checkbox extends React.Component<CheckboxProps> {
     defaultChecked: false,
   }
 
-  static contextType=ThemeContext
+  static contextType = ThemeContext
 
   // public readonly state = {
   //   checked: false,
@@ -77,17 +77,17 @@ class Checkbox extends React.Component<CheckboxProps> {
     const checkboxProps: CheckboxProps = { ...restProps };
 
     if (checkboxGroup) {
-      checkboxProps.onChange = (...args) => {
+      checkboxProps.onChange = (e, ...args) => {
         if (restProps.onChange) {
-          restProps.onChange(...args);
+          restProps.onChange(e, ...args);
         }
-        checkboxGroup.toggleOption({ label: children, value: props.value });
+        checkboxGroup.toggleOption(e, { label: children, value: props.value });
       };
       checkboxProps.name = checkboxGroup.name;
       checkboxProps.checked = checkboxGroup.value.indexOf(props.value) !== -1;
       checkboxProps.disabled = props.disabled || checkboxGroup.disabled;
     }
-    const classString = classNames(className,[`${prefixCls}-wrapper`], {
+    const classString = classNames(className, [`${prefixCls}-wrapper`], {
       [`${prefixCls}-wrapper-checked`]: checkboxProps.checked,
       [`${prefixCls}-wrapper-disabled`]: checkboxProps.disabled,
     });

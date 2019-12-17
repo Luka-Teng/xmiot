@@ -32,6 +32,7 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
     }
 
     onChange = (e: CompositeSyntheticEvent) => {
+      console.log(this.props.name,'name',e)
       // 添加变化事件依赖
       this.context.setFieldValue(this.props.name, e.target.value)
 
