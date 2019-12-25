@@ -9,6 +9,18 @@ ts的overload可以用交叉类型来定义
 |props|description|
 |:----|:----------|
 |null|null|
+
+|instance (Form的实例，可通过ref获取)|description|
+|:----|:----------|
+|getFieldValue|获取某个表单元素的value|
+|getFieldsValue|获取一组表单元素的value|
+|setFieldValue|设置某个表单元素的value|
+|setFieldsValue|设置一组表单元素的value|
+|validateFields|验证一组/全部表单元素|
+|validateFieldsToScroll|验证一组/全部表单元素，并滑动到错误表单元素位置|
+|resetFieldValue|重置某个表单元素|
+|resetFieldsValue|重置一组表单元素|
+
 ---
 
 #### FormItem

@@ -13,9 +13,7 @@ const createForm = (): [
 }
 
 export const createFormRef = () => {
-  return createRef<
-    InstanceType<ReturnType<typeof buildForm>> & HTMLDivElement
-  >()
+  return createRef<InstanceType<ReturnType<typeof buildForm>>>()
 }
 
 export default createForm

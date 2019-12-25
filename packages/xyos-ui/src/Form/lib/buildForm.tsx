@@ -41,8 +41,6 @@ type State = {
   hasError: boolean
 }
 
-type Props = Partial<JSX.IntrinsicElements['div']>
-
 export type ExportedFunc = Pick<
   FormFuncs,
   | 'addField'
@@ -56,7 +54,7 @@ export type ExportedFunc = Pick<
 >
 
 const buildForm = (Provider: React.Provider<ExportedFunc>) => {
-  return class Form extends Component<Props, State> {
+  return class Form extends Component<{}, State> {
     fieldStore = new FieldStore()
 
     state = {
@@ -227,7 +225,7 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
     }
 
     render () {
-      const { children, ...rest } = this.props
+      const { children } = this.props
       return !this.state.hasError ? (
         <Provider
           value={{
@@ -241,7 +239,7 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
             validateField: this.validateField
           }}
         >
-          <div {...rest}>{children}</div>
+          <div>{children}</div>
         </Provider>
       ) : (
         <div>Something went wrong</div>
