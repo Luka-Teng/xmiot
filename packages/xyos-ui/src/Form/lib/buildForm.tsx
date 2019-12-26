@@ -77,7 +77,7 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
     }
 
     removeField: FormFuncs['removeField'] = name => {
-      this.removeField(name)
+      this.fieldStore.removeField(name)
     }
 
     getFieldValue: FormFuncs['getFieldValue'] = name => {
