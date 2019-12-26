@@ -58,7 +58,7 @@ module.exports = (options = {}, extraOptions = {}) => {
       fileAsBlob({
         include: ['**/**.{png,gif,jpg}']
       }),
-      terser(),
+      // terser(),
       clear({
         // required, point out which directories should be clear.
         targets: buildPaths,

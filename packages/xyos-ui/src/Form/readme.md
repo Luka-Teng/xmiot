@@ -92,5 +92,5 @@ const Component = (props) => {
   })(WrappedElement)
 }
 
-creatForm(options)(Component)
+creatForm(options)(Component) 
 ```
