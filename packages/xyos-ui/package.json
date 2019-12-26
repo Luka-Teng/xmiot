@@ -22,13 +22,16 @@
   },
   "dependencies": {
     "@types/classnames": "^2.2.9",
+    "@types/lodash": "^4.14.149",
     "async-validator": "^3.2.1",
     "classnames": "^2.2.6",
+    "lodash": "^4.17.15",
     "prop-types": "^15.7.2",
     "rc-animate": "^2.10.0",
     "rc-checkbox": "^2.1.8",
     "rc-notification": "^3.3.1",
     "rc-select": "^10.0.0-alpha.28",
+    "rc-upload": "^2.9.4",
     "xmiot-function": "^1.0.21"
   },
   "gitHead": "d094142a9d9d3148accca6746e5064419a4c634b"
