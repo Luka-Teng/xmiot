@@ -1,7 +1,5 @@
 ## Label
 
-### Checkbox
-
 |props| description                 |
 |:----|:------------------|
 |align | 垂直对齐方式，默认居中|
