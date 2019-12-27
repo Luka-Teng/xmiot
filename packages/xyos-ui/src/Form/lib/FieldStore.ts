@@ -51,9 +51,8 @@ class FieldStore {
         errors: options.errors || [],
         ref: options.ref || null
       }
+      this.updateFieldsKeys()
     }
-
-    this.updateFieldsKeys()
   }
 
   /* get a field */
