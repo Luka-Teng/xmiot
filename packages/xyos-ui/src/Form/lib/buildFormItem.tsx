@@ -70,7 +70,11 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
           trigger
         })
       } else {
-        /* forceUpdate在事件中也会被合并，所以不用担心触发多次 */
+        /**
+         * forceUpdate在事件中也会被合并，所以不用担心触发多次
+         * valuePropName, trigger几乎不存在改变，因为formItem和wrappedElement只会使用一套valuePropName, trigger
+         * 因此99.9%的情况不需要对这两个变量进行重新赋值
+         */
         this.context.setFieldValidates(name, validates || [])
         this.context.setFieldValueWithDirty(name, initialValue)
       }
