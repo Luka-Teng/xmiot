@@ -1,14 +1,18 @@
 const getRollupConfig = require('../../utils/getRollupConfig')
 const path = require('path')
 const fs = require('fs')
+const packageJson = require('./package.json')
 
 const src = path.resolve(__dirname, './src')
 
 /* 读取src文件下的目录 */
 const srcContents = fs.readdirSync(src)
 
+/* 声明文件 */
+const declares = []
+
 const validDirs = srcContents
-  .map((content, index) => {
+  .map((content) => {
     const dir = path.join(src, content)
 
     /* 判断是否是文件夹 */
@@ -16,13 +20,19 @@ const validDirs = srcContents
       return null
     }
 
+    /* 判断是否存在声明文件，并加入队列 */
+    try {
+      if (fs.statSync(path.join(dir, 'index.d.ts')).isFile()) {
+        declares.push(content)
+      }
+    } catch (e) {}
+
     /* 判断文件夹内部是否有入口文件 */
     try {
       if (fs.statSync(path.join(dir, 'index.ts')).isFile()) {
         return [content, 'index.ts']
       }
     } catch (e) {}
-
     try {
       if (fs.statSync(path.join(dir, 'index.tsx')).isFile()) {
         return [content, 'index.tsx']
@@ -50,15 +60,7 @@ function getOptions (format) {
       dir: './entry',
       format
     },
-    external: id => {
-      if (/(^rc\-)/.test(id)) {
-        return true
-      }
-
-      if (['react', 'react-dom', 'async-validator'].includes(id)) {
-        return true
-      }
-    }
+    external: Object.keys(packageJson.dependencies)
   }
 }
 
@@ -99,7 +101,11 @@ const extraOptions = format => ({
         filename: 'Input/index.css'
       }
     ]
-  }
+  },
+  copyOptions: declares.map(declare => ({
+    src: path.resolve(__dirname, 'src', declare + '/index.d.ts'),
+    dest: path.resolve(__dirname, 'entry', format, declare)
+  }))
 })
 
 export default [
