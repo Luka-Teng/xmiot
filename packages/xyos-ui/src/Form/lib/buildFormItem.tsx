@@ -8,12 +8,17 @@ type CompositeSyntheticEvent = React.SyntheticEvent & {
   }
 }
 
+/**
+ * TODO
+ * valuePropName， trigger，validateTrigger这三个属性可以从fieldStore数据中剥离
+ */
 type Props = {
   name: string
   initialValue?: any
   validates?: Field['validates']
   valuePropName?: string
   trigger?: string
+  validateTrigger?: string
   errorComponent?: React.ComponentClass<any, any> | React.FunctionComponent<any>
 } & Partial<JSX.IntrinsicElements['div']>
 
@@ -34,9 +39,6 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
     onChange = (e: CompositeSyntheticEvent) => {
       // 添加变化事件依赖
       this.context.setFieldValue(this.props.name, e.target.value)
-
-      // TODO: 应启慧要求，这边的validate不默认绑定onchange
-      this.context.validateField(this.props.name)
     }
 
     /**
@@ -87,13 +89,29 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
         this.props.name
       )
       const value = this.context.getFieldValue(this.props.name)
+      const validateTrigger = this.props.validateTrigger || 'onChange'
 
       if (React.isValidElement(children)) {
         return React.cloneElement(children, {
-          [trigger]: (e: CompositeSyntheticEvent) => {
-            children.props[trigger] && children.props[trigger](e)
-            this.onChange(e)
-          },
+          ...(validateTrigger === trigger
+            ? {
+                [trigger]: (e: CompositeSyntheticEvent) => {
+                  children.props[trigger] && children.props[trigger](e)
+                  this.onChange(e)
+                  this.context.validateField(this.props.name)
+                }
+              }
+            : {
+                [trigger]: (e: CompositeSyntheticEvent) => {
+                  children.props[trigger] && children.props[trigger](e)
+                  this.onChange(e)
+                },
+                [validateTrigger]: (e: CompositeSyntheticEvent) => {
+                  children.props[validateTrigger] &&
+                    children.props[validateTrigger](e)
+                  this.context.validateField(this.props.name)
+                }
+              }),
           [valuePropName]: value,
           errors: errors
         })

@@ -66,7 +66,8 @@ this.ref = createFormRef()
     name="required"
     validates="not required"
     initialValue="not required"
-    trigger="not required"
+    trigger="表示触发数据改变的时机"
+    validateTrigger="表示触发validate的时机"
     valuePropName="not required"
   >
     <WrappedElement />
