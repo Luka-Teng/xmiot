@@ -23,6 +23,7 @@ type FormItemProps = {
   validates?: RuleItem[]
   valuePropName?: string
   trigger?: string
+  triggerValidate?: string
   errorComponent?: React.ComponentClass<any, any> | React.FunctionComponent<any>
 } & Partial<JSX.IntrinsicElements['div']>
 

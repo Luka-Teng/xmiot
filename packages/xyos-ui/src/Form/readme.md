@@ -34,6 +34,7 @@ ts的overload可以用交叉类型来定义
 |validates|校验|
 |valuePropName|绑定的子元素value名，默认value|
 |trigger|绑定的子元素事件触发名，默认onChange|
+|validateTrigger|绑定的子元素校验触发名，默认onChange|
 |errorComponent|展示错误的组件|
 ---
 
@@ -66,7 +67,8 @@ this.ref = createFormRef()
     name="required"
     validates="not required"
     initialValue="not required"
-    trigger="not required"
+    trigger="表示触发数据改变的时机"
+    validateTrigger="表示触发validate的时机"
     valuePropName="not required"
   >
     <WrappedElement />
