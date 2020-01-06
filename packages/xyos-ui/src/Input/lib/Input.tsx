@@ -80,23 +80,12 @@ export interface InputState {
 }
 
 class Input extends React.Component<InputProps, InputState> {
-  // static Group: typeof Group;
-
-  // static Search: typeof Search;
-
-  // static TextArea: typeof TextArea;
-
-  // static Password: typeof Password;
-
   static defaultProps = {
     type: 'text'
   }
 
   static propTypes = {
-    type: PropTypes.string,
-    id: PropTypes.string,
     size: PropTypes.oneOf(InputSizes),
-    maxLength: PropTypes.number,
     disabled: PropTypes.bool,
     value: PropTypes.any,
     defaultValue: PropTypes.any,
@@ -106,7 +95,6 @@ class Input extends React.Component<InputProps, InputState> {
     prefixCls: PropTypes.string,
     onPressEnter: PropTypes.func,
     onKeyDown: PropTypes.func,
-    onKeyUp: PropTypes.func,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
     prefix: PropTypes.node,
@@ -138,17 +126,6 @@ class Input extends React.Component<InputProps, InputState> {
   // Since polyfill `getSnapshotBeforeUpdate` need work with `componentDidUpdate`.
   // We keep an empty function here.
   componentDidUpdate () {}
-
-  getSnapshotBeforeUpdate (prevProps: InputProps) {
-    if (hasPrefixSuffix(prevProps) !== hasPrefixSuffix(this.props)) {
-      // warning(
-      //   this.input !== document.activeElement,
-      //   'Input',
-      //   `When Input is focused, dynamic add or remove prefix / suffix will make it lose focus caused by dom structure change. Read more: https://ant.design/components/input/#FAQ`,
-      // );
-    }
-    return null
-  }
 
   focus () {
     this.input.focus()
@@ -208,6 +185,7 @@ class Input extends React.Component<InputProps, InputState> {
         {...otherProps}
         onChange={this.handleChange}
         onKeyDown={this.handleKeyDown}
+        onBlur={this.handleBlur}
         className={classNames(getInputClassName(prefixCls, size, disabled), {
           [className!]: className && !addonBefore && !addonAfter
         })}
@@ -251,6 +229,15 @@ class Input extends React.Component<InputProps, InputState> {
   ) => {
     this.setValue(e.target.value)
     resolveOnChange(this.input, e, this.props.onChange)
+  }
+
+  handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { onBlur } = this.props
+    if (onBlur) {
+      onBlur(e)
+    }
   }
 
   handleKeyDown = (
