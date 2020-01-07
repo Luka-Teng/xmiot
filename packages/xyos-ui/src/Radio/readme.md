@@ -12,6 +12,9 @@
 | className| 用于类名扩展 |
 | options | 配置子元素 |
 | value  | 设置当前选中的值|
+|size| 'large' | 'default' | 'small' |
+|options| 配置 array |
+
 
 ----
 
@@ -20,25 +23,29 @@
 |props| description       |
 |:----|:------------------|
 | checked  | 默认选中 |
+|defaultChecked | 初始是否选中 |
 |onChange | 触发多选的状态，可直接获取到 checkedValues 是选中之后的value 数组|
 |disabled| 不可用的勾选 （boolean）|
 |className| 用于类名扩展定义业务样式|
-| value  | 设置当前选中的值|
+| value  | 根据 value 进行比较，判断是否选中 |
+| onClick| 点击事件 |
+| onChange| change事件 |
+
 
 ```
 
-  handleChange = (checkValue: any) => {
-    console.log('value-', checkValue)
-    this.setState({
-      selectedValue: checkValue
-    });
-  }
+ 	handleChange = (e: any) => {
+		console.log(`selected ${e.target.value}`);
+		this.setState({
+			selectedValue: e.target.value
+		});
+	}
 
-<RadioGroup name="platform" defaultValue={this.state.selectedValue} onChange={this.handleChange}>
-    <Radio value="PC" disabled={true}>选项一</Radio>
-    <Radio value="APP">选项二</Radio>
-    <Radio value="WAP">选项三</Radio>
-</RadioGroup>
+		<Radio.Group name="lei" value={this.state.selectedValue} onChange={this.handleChange}>
+      <Radio value="111">选项一</Radio>
+      <Radio value="222">选项二</Radio>
+      <Radio value="333">选项三</Radio>
+    </Radio.Group>
 
 
 // 添加参数radiobutton 使用 button 样式展示
