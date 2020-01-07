@@ -87,6 +87,7 @@
     "minimatch": "^3.0.4",
     "ora": "^3.0.0",
     "postcss": "^7.0.21",
+    "postcss-base64": "^0.7.1",
     "prettier": "1.14.3",
     "react-dom": "^16.7.0",
     "rollup": "^1.26.3",

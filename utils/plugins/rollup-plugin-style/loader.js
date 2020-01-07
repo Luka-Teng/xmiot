@@ -1,5 +1,8 @@
 const postcss = require('postcss')
 const chalk = require('chalk')
+const path = require('path')
+const base64 = require('postcss-base64')
+const cssnano = require('cssnano')
 const lessLoader = require('./lessLoader')
 const { series } = require('./utils')
 
@@ -37,7 +40,7 @@ module.exports = {
     const poscssPlugins = [
       ...plugins,
       /* 默认对css进行压缩，和注释去除 */
-      require('cssnano')({
+      cssnano({
         preset: [
           'default',
           {
@@ -46,6 +49,11 @@ module.exports = {
             }
           }
         ]
+      }),
+      /* 图片默认用base64 */
+      base64({
+        extensions: ['png', 'gif', 'jpg'],
+        root: path.dirname(id)
       })
     ]
 
