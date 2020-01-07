@@ -1,1 +1,3 @@
-export { default as Icon } from './lib/Icon'
+import Icon from './lib/Icon'
+
+export default Icon

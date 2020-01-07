@@ -20,9 +20,13 @@
       { label: 'Orange', value: 'Orange', disabled: true },
     ];
 
-  onChange = (checkedValues: any) => {
-    console.log('checkedValues', checkedValues)  // 结果 ['Apple','Pear']
-  }
+	onChange = (e: any,) => {
+		console.log('checkedValues', e)
+
+		this.setState({
+			checkboxValue: e.target.value
+		});
+	}
 
   
   <CheckboxGroup options={options} defaultValue={['Apple']} onChange={this.onChange}/>

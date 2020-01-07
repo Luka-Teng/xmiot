@@ -22,12 +22,6 @@ class Checkbox extends React.Component<CheckboxProps> {
 
   static contextType = ThemeContext
 
-  // public readonly state = {
-  //   checked: false,
-  // }
-
-  // public checked = 'checked' in this.props ? this.props.checked : this.props.defaultChecked;
-
   private rcCheckbox: any;
 
   componentDidMount() {

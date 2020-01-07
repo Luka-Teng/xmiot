@@ -99,7 +99,11 @@ const extraOptions = format => ({
       {
         test: /src\/Input/,
         filename: 'Input/index.css'
-      }
+      },
+      {
+        test: /src\/Icon/,
+        filename: 'Icon/index.css'
+      },
     ]
   },
   copyOptions: declares.map(declare => ({

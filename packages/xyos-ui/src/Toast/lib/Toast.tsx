@@ -1,7 +1,7 @@
 import React from 'react'
 import Notification from 'rc-notification'
 import classNames from 'classnames'
-import { Icon } from '../../Icon/index'
+import Icon from '../../Icon/index'
 import './toast.less'
 
 type NoticeType = 'info' | 'success' | 'error' | 'warning' | 'loading'
@@ -195,7 +195,6 @@ const api: any = {
     })
   }
 }
-
 ;['success', 'info', 'warning', 'error'].forEach(type => {
   api[type] = (args: ArgsProps) =>
     api.open({

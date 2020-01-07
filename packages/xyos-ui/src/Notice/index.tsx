@@ -1,1 +1,3 @@
-export { default as Notice } from './lib/Notice'
+import Notice from './lib/Notice'
+
+export default Notice

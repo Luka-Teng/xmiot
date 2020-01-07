@@ -39,7 +39,7 @@ export interface IconProps {
 
 }
 
-export type ThemeType = 'filled' | 'outlined' | 'twoTone';
+export type ThemeType = 'filled' | 'outlined' | 'twoTone' | null;
 
 export interface IconComponent<P> extends React.SFC<P> {
   createFromIconfontCN: typeof createFromIconfontCN;

@@ -15,9 +15,18 @@
   &-content {
     border: 1px solid @borderColor;
     padding: 6px 10px;
+    position: relative;
+  }
 
-    &-small {
-      // padding: 6px 10px;
+  // 没有一级标题 title
+  &-content-notitle{
+    .xyos-notice-message {
+      font-size: 14px;
+      line-height: 20px;
+      color: @textColor;
+      text-align: left;
+      display: inline-block;
+      margin-left: 20px;
     }
   }
 
@@ -47,25 +56,24 @@
 
   &-icon {
     position: absolute;
+    top: 8px;
   }
 
   &-title {
-    display: inline-block;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     color: @mainFontColor;
     font-weight: 500;
     font-size: 16px;
     line-height: 24px;
-    margin-left: 27px;
+    margin-left: 36px;
   }
 
   &-message {
     font-size: 14px;
+    line-height: 20px;
     color: @textColor;
     text-align: left;
     display: inline-block;
-    margin-left: 27px;
+    margin-left: 36px;
   }
-
-
 }
