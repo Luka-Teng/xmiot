@@ -1,2 +1,2 @@
-export { default as Input } from './lib/Input'
+import Input from './lib/Input'
 export default Input
