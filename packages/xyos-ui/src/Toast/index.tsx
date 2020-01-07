@@ -1,2 +1,3 @@
+import Toast from './lib/Toast'
 
-export { default as Toast } from './lib/Toast'
+export default Toast

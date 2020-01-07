@@ -2,6 +2,7 @@ import React from 'react'
 import Notification from 'rc-notification'
 import classNames from 'classnames'
 import Icon from '../../Icon/index'
+import '../../Icon/lib/icon.less'
 import './toast.less'
 
 type NoticeType = 'info' | 'success' | 'error' | 'warning' | 'loading'

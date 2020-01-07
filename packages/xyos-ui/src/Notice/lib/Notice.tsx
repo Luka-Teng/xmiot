@@ -8,7 +8,6 @@ interface NoticeProps{
   message:string
   type:string
   title?:string
-
 }
 const prefixCls='xyos-notice'
 
