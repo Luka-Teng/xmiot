@@ -67,6 +67,7 @@ function getOptions (format) {
 const extraOptions = format => ({
   buildPaths: [path.resolve(__dirname, 'entry', format)],
   styleOptions: {
+    autoUse: true,
     extract: [
       {
         test: /src\/Animate/,
