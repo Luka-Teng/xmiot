@@ -63,7 +63,7 @@ module.exports = (options = {}, extraOptions = {}) => {
       fileAsBlob({
         include: ['**/**.{png,gif,jpg}']
       }),
-      // terser(),
+      terser(),
       clear({
         // required, point out which directories should be clear.
         targets: buildPaths,
@@ -71,9 +71,10 @@ module.exports = (options = {}, extraOptions = {}) => {
         watch: true // default: false
       }),
       styleOptions && style(styleOptions),
-      copyOptions && copy({
-        targets: copyOptions
-      })
+      copyOptions &&
+        copy({
+          targets: copyOptions
+        })
     ].filter(Boolean)
   }
 
