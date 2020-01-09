@@ -109,15 +109,19 @@ module.exports = ({ extract, plugins = [], autoUse = false } = {}) => {
       }
 
       /**
-       * 这边和业务强耦合，后期需要做额外思考
-       * 将每一个entryChunk都加上 `import './index.css'`
+       * todo
+       * 这边和业务强耦合，后期需要做额外思考，一定要改、、、
+       * 将每一个配置过extractentryChunk都加上 `import './index.css'`
        * 通过这种暴力的方式引入打包出来的样式
        */
       if (autoUse) {
+        const isExtract = path => {
+          return extract.some(e => e.test.test(path))
+        }
         const format = options.format
         Object.keys(bundle).forEach(chunkName => {
           const chunk = bundle[chunkName]
-          if (chunk.isEntry) {
+          if (chunk.isEntry && isExtract(chunk.facadeModuleId)) {
             chunk.code =
               (format === 'es'
                 ? `import './index.css' \n`
