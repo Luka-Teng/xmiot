@@ -121,6 +121,14 @@ module.exports = ({ extract, plugins = [], autoUse = false } = {}) => {
         const format = options.format
         Object.keys(bundle).forEach(chunkName => {
           const chunk = bundle[chunkName]
+          /* 自引用common */
+          if (extractedStyles[extractedStylesKey] !== undefined) {
+            chunk.code =
+              (format === 'es'
+                ? `import '../common.css' \n`
+                : `require('../common.css') \n`) + chunk.code
+          }
+          /* 自引用内部模块chunk */
           if (chunk.isEntry && isExtract(chunk.facadeModuleId)) {
             chunk.code =
               (format === 'es'
