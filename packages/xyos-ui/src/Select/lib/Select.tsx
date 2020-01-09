@@ -6,6 +6,7 @@ import RcSelect, {
   SelectProps
 } from 'rc-select'
 import { OptionData } from 'rc-select/lib/interface/index'
+import Icon from '../../Icon/index'
 import './select.less'
 
 type X = Pick<SelectProps, Exclude<keyof SelectProps, 'onChange'>>
@@ -19,6 +20,7 @@ interface OptionProps extends OptionData {
 interface Props extends X {
   size?: string
   optionLabelProp?: string
+  mode?: 'multiple' | 'tags';
   onChange?: (e: Event) => void
 }
 
@@ -36,11 +38,6 @@ class Select extends React.Component<Props> {
   static OptGroup = (OptionGroup as {}) as React.FC<OptGroupProps>
 
   private rcSelect: any
-
-  isCombobox = () => {
-    const { mode } = this.props
-    return mode === 'combobox'
-  }
 
   saveSelect = (node: any) => {
     this.rcSelect = node
@@ -86,7 +83,7 @@ class Select extends React.Component<Props> {
               `${prefixCls}-remove-icon`
             )
           })
-        : removeIcon)) || <span className={`${prefixCls}-remove-icon`} />
+        : removeIcon)) || <Icon className={`${prefixCls}-remove-icon`} type='clear'/>
 
     const finalClearIcon = (clearIcon &&
       (React.isValidElement<{ className?: string }>(clearIcon)
@@ -96,21 +93,15 @@ class Select extends React.Component<Props> {
               `${prefixCls}-clear-icon`
             )
           })
-        : clearIcon)) || <span className={`${prefixCls}-clear-icon`}>ii</span>
+        : clearIcon)) || <Icon className={`${prefixCls}-clear-icon`} type='clear'/>
 
     const modeConfig = {
       multiple: this.props.mode === 'multiple',
       tags: this.props.mode === 'tags',
-      combobox: this.isCombobox()
     }
 
     let { optionLabelProp } = this.props
     const { ...rest } = this.props
-
-    if (this.isCombobox()) {
-      // children 带 dom 结构时，无法填入输入框
-      optionLabelProp = optionLabelProp || 'value'
-    }
 
     const restChange = (value: any) => {
       if (onChange) {

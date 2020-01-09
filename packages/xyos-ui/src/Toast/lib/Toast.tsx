@@ -8,6 +8,7 @@ import './toast.less'
 type NoticeType = 'info' | 'success' | 'error' | 'warning' | 'loading'
 type ConfigContent = React.ReactNode | string
 type ConfigDuration = number | (() => void)
+export type NotificationPlacement = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | "topCenter";
 
 export type ConfigOnClose = () => void
 
@@ -15,24 +16,22 @@ export interface ThenableArgument {
   (_: any): any
 }
 
-interface MessageApi {
-  (content: ConfigContent): MessageType
-  (content: ConfigContent, duration: number): MessageType
-  (content: ConfigContent, duration: number, onClose: () => void): MessageType
-  (content: ConfigContent, onClose: () => void): MessageType
-}
-
 /** 实例 */
 // let notifier: MessageNotify = null
 // let messageInstance: any;
 let defaultDuration = 3
-let defaultTop: number | null
-let messageInstance: any
+let defaultTop = 24;
+let defaultBottom = 24;
+let messageInstance: any;
+let defaultGetContainer: () => HTMLElement;
 
 let key: number = 0
 let transitionName = 'move-up'
 let getContainer: () => HTMLElement
 let maxCount: number
+let defaultCloseIcon: React.ReactNode;
+let defaultPlacement: NotificationPlacement = 'topRight';
+
 
 const typeIcon = {
   success: 'filled-success',
@@ -42,38 +41,22 @@ const typeIcon = {
   loading: 'loading'
 }
 
-type NotificationInstanceProps = {
-  prefixCls: string
-  // placement?: NotificationPlacement;
-  // getContainer?: () => HTMLElement;
-  // top?: number;
-  // bottom?: number;
-  // closeIcon?: React.ReactNode;
+export interface ConfigProps {
+  top?: number;
+  bottom?: number;
+  duration?: number;
+  placement?: NotificationPlacement;
+  getContainer?: () => HTMLElement;
+  closeIcon?: React.ReactNode;
 }
 
-function getNotifier (
-  { prefixCls: prefixCls }: NotificationInstanceProps,
-  callback: (i: any) => void
-) {
-  if (messageInstance) {
-    callback(messageInstance)
-    return
-  }
-  Notification.newInstance(
-    {
-      prefixCls,
-      transitionName,
-      style: { top: defaultTop }, // 覆盖原来的样式
-      getContainer,
-      maxCount
-    },
-    (instance: any) => {
-      if (!messageInstance) {
-        messageInstance = instance
-      }
-      callback(instance)
-    }
-  )
+type NotificationInstanceProps = {
+  prefixCls: string
+  placement?: NotificationPlacement;
+  getContainer?: () => HTMLElement;
+  top?: number;
+  bottom?: number;
+  closeIcon?: React.ReactNode;
 }
 
 export interface MessageType {
@@ -92,14 +75,137 @@ export interface ArgsProps {
   style?: React.CSSProperties
   className?: string
   onClick?: () => void
+  placement?: NotificationPlacement;
   top?: number
   bottom?: number
   description?: string
   btn?: React.ReactNode
   prefixCls?: string
+  getContainer?: () => HTMLElement;
+  closeIcon?: React.ReactNode;
 }
 
-function notice (args: ArgsProps): MessageType {
+function setNotificationConfig(options: ConfigProps) {
+  const { duration, placement, bottom, top, getContainer, closeIcon } = options;
+  if (duration !== undefined) {
+    defaultDuration = duration;
+  }
+  if (placement !== undefined) {
+    defaultPlacement = placement;
+  }
+  if (bottom !== undefined) {
+    defaultBottom = bottom;
+  }
+  if (top !== undefined) {
+    defaultTop = top;
+  }
+  if (getContainer !== undefined) {
+    defaultGetContainer = getContainer;
+  }
+  if (closeIcon !== undefined) {
+    defaultCloseIcon = closeIcon;
+  }
+}
+
+function getPlacementStyle(
+  placement: NotificationPlacement,
+  top: number = defaultTop,
+  bottom: number = defaultBottom,
+) {
+  let style;
+  console.log(placement, 'placementplacement')
+  switch (placement) {
+    case 'topLeft':
+      style = {
+        left: 0,
+        top,
+        bottom: 'auto',
+      };
+      break;
+    case 'topRight':
+      style = {
+        right: 0,
+        top,
+        bottom: 'auto',
+      };
+      break;
+    case 'bottomLeft':
+      style = {
+        left: 0,
+        top: 'auto',
+        bottom,
+      };
+      break;
+    case 'topCenter':
+      style = {
+        top: 0,
+        margin: '0 auto',
+        left: 0,
+        right: 0,
+        bottom: 'auto',
+      };
+      break;
+    default:
+      style = {
+        right: 0,
+        top: 'auto',
+        bottom,
+      };
+      break;
+  }
+  return style;
+}
+
+function getNotifier(
+  {
+    prefixCls,
+    top,
+    bottom,
+    placement = defaultPlacement,
+    getContainer = defaultGetContainer,
+    closeIcon = defaultCloseIcon,
+  }: NotificationInstanceProps,
+  callback: (i: any) => void
+) {
+  const cacheKey = `${prefixCls}-${placement}`;
+
+  const closeIconToRender = (
+    <span className={`${prefixCls}-close-x`}>
+      {closeIcon || <Icon type='close' className={`${prefixCls}-close-icon`} />}
+    </span>
+  );
+
+  if (messageInstance) {
+
+    if (messageInstance[cacheKey]) {
+      callback(messageInstance[cacheKey]);
+      return;
+    }
+  }
+  Notification.newInstance(
+    {
+      prefixCls,
+      className: `${prefixCls}-${placement}`,
+      transitionName,
+      style: getPlacementStyle(placement, top, bottom),
+      getContainer,
+      maxCount,
+      closeIcon: closeIconToRender,
+    },
+    (instance: any) => {
+
+      if (!messageInstance) {
+        messageInstance = instance
+      }
+      messageInstance[cacheKey] = instance;
+      callback(instance)
+    }
+  )
+}
+
+
+
+function notice(args: ArgsProps): MessageType {
   const outerPrefixCls = args.prefixCls ? args.prefixCls : 'xyos-message'
   const prefixCls = `${outerPrefixCls}`
   const duration = args.duration !== undefined ? args.duration : defaultDuration
@@ -131,13 +237,20 @@ function notice (args: ArgsProps): MessageType {
       return resolve(true)
     }
 
+    const { placement, top, bottom, getContainer, closeIcon } = args;
     getNotifier(
       {
-        prefixCls: outerPrefixCls
+        prefixCls: outerPrefixCls,
+        placement,
+        top,
+        bottom,
+        getContainer,
+        closeIcon
       },
       (instance: any) => {
         instance.notice({
-          key: target,
+          // key: target,
+          key: args.key,
           duration,
           closable: true,
           style: args.style || {},
@@ -183,20 +296,20 @@ function notice (args: ArgsProps): MessageType {
 
 const api: any = {
   open: notice,
-  close (key: string) {
+  close(key: string) {
     Object.keys(messageInstance).forEach(cacheKey =>
       messageInstance[cacheKey].removeNotice(key)
     )
   },
-  // config: setNotificationConfig,
-  destroy () {
+  config: setNotificationConfig,
+  destroy() {
     Object.keys(messageInstance).forEach(cacheKey => {
       messageInstance[cacheKey].destroy()
       delete messageInstance[cacheKey]
     })
   }
-}
-;['success', 'info', 'warning', 'error'].forEach(type => {
+};
+['success', 'info', 'warning', 'error'].forEach(type => {
   api[type] = (args: ArgsProps) =>
     api.open({
       ...args,
@@ -205,15 +318,14 @@ const api: any = {
 })
 
 export interface NotificationApi {
-  success (args: ArgsProps): void
-  error (args: ArgsProps): void
-  info (args: ArgsProps): void
-  warn (args: ArgsProps): void
-  warning (args: ArgsProps): void
-  open (args: ArgsProps): void
-  close (key: string): void
-  // config(options: ConfigProps): void;
-  destroy (): void
+  success(args: ArgsProps): void
+  error(args: ArgsProps): void
+  info(args: ArgsProps): void
+  warning(args: ArgsProps): void
+  open(args: ArgsProps): void
+  close(key: string): void
+  config(options: ConfigProps): void;
+  destroy(): void
 }
 
 export default api as NotificationApi

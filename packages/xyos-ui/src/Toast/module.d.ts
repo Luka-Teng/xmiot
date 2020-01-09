@@ -18,6 +18,8 @@ declare module 'rc-notification' {
         transitionName: string
         maxCount: number
         getContainer: Function
+        className?: string
+        closeIcon?: React.ReactNode
       },
       notification
     ): void

@@ -50,31 +50,43 @@
   margin-right: 24px;
   position: fixed;
   z-index: 1000;
-  width: 100%;
-  top: 0;
-  left: 0;
-  pointer-events: none;
 
   &-notice {
     padding: 8px;
     text-align: center;
-
+    position: relative;
+    margin-bottom: 16px;
+    padding: 16px 24px;
+    overflow: hidden;
+    line-height: 1.5;
+    background: #fff;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  
     &:first-child {
       margin-top: -8px;
+    }
+    &-close{
+      position: absolute;
+      top: 16px;
+      right: 22px;
+      color: rgba(0, 0, 0, 0.45);
+      outline: none;
+      cursor: pointer;
+      .xyos-icon-close{
+        width: 14px;
+        height: 14px;
+        background: url('../../assets/icons/close.png') no-repeat center center;
+        background-size: 100%;
+      }
     }
   }
 
   &-notice-content {
     font-size: 12px;
     line-height: 17px;
-    padding: @message-notice-content-padding;
-    border-radius: @border-radius-base;
-    box-shadow: @shadow-2;
-    background: @component-background;
-    display: inline-block;
-    pointer-events: all;
-    border: 1px solid #eef0f4;
-    color: @mainFontColor;
+    text-align: left;
   }
 
   &-title {
@@ -83,7 +95,8 @@
     color: @mainFontColor;
     font-weight: 500;
     font-size: 16px;
-    line-height: 24px
+    line-height: 24px;
+    text-align: left;
   }
 
   &-description {
@@ -119,73 +132,6 @@
     animation-duration: 0.3s;
   }
 }
-
-// 静态提示语
-.xyos-tips{
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-size: 14px;
-  font-variant: tabular-nums;
-  line-height: 1.5;
-  list-style: none;
-  -webkit-font-feature-settings: 'tnum';
-  font-feature-settings: 'tnum';
-  &-notice-content {
-    font-size: 12px;
-    line-height: 17px;
-   
-    border-radius: @border-radius-base;
-    background: @component-background;
-    pointer-events: all;
-    // border: 1px solid #eef0f4;
-    color: @mainFontColor;
-  }
-
-  &-with-icon {
-    .xyos-tips-title {
-      margin-bottom: 4px;
-      margin-left: 27px;
-      font-size: 16px
-    }
-    .xyos-tips-description {
-      margin-left: 24px;
-    }
-
-    .xyos-icon {
-      position: absolute;
-    }
-  }
-  &-success{
-    padding: 5px 10px;
-    border: 1px solid #50E3C2;
-    background-color: rgba(80, 227, 194,.1);
-    background:rgba(179,242,209,0.1);
-    border:1px solid rgba(179,242,209,1);
-  }
-  &-info{
-    padding: 5px 10px;
-    background:rgba(183,216,255,0.1);
-    border:1px solid #B7D8FF;
-  }
-  &-warning{
-    padding: 5px 10px;
-    background:rgba(255,191,102,0.1);
-    border:1px solid #FFBF66;
-  }
-  &-error{
-    padding: 5px 10px;
-    background:rgba(255,163,158,0.1);
-    border:1px solid #FFA39E;
-  }
-
-  .notice-title();
-  .notice-description()
-
-
-}
-
 
 
 @keyframes MessageMoveOut {

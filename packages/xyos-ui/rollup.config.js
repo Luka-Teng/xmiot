@@ -104,6 +104,10 @@ const extraOptions = format => ({
         test: /src\/Icon/,
         filename: 'Icon/index.css'
       },
+      {
+        test: /src\/Notice/,
+        filename: 'Notice/index.css'
+      },
     ]
   },
   copyOptions: declares.map(declare => ({
