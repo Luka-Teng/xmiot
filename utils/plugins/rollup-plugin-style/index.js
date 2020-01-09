@@ -122,7 +122,7 @@ module.exports = ({ extract, plugins = [], autoUse = false } = {}) => {
         Object.keys(bundle).forEach(chunkName => {
           const chunk = bundle[chunkName]
           /* 自引用common */
-          if (extractedStyles[extractedStylesKey] !== undefined) {
+          if (newAssets['common.css'] !== undefined) {
             chunk.code =
               (format === 'es'
                 ? `import '../common.css' \n`
