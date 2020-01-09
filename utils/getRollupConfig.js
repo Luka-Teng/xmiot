@@ -59,7 +59,6 @@ module.exports = (options = {}, extraOptions = {}) => {
       resolve(),
       commonjs(),
       json(),
-      style(styleOptions),
       // 引入的图片统一用base64输出，后期要做大小限制
       fileAsBlob({
         include: ['**/**.{png,gif,jpg}']
@@ -71,10 +70,12 @@ module.exports = (options = {}, extraOptions = {}) => {
         // optional, whether clear the directores when rollup recompile on --watch mode.
         watch: true // default: false
       }),
-      copy({
-        targets: copyOptions
-      })
-    ].filter(e => e !== '')
+      style(styleOptions),
+      copyOptions &&
+        copy({
+          targets: copyOptions
+        })
+    ].filter(Boolean)
   }
 
   // 深拷贝options，提供各个包自主配置plugin的能力
