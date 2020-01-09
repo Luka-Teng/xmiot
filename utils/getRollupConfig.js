@@ -70,7 +70,7 @@ module.exports = (options = {}, extraOptions = {}) => {
         // optional, whether clear the directores when rollup recompile on --watch mode.
         watch: true // default: false
       }),
-      styleOptions && style(styleOptions),
+      style(styleOptions),
       copyOptions &&
         copy({
           targets: copyOptions
