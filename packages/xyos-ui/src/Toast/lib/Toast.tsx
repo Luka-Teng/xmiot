@@ -65,7 +65,7 @@ export interface MessageType {
 }
 
 export interface ArgsProps {
-  content?: React.ReactNode
+  content?: string | React.ReactNode
   duration?: number | null
   type?: NoticeType
   onClose?: () => void
@@ -77,7 +77,7 @@ export interface ArgsProps {
   placement?: NotificationPlacement;
   top?: number
   bottom?: number
-  description?: string
+  description?: string | React.ReactNode
   btn?: React.ReactNode
   prefixCls?: string
   getContainer?: () => HTMLElement;

@@ -3,12 +3,24 @@ import classnames from 'classnames'
 import loadingGif from './loading.gif'
 
 export const tuple = <T extends string[]>(...args: T) => args;
+export const omit = (
+  source: { [propName: string]: any },
+  target: string[]
+): object => {
+  let tempSource = { ...source }
+  target.map(item => delete tempSource[item])
+  return tempSource
+}
 
 export type ButtonType = 'default' | 'primary' | 'ghost' | 'dashed' | 'danger'
-type ButtonHtmlType = 'submit' | 'button' | 'reset'
+// type ButtonHtmlType = 'submit' | 'button' | 'reset'
 type ButtonSize = 'medium' | 'large' | 'small'
 
-export interface ButtonProps {
+const ButtonHTMLTypes = tuple('submit', 'button', 'reset');
+
+export type ButtonHTMLType = typeof ButtonHTMLTypes[number];
+
+export interface BaseButtonProps {
   type?: ButtonType;
   icon?: string;
   size?: ButtonSize;
@@ -16,17 +28,32 @@ export interface ButtonProps {
   disabled?: boolean
   className?: string;
   block?: boolean;
-  htmlType?: ButtonHtmlType
   children?: React.ReactNode;
-  onClick?: React.MouseEventHandler<HTMLElement>;
-
 }
+
+export type NativeButtonProps = {
+  htmlType?: ButtonHTMLType;
+  onClick?: React.MouseEventHandler<HTMLElement>;
+} & BaseButtonProps &
+  Omit<React.ButtonHTMLAttributes<any>, 'type' | 'onClick'>;
+
+  export type AnchorButtonProps = {
+    href: string;
+    target?: string;
+    onClick?: React.MouseEventHandler<HTMLElement>;
+  } & BaseButtonProps &
+    Omit<React.AnchorHTMLAttributes<any>, 'type' | 'onClick'>;
+
+export type ButtonProps = Partial<AnchorButtonProps & NativeButtonProps>;
+
 
 interface ButtonState {
   loading?: boolean | { delay?: number };
 }
 
 class Button extends React.Component<ButtonProps, ButtonState> {
+
+  static __XYOS_BUTTON = true;
 
   static defaultProps = {
     type: 'default',
@@ -45,15 +72,19 @@ class Button extends React.Component<ButtonProps, ButtonState> {
 
   render() {
     const { children } = this.props
-    const { className, type, htmlType, size, disabled, loading, icon } = this.props
+    const { className, type, size, disabled, loading, icon, ...rest } = this.props
     const _className = classnames(['button', 'button-' + type, 'button-' + size, className], {
       ['button-disabled']: disabled,
       [`button-loading`]: !!loading,
     })
     const iconNode = loading ? 'loading' : icon;
-
+    const { htmlType, ...otherProps } = rest as NativeButtonProps;
     return (
-      <button className={_className} onClick={this.onClick} type={htmlType}>
+      <button 
+      {...(omit(otherProps, ['loading']) as NativeButtonProps)}
+      className={_className} 
+      onClick={this.onClick} 
+      type={htmlType}>
         {
           loading && <img className='action-loading' src={loadingGif} alt="" />
         }
@@ -64,10 +95,14 @@ class Button extends React.Component<ButtonProps, ButtonState> {
 
   private onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { onClick, disabled, loading } = this.props
+    if(loading){
+      return
+    }
+    if(disabled){
+      return
+    }
     if (onClick) {
-      if (!disabled && !loading) {
-        onClick(event)
-      }
+      (onClick as React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>)(event);
     }
   }
 

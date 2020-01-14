@@ -17,11 +17,23 @@
 
 .@{tooltip-prefix-cls} {
   position: absolute;
-  z-index: 11;
+  z-index: 1060;
   max-width: 250px;
   visibility: visible;
+  display: block;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+
+
   &-rtl{
     direction: rtl; 
+  }
+  &-notitle{
+    .@{tooltip-prefix-cls}-inner{
+      padding: 8px 12px;
+    }
   }
 
   &-hidden {
@@ -54,14 +66,12 @@
 
   &-inner {
     min-width: 30px;
-    min-height: 32px;
-    padding: 6px 8px;
-    color: #fff;
+    color: @textColor;
     text-align: left;
     text-decoration: none;
     word-wrap: break-word;
-    background-color: @tooltip-bg;
-    border-radius: 4px;
+    background-color: #fff;
+    border:1px solid rgba(238,240,244,1);
     box-shadow: 0px 0px 5px 0px rgba(204,207,212,0.5);
 
     .@{tooltip-prefix-cls}-rtl & {
@@ -69,12 +79,28 @@
     }
   }
 
+  // popover
+  &-popover-title {
+    min-width: 177px;
+    margin: 0;
+    padding: 5px 16px 4px;
+    color: @mainFontColor;
+    font-weight: 500;
+    font-size: 12px;
+    border-bottom:1px solid @borderColor;
+  }
+  &-popover-inner-content {
+    padding:12px 20px;
+    font-size: 12px;
+    color: @textColor;
+  }
+
   // Arrow
   &-arrow{
     position: absolute;
     display: block;
-    width: 5px;
-    height: 5px;
+    width: 12px;
+    height: 12px;
     overflow: hidden;
     background: transparent;
     pointer-events: none;
@@ -82,13 +108,14 @@
       position: absolute;
       top: 0;
       right: 0;
-      bottom: 0;
+      bottom: 2px;
       left: 0;
       display: block;
-      width: @tooltip-arrow-width;
-      height: @tooltip-arrow-width;
+      width: 12px;
+      height: 12px;
       margin: auto;
-      background-color: @tooltip-bg;
+      background-color: #fff;
+      // border:1px solid rgba(238,240,244,1);
       content: '';
       pointer-events: auto;
     }
@@ -136,10 +163,10 @@
 
 
   &-placement-rightTop &-arrow {
-    top:5px;
+    top:8px;
   }
   &-placement-rightBottom &-arrow {
-    bottom: 5px;
+    bottom: 8px;
   }
 
   &-placement-left &-arrow,
@@ -159,11 +186,11 @@
   }
 
   &-placement-leftTop &-arrow {
-    top: 5px;
+    top: 8px;
   }
 
   &-placement-leftBottom &-arrow {
-    bottom: 5px;
+    bottom: 8px;
   }
  
   &-placement-bottom &-arrow,
