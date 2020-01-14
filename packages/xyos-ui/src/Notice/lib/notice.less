@@ -1,5 +1,7 @@
 @import '../../common.less';
 
+
+
 .xyos-notice {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -11,6 +13,11 @@
   list-style: none;
   -webkit-font-feature-settings: 'tnum';
   font-feature-settings: 'tnum';
+  position: relative;
+  max-height: 68px;
+  -webkit-transition: all .5s cubic-bezier(0, 1, 0.5, 1);
+  transition: all .5s cubic-bezier(0, 1, 0.5, 1);
+
 
   &-content {
     border: 1px solid @borderColor;
@@ -58,6 +65,12 @@
     position: absolute;
     top: 8px;
   }
+  &-icon-close{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+  }
 
   &-title {
     margin-bottom: 4px;
@@ -76,4 +89,16 @@
     display: inline-block;
     margin-left: 36px;
   }
+}
+
+.xyos-notice.xyos-notice-leave{
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  background-color: #dedede;
+  -moz-transition:  max-height .25s ease;
+  -webkit-transition: max-height .25s ease;
+  -o-transition: max-height .25s ease;
+  transition: max-height .25s ease;
+  transition: max-height 1s;
 }

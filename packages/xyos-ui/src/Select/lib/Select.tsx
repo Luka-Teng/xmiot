@@ -28,29 +28,55 @@ export interface OptGroupProps {
   label?: React.ReactNode
 }
 
+export interface SelectState {
+  values: any
+}
+
 const Option = (RcOption as {}) as React.FC<OptionProps>
 
 const OptionGroup = (RcOptionGroup as {}) as React.FC<OptGroupProps>
 
-class Select extends React.Component<Props> {
+class Select extends React.Component<Props, SelectState> {
   static Option = (Option as {}) as React.FC<OptionProps>
 
   static OptGroup = (OptionGroup as {}) as React.FC<OptGroupProps>
 
   private rcSelect: any
 
+  constructor(props:Props){
+    super(props);
+    const values =
+    typeof this.props.value === 'undefined' && ('value' in this.props) ? ['']: typeof this.props.value === 'undefined' && !('value' in this.props) ? this.props.defaultValue  : this.props.value
+    this.state = {
+      values
+    }
+  }
+
+ componentWillReceiveProps(nextProps:Props){
+   if(('value' in nextProps)&& typeof nextProps.value === 'undefined'){
+     this.setState({
+       values:['']
+     })
+   }
+   return null
+ }
+
   saveSelect = (node: any) => {
     this.rcSelect = node
   }
-  focus () {
+  focus() {
     this.rcSelect.focus()
   }
 
-  blur () {
+  blur() {
     this.rcSelect.blur()
   }
 
-  render () {
+  setValue (value: any,) {
+    this.setState({ values:value })
+  }
+
+  render() {
     const {
       prefixCls: customizePrefixCls,
       className = '',
@@ -61,6 +87,8 @@ class Select extends React.Component<Props> {
       menuItemSelectedIcon,
       showArrow,
       onChange,
+      errors,
+      value,
       ...restProps
     } = this.props
 
@@ -70,7 +98,8 @@ class Select extends React.Component<Props> {
         [`${prefixCls}-lg`]: size === 'large',
         [`${prefixCls}-sm`]: size === 'small',
         [`${prefixCls}-mid`]: size === 'mid',
-        [`${prefixCls}-show-arrow`]: showArrow
+        [`${prefixCls}-show-arrow`]: showArrow,
+        [`${prefixCls}-error`]: errors && errors.length 
       },
       className
     )
@@ -78,32 +107,34 @@ class Select extends React.Component<Props> {
     const finalRemoveIcon = (removeIcon &&
       (React.isValidElement<{ className?: string }>(removeIcon)
         ? React.cloneElement(removeIcon, {
-            className: classNames(
-              removeIcon.props.className,
-              `${prefixCls}-remove-icon`
-            )
-          })
-        : removeIcon)) || <Icon className={`${prefixCls}-remove-icon`} type='clear'/>
+          className: classNames(
+            removeIcon.props.className,
+            `${prefixCls}-remove-icon`
+          )
+        })
+        : removeIcon)) || <Icon className={`${prefixCls}-remove-icon`} type='clear' />
 
     const finalClearIcon = (clearIcon &&
       (React.isValidElement<{ className?: string }>(clearIcon)
         ? React.cloneElement(clearIcon, {
-            className: classNames(
-              clearIcon.props.className,
-              `${prefixCls}-clear-icon`
-            )
-          })
-        : clearIcon)) || <Icon className={`${prefixCls}-clear-icon`} type='clear'/>
+          className: classNames(
+            clearIcon.props.className,
+            `${prefixCls}-clear-icon`
+          )
+        })
+        : clearIcon)) || <Icon className={`${prefixCls}-clear-icon`} type='clear' />
 
     const modeConfig = {
-      multiple: this.props.mode === 'multiple',
-      tags: this.props.mode === 'tags',
+      multiple: this.props.mode === 'multiple' ? 'multiple' : null,
+      tags: this.props.mode === 'tags' ? 'tags' : null,
     }
+
 
     let { optionLabelProp } = this.props
     const { ...rest } = this.props
 
     const restChange = (value: any) => {
+     this.setValue(value)
       if (onChange) {
         onChange({
           target: {
@@ -112,8 +143,9 @@ class Select extends React.Component<Props> {
         } as any)
       }
     }
+    const { values } = this.state
 
-    return (
+    return (    
       <RcSelect
         dropdownClassName={
           this.props.mode === 'tags' || this.props.mode === 'multiple'
@@ -123,6 +155,7 @@ class Select extends React.Component<Props> {
         showArrow={showArrow}
         clearIcon={finalClearIcon}
         removeIcon={finalRemoveIcon}
+        value={values}
         {...restProps}
         onChange={restChange}
         {...modeConfig}
@@ -130,7 +163,7 @@ class Select extends React.Component<Props> {
         className={cls}
         optionLabelProp={optionLabelProp || 'children'}
         ref={this.saveSelect}
-      />
+      />  
     )
   }
 }

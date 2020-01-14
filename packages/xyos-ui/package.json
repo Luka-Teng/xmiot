@@ -27,6 +27,7 @@
     "rc-checkbox": "^2.1.8",
     "rc-notification": "^3.3.1",
     "rc-select": "^10.0.0-alpha.28",
+    "rc-tooltip": "^4.0.0-alpha.3",
     "rc-upload": "^2.9.4",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
