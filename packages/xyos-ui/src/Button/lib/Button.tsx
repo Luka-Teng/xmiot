@@ -13,7 +13,7 @@ export const omit = (
 }
 
 export type ButtonType = 'default' | 'primary' | 'ghost' | 'dashed' | 'danger'
-// type ButtonHtmlType = 'submit' | 'button' | 'reset'
+
 type ButtonSize = 'medium' | 'large' | 'small'
 
 const ButtonHTMLTypes = tuple('submit', 'button', 'reset');
@@ -27,7 +27,7 @@ export interface BaseButtonProps {
   loading?: boolean | { delay?: number };
   disabled?: boolean
   className?: string;
-  block?: boolean;
+  ghost?: boolean;
   children?: React.ReactNode;
 }
 
@@ -59,7 +59,6 @@ class Button extends React.Component<ButtonProps, ButtonState> {
     type: 'default',
     loading: false,
     ghost: false,
-    block: false,
     htmlType: 'button',
   };
 
@@ -72,10 +71,11 @@ class Button extends React.Component<ButtonProps, ButtonState> {
 
   render() {
     const { children } = this.props
-    const { className, type, size, disabled, loading, icon, ...rest } = this.props
+    const { className, type, size, disabled, loading, icon, ghost, ...rest } = this.props
     const _className = classnames(['button', 'button-' + type, 'button-' + size, className], {
       ['button-disabled']: disabled,
       [`button-loading`]: !!loading,
+      [`button-background-ghost`]: ghost,
     })
     const iconNode = loading ? 'loading' : icon;
     const { htmlType, ...otherProps } = rest as NativeButtonProps;

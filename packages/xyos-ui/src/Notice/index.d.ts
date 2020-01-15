@@ -8,6 +8,7 @@ export interface NoticeProps{
   message:string
   type:Type
   title?:string
+  closable?:boolean
 }
 
 

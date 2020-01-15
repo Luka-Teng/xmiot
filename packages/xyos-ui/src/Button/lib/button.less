@@ -107,6 +107,39 @@
     }
   }
 
+  // button ghost
+  &.button-background-ghost{
+    color: #fff;
+    background: transparent !important;
+    border-color: #fff;
+    span{
+      color: #fff;
+    }
+  }
+  &.button-background-ghost.button-primary{
+    color: @activeColor;
+    background-color: transparent;
+    border-color: @activeColor;
+    text-shadow: none;
+    span{
+      color: @activeColor
+    }
+  }
+  &.button-background-ghost.button-danger{
+    border-color: @dangerColor;
+    span{
+      color: @dangerColor;
+    }
+  }
+
+  &.button-background-ghost.button-danger{
+    span{
+      color: #fff;
+    }
+    border-color: #fff;
+
+  }
+
   .action-loading {
     display: inline-block;
     width: 20px;
