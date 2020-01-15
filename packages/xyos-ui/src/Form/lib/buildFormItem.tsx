@@ -89,32 +89,35 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
         this.props.name
       )
       const value = this.context.getFieldValue(this.props.name)
-      const validateTrigger = this.props.validateTrigger || 'onChange'
+      const validateTrigger = this.props.validateTrigger
 
       if (React.isValidElement(children)) {
-        return React.cloneElement(children, {
-          ...(validateTrigger === trigger
-            ? {
-                [trigger]: (e: CompositeSyntheticEvent) => {
-                  children.props[trigger] && children.props[trigger](e)
-                  this.onChange(e)
-                  this.context.validateField(this.props.name)
-                }
-              }
-            : {
-                [trigger]: (e: CompositeSyntheticEvent) => {
-                  children.props[trigger] && children.props[trigger](e)
-                  this.onChange(e)
-                },
-                [validateTrigger]: (e: CompositeSyntheticEvent) => {
-                  children.props[validateTrigger] &&
-                    children.props[validateTrigger](e)
-                  this.context.validateField(this.props.name)
-                }
-              }),
+        const props = {
           [valuePropName]: value,
           errors: errors
-        })
+        }
+
+        if (validateTrigger === trigger) {
+          props[trigger] = (e: CompositeSyntheticEvent) => {
+            children.props[trigger] && children.props[trigger](e)
+            this.onChange(e)
+            this.context.validateField(this.props.name)
+          }
+        } else {
+          props[trigger] = (e: CompositeSyntheticEvent) => {
+            children.props[trigger] && children.props[trigger](e)
+            this.onChange(e)
+          }
+          if (validateTrigger) {
+            props[validateTrigger] = (e: CompositeSyntheticEvent) => {
+              children.props[validateTrigger] &&
+                children.props[validateTrigger](e)
+              this.context.validateField(this.props.name)
+            }
+          }
+        }
+
+        return React.cloneElement(children, props)
       }
 
       return children
