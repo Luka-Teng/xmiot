@@ -15,6 +15,7 @@ export interface ButtonProps {
   htmlType?: ButtonHtmlType
   children?: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLElement>;
+  ghost?:boolean
 }
 
 
