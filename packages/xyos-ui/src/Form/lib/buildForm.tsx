@@ -8,7 +8,7 @@ type FormFuncs = {
     name: string,
     options: Pick<Field<string>, 'value'> &
       Partial<
-        Pick<Field<string>, 'validates' | 'ref' | 'valuePropName' | 'trigger'>
+        Pick<Field<string>, 'validates' | 'ref' >
       >
   ) => void
   removeField: (name: string) => void
@@ -46,11 +46,11 @@ export type ExportedFunc = Pick<
   | 'addField'
   | 'removeField'
   | 'getFieldValue'
-  | 'getCriticalProps'
   | 'setFieldValue'
   | 'setFieldValueWithDirty'
   | 'setFieldValidates'
   | 'validateField'
+  | 'getFieldErrors'
 >
 
 const buildForm = (Provider: React.Provider<ExportedFunc>) => {
@@ -90,15 +90,6 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
 
     getFieldErrors: FormFuncs['getFieldErrors'] = name => {
       return this.fieldStore.getFieldErrors(name)
-    }
-
-    getCriticalProps: FormFuncs['getCriticalProps'] = (name: string) => {
-      const field = this.fieldStore.getField(name)
-      return {
-        trigger: field ? field.trigger : 'onChange',
-        valuePropName: field ? field.valuePropName : 'value',
-        errors: field ? field.errors : []
-      }
     }
 
     setFieldValue: FormFuncs['setFieldValue'] = (name, value) => {
@@ -235,8 +226,8 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
             setFieldValueWithDirty: this.setFieldValueWithDirty,
             setFieldValidates: this.setFieldValidates,
             getFieldValue: this.getFieldValue,
-            getCriticalProps: this.getCriticalProps,
-            validateField: this.validateField
+            validateField: this.validateField,
+            getFieldErrors: this.getFieldErrors
           }}
         >
           <div>{children}</div>

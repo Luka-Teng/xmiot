@@ -5,8 +5,8 @@ import { is, params } from './utils'
 export type Field<T extends string = string> = {
   name: T
   dirty: boolean
-  trigger: string
-  valuePropName: string
+  // trigger: string
+  // valuePropName: string
   validates: RuleItem[]
   value: any
   errors: string[]
@@ -44,8 +44,8 @@ class FieldStore {
       this.fields[name] = {
         name,
         dirty: options.dirty || false,
-        trigger: options.trigger || 'onChange',
-        valuePropName: options.valuePropName || 'value',
+        // trigger: options.trigger || 'onChange',
+        // valuePropName: options.valuePropName || 'value',
         validates: options.validates || [],
         value: options.value || '',
         errors: options.errors || [],

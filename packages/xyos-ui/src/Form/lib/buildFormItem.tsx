@@ -8,10 +8,6 @@ type CompositeSyntheticEvent = React.SyntheticEvent & {
   }
 }
 
-/**
- * TODO
- * valuePropName， trigger，validateTrigger这三个属性可以从fieldStore数据中剥离
- */
 type Props = {
   name: string
   initialValue?: any
@@ -20,7 +16,7 @@ type Props = {
   trigger?: string
   validateTrigger?: string
   errorComponent?: React.ComponentClass<any, any> | React.FunctionComponent<any>
-} & Partial<JSX.IntrinsicElements['div']>
+}
 
 const buildFormItem = (context: React.Context<ExportedFunc>) => {
   return class FormItem extends React.Component<Props> {
@@ -42,6 +38,7 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
     }
 
     /**
+     * 用于管理fieldStore相关属性的创建和更新
      * react在render中抛出错误，会再实例化一遍Component，并render
      * 导致render方法会在不同实例内render两次、、、
      */
@@ -50,11 +47,11 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
         throw new Error('FormItem should be inside the Form Component')
       }
 
-      if (props.children instanceof Array) {
+      if (this.props.children instanceof Array) {
         throw new Error('FormItem的只能存在一个子元素')
       }
 
-      const { name, initialValue, validates, valuePropName, trigger } = props
+      const { name, initialValue, validates } = props
 
       /**
        * 这边只需要对name做diff，直接赋值效率更高
@@ -67,9 +64,7 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
         this.context.addField(name, {
           value: initialValue,
           validates,
-          ref: this,
-          valuePropName,
-          trigger
+          ref: this
         })
       } else {
         /**
@@ -84,12 +79,17 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
       this.prevProps = props
     }
 
+    /**
+     * 将事件绑定在子组件
+     */
     buildChildren = (children: React.ReactNode) => {
-      const { valuePropName, trigger, errors } = this.context.getCriticalProps(
-        this.props.name
-      )
+      const errors = this.context.getFieldErrors(this.props.name)
       const value = this.context.getFieldValue(this.props.name)
-      const validateTrigger = this.props.validateTrigger
+      const {
+        validateTrigger,
+        valuePropName = 'value',
+        trigger = 'onChange'
+      } = this.props
 
       if (React.isValidElement(children)) {
         const props = {
@@ -129,23 +129,18 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
         name,
         initialValue,
         validates,
-        valuePropName,
-        trigger,
-        errorComponent: ErrorComponent,
-        ...rest
+        errorComponent: ErrorComponent
       } = this.props
       this.manageProps({
         name,
         initialValue,
-        validates,
-        valuePropName,
-        trigger
+        validates
       })
-      let builtChildren = this.buildChildren(children)
-      const { errors } = this.context.getCriticalProps(name)
+      const builtChildren = this.buildChildren(children)
+      const errors = this.context.getFieldErrors(name)
 
       return (
-        <div {...rest}>
+        <div>
           {builtChildren}
           {ErrorComponent ? <ErrorComponent errors={errors} /> : null}
         </div>
