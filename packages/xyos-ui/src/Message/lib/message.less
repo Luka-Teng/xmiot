@@ -1,0 +1,123 @@
+@import '../../common.less';
+
+.xyos-message-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, .47);
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  align-items: center;
+
+  .xyos-messageBox {
+    position: relative;
+    width: 440px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    overflow: hidden;
+    box-shadow: 0px 0px 5px 0px rgba(204, 207, 212, 0.5);
+    border-radius: 2px;
+    padding: 30px 20px 20px 30px;
+
+    &.mid {
+      width: 450px;
+    }
+
+    &.xyos-messageBox-hasHeader {
+      padding: 0;
+      width: 450px;
+
+      // 头部标题
+      .xyos-messageBox-header {
+        position: relative;
+        height: 50px;
+        line-height: 50px;
+        background-color: #F7F9FD;
+        border-bottom: 1px solid #EEF0F4;
+
+        .close {
+          width: 14px;
+          height: 14px;
+          background: url(../../assets/icons/close.png) no-repeat center center;
+          background-size: 100%;
+          position: absolute;
+          top: 18px;
+          right: 20px;
+          cursor: pointer;
+        }
+
+        .left {
+          padding: 15px 20px;
+          color: #999;
+          font-size: 14px;
+          text-align: center;
+        }
+      }
+      .xyos-messageBox-content{
+        .xyos-messageBox-inner-content {
+          text-align: center;
+          padding: 30px;
+          .inner-text {
+            margin-left: 0;
+          }
+        }
+      }
+     
+
+      // 底部btns
+      .btnList {
+        padding: 10px 20px;
+        background-color: #F7F9FD;
+        border-top: 1px solid #EEF0F4;
+        margin-top: 0;
+      }
+
+    }
+
+    .xyos-messageBox-content {
+      .xyos-messageBox-inner-content {
+        .xyos-messageBox-icon {
+          position: absolute;
+        }
+
+        .xyos-messageBox-inner-title {
+          color: @mainFontColor;
+          font-size: 16px;
+          font-weight: 500;
+          line-height: 22px;
+          margin-left: 27px;
+          margin-bottom: 9px;
+        }
+
+        .inner-text {
+          color: @textColor;
+          font-size: 14px;
+          line-height: 22px;
+          margin-left: 27px;
+        }
+      }
+    }
+
+    .btnList {
+      display: flex;
+      margin-top: 30px;
+      justify-content: flex-end;
+
+      .btn-item {
+        height: 34px;
+        line-height: 34px;
+        font-size: 14px;
+        text-align: center;
+        border-radius: 20px;
+        width: 100px;
+        cursor: pointer;
+      }
+    }
+
+
+  }
+}

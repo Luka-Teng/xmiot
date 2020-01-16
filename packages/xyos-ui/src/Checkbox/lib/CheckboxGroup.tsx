@@ -42,6 +42,16 @@ class CheckboxGroup extends React.Component<CheckboxGroupProps, CheckboxGroupSta
     options: [],
   };
 
+  static getDerivedStateFromProps (nextProps: CheckboxGroupProps) {
+    if ('value' in nextProps) {
+      return {
+        value: nextProps.value
+      }
+    }
+    return null
+  }
+
+
   constructor(props: CheckboxGroupProps) {
     super(props);
     this.state = {
@@ -54,6 +64,13 @@ class CheckboxGroup extends React.Component<CheckboxGroupProps, CheckboxGroupSta
   };
 
   ProviderValue() {
+    const { value } = this.state
+    if('value' in this.props){
+      if(!(value instanceof Array)){
+        throw new Error('参数错误')
+      }
+    }
+  
     return {
       checkboxGroup: {
         toggleOption: this.toggleOption,

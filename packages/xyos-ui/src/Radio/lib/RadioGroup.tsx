@@ -77,11 +77,13 @@ function getCheckedValue (children: React.ReactNode) {
   })
   return matched ? { value } : undefined
 }
+
 export interface RadioGroupState {
   value: any
 }
 
 class RadioGroup extends React.Component<RadioGroupProps, RadioGroupState> {
+
   static getDerivedStateFromProps (nextProps: RadioGroupProps) {
     if ('value' in nextProps) {
       return {

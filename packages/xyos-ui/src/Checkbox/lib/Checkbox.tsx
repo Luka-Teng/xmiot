@@ -22,6 +22,8 @@ class Checkbox extends React.Component<CheckboxProps> {
 
   static contextType = ThemeContext
 
+  
+
   private rcCheckbox: any;
 
   componentDidMount() {

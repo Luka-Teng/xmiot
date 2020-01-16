@@ -7,8 +7,11 @@ import RadioGroup from './RadioGroup'
 
 type X = Pick<RcCheckBoxProps, Exclude<keyof RcCheckBoxProps, 'onChange'>>;
 
+export interface RadioState {
+  value: any
+}
 
-class Radio extends React.Component<RadioProps> {
+class Radio extends React.Component<RadioProps, RadioState> {
 
   static Group: typeof RadioGroup;
 
@@ -46,8 +49,7 @@ class Radio extends React.Component<RadioProps> {
           (radioGroup: RadioGroupProps) => {
 
             const prefixCls = 'rc-radio'
-            const { defaultValue, radiobutton, value, } = radioGroup;
-
+            const { defaultValue, radiobutton,  } = radioGroup;
             const renderRadio = () => {
               const { props } = this;
               const { className, children, style, ...restProps } = props;
