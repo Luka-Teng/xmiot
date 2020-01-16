@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "server": "xmiot-server",
+    "server": "xmiot-server package/",
     "xmiot-prettier": "node scripts/xmiot-prettier",
     "bootstrap": "lerna exec npm i",
     "init": "node scripts/init.js",
