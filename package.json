@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "server": "xmiot-server package/",
+    "server": "xmiot-server -b packages",
     "xmiot-prettier": "node scripts/xmiot-prettier",
     "bootstrap": "lerna exec npm i",
     "init": "node scripts/init.js",
@@ -105,13 +105,13 @@
     "ts-jest": "^24.0.0",
     "tslib": "^1.9.3",
     "tslint": "^5.16.0",
-    "typescript": "^3.6.4"
+    "typescript": "^3.6.4",
+    "xmiot-server": "^1.3.8"
   },
   "dependencies": {
     "react": "^16.10.2",
     "rollup-plugin-json": "^4.0.0",
-    "save-dev": "0.0.1-security",
-    "xmiot-server": "^1.2.19"
+    "save-dev": "0.0.1-security"
   },
   "lastCommit": "fd7924b8cc3a19cf89be504dd3967d4df89ac697"
 }
