@@ -34,7 +34,7 @@ ts的overload可以用交叉类型来定义
 |validates|校验|
 |valuePropName|绑定的子元素value名，默认value|
 |trigger|绑定的子元素事件触发名，默认onChange|
-|validateTrigger|绑定的子元素校验触发名，默认onChange|
+|validateTrigger|绑定的子元素校验触发名，默认不触发|
 |errorComponent|展示错误的组件|
 ---
 
