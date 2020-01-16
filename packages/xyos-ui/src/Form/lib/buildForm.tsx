@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import ReactDom from 'react-dom'
 import FieldStore, { Field } from './FieldStore'
 import { isArray } from './utils'
+import wrongPng from '../assets/wrong.png'
 
 type FormFuncs = {
   addField: (
@@ -63,6 +64,7 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
 
     static getDerivedStateFromError (error: any) {
       if (error) {
+        console.error(error)
         return { hasError: true }
       } else {
         return { hasError: false }
@@ -233,9 +235,25 @@ const buildForm = (Provider: React.Provider<ExportedFunc>) => {
           <div>{children}</div>
         </Provider>
       ) : (
-        <div>Something went wrong</div>
+        <div style={styles.wrongDiv}>
+          <img src={wrongPng} alt="wentWrong" />
+          <p style={styles.wrongP}>Something wrong in this Form, please check the error log.</p>
+        </div>
       )
     }
+  }
+}
+
+const styles: ReactStyle = {
+  wrongDiv: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  wrongP: {
+    margin: '10px 0px 0px',
+    color: '#666',
+    fontSize: '15px'
   }
 }
 
