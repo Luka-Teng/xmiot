@@ -7,7 +7,7 @@ import wrongPng from '../assets/wrong.png'
 type FormFuncs = {
   addField: (
     name: string,
-    options: Pick<Field<string>, 'value'> &
+    options: Pick<Field<string>, 'initialValue'> &
       Partial<
         Pick<Field<string>, 'validates' | 'ref' >
       >

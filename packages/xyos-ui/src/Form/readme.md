@@ -49,6 +49,8 @@ FormItem默认是对value分发，对onChange事件进行拦截，所以各自�
 1. 一般情况下WrappedElement需要实现两个对外暴露的属性，value + onChange，value是可以通过外界值，是内部表单组件成为受控组件，onChange是对内部表单组件的事件监听。
 
 2. 如果外界不传props.value，则内部管理自己的状态值，建议以state来管理。如果外界传props.value则将其直接托管于外部
+
+3. 由于每个WrappedElement对于初始value的期待都不同，所以需要特殊初始值的WrappedComponent都需要挂载InitialValue在静态属性上，否则默认值统一为空字符串
 ---
 
 #### 使用方式

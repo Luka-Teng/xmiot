@@ -1,7 +1,6 @@
 import React from 'react'
 import { ExportedFunc } from './buildForm'
 import { Field } from './FieldStore'
-import { initValueConfig } from './config'
 
 type CompositeSyntheticEvent = React.SyntheticEvent & {
   target: {
@@ -64,9 +63,10 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
 
       /* 如果没有设置initialValue, 根据initValueConfig配置进行初始值赋值 */
       if (initialValue === undefined) {
-        const uniqueName = (this.props.children as genObject).type.uniqueName
-        if (uniqueName && initValueConfig[uniqueName]) {
-          initialValue = initValueConfig[uniqueName]
+        const customInitialValue = (this.props.children as genObject).type
+          .InitialValue
+        if (customInitialValue !== undefined) {
+          initialValue = customInitialValue
         }
       }
 
@@ -79,7 +79,7 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
       if (this.prevProps === null || this.prevProps.name !== name) {
         this.prevProps && this.context.removeField(this.prevProps.name)
         this.context.addField(name, {
-          value: initialValue,
+          initialValue,
           validates,
           ref: this
         })
