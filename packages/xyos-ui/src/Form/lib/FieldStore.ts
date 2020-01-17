@@ -40,7 +40,7 @@ class FieldStore {
         ...options
       }
     } else {
-      const initialValue = options.initialValue === undefined ? '' : options.initialValue
+      const initialValue = options.initialValue
       this.fields[name] = {
         name,
         dirty: options.dirty || false,
@@ -48,8 +48,7 @@ class FieldStore {
         errors: options.errors || [],
         ref: options.ref || null,
         /**
-         * initialValue, value在新增field的时候需要对undefined做判断
-         * 只有值为undefined才表示没有设置该属性，需要设置为默认值''
+         * 进过思考，value和initialValue还是直接继承undefined
          */
         initialValue,
         value: initialValue
