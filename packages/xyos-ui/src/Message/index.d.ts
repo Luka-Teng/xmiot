@@ -4,7 +4,7 @@ type messageWidthType = 'normal' | 'mid'
 type messageType = 'error' | 'info' | 'warning'
 
 export interface MessageProps {
-  type?:messageType
+  type?: messageType
   message?: string
   title?: string
   headerAlign?: string,
@@ -18,6 +18,7 @@ export interface MessageProps {
   showClose?: boolean,
   messageWidth?: messageWidthType,
   className?: string
+  headerText?: string
 }
 
 

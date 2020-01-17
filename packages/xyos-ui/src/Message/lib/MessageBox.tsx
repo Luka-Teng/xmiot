@@ -105,8 +105,6 @@ class MessageBox extends React.Component<MessageBoxProps> {
 
     // let messageContent = classnames ({
     //   [`${prefixCls}-inner-content`]:true,
-
-
     // })
 
     let btnList = buttonReverse

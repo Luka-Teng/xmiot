@@ -54,6 +54,27 @@ class Select extends React.Component<Props, SelectState> {
 
   static getDerivedStateFromProps (nextProps: Props) {
     if ('value' in nextProps) {
+      if (!nextProps.value) {
+        return {
+          values: null
+        }
+      }
+      if (nextProps.labelInValue && !nextProps.mode) {
+        return {
+          values: {
+            value: nextProps.value,
+            label: nextProps.value,
+            key: nextProps.value
+          }
+        }
+      }
+
+      if (nextProps.mode && !(nextProps.value instanceof Array)) {
+        return {
+          values: [nextProps.value]
+        }
+      }
+
       return {
         values: nextProps.value
       }
@@ -150,6 +171,8 @@ class Select extends React.Component<Props, SelectState> {
     }
 
     const { values } = this.state
+
+    console.log(values, 'values')
 
     return (
       <RcSelect

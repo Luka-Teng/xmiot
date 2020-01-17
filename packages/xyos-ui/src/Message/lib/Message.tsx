@@ -23,6 +23,7 @@ export interface MessageDataProps {
   showClose?: boolean,
   messageWidth?: messageWidthType,
   className?: string
+  headerText?: string
 }
 
 let div: any
