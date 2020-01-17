@@ -6,6 +6,7 @@ export type Field<T extends string = string> = {
   name: T
   dirty: boolean
   validates: RuleItem[]
+  initialValue: any
   value: any
   errors: string[]
   ref: React.Component | null
@@ -43,9 +44,10 @@ class FieldStore {
         name,
         dirty: options.dirty || false,
         validates: options.validates || [],
-        value: options.value || '',
+        value: options.value || null,
         errors: options.errors || [],
-        ref: options.ref || null
+        ref: options.ref || null,
+        initialValue: options.value || null
       }
       this.updateFieldsKeys()
     }
@@ -73,7 +75,7 @@ class FieldStore {
   resetFieldValue = (name: string, callback?: (field: Field) => void) => {
     if (this.fields[name]) {
       this.fields[name].dirty = false
-      this.fields[name].value = null
+      this.fields[name].value = this.fields[name].initialValue
       this.fields[name].errors = []
       callback && callback(this.fields[name])
     }
@@ -120,6 +122,9 @@ class FieldStore {
     is(checkDirty, ['boolean', 'undefined'], 'checkDirty must be a boolean')
 
     if (checkDirty && this.fields[name]) {
+      /* checkDirty === true means receiving an initialValue */
+      this.fields[name].initialValue = value
+
       this.fields[name].value = this.fields[name].dirty
         ? this.fields[name].value
         : value
