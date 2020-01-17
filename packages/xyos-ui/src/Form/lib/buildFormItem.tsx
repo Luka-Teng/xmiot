@@ -1,6 +1,7 @@
 import React from 'react'
 import { ExportedFunc } from './buildForm'
 import { Field } from './FieldStore'
+import { initValueConfig } from './config'
 
 type CompositeSyntheticEvent = React.SyntheticEvent & {
   target: {
@@ -28,7 +29,7 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
     context: ExportedFunc = null as any
 
     componentWillUnmount () {
-      // 删除field
+      // 删除field，注意的是错误的情况也要
       this.context.removeField(this.props.name)
     }
 
@@ -51,7 +52,23 @@ const buildFormItem = (context: React.Context<ExportedFunc>) => {
         throw new Error('FormItem的只能存在一个子元素')
       }
 
-      const { name, initialValue, validates } = props
+      if (this.props.children === undefined || this.props.children === null) {
+        throw new Error('FormItem的子元素不能为空')
+      }
+
+      if (typeof this.props.children !== 'object') {
+        throw new Error('FormItem的子元素不能为TEXT_NODE')
+      }
+
+      let { name, initialValue, validates } = props
+
+      /* 如果没有设置initialValue, 根据initValueConfig配置进行初始值赋值 */
+      if (initialValue === undefined) {
+        const uniqueName = (this.props.children as genObject).type.uniqueName
+        if (uniqueName && initValueConfig[uniqueName]) {
+          initialValue = initValueConfig[uniqueName]
+        }
+      }
 
       /**
        * 这边只需要对name做diff，直接赋值效率更高

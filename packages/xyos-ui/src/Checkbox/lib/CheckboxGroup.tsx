@@ -36,6 +36,8 @@ interface CheckboxGroupProps {
 }
 
 class CheckboxGroup extends React.Component<CheckboxGroupProps, CheckboxGroupState> {
+  static uniqueName = 'CheckboxGroup'
+
   private rcCheckboxGroup: any;
 
   static defaultProps = {
