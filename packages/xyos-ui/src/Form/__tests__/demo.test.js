@@ -4,10 +4,10 @@ import { createForm } from '../index'
 
 /**
  * 该测试用例主要测试
- * 
+ *
  * 在非Form集成下：
  * 1. 触发trigger事件，内部value情况
- * 
+ *
  * 在Form集成下：
  * 1. 未触发trigger事件，未设置初始值，外部value情况
  * 2. 未触发trigger事件，已设置初始值，外部value情况
@@ -17,6 +17,7 @@ import { createForm } from '../index'
  * 6. setFieldsValue，外部value情况
  * 7. resetFields，外部value情况
  * 8. 设置rules情况下，validateFields + getFieldErrors，获取errors情况
+ * 9. 设置rules情况下，validateTrigger + getFieldErrors在事件触发时，获取errors情况
  */
 describe('test for Input in Form', () => {
   let container
@@ -28,10 +29,7 @@ describe('test for Input in Form', () => {
   const Comp = (props = {}) => {
     return (
       <Form>
-        <FormItem
-          name="input"
-          {...props}
-        >
+        <FormItem name="input" {...props}>
           <input id="input" />
         </FormItem>
       </Form>
@@ -42,10 +40,7 @@ describe('test for Input in Form', () => {
   beforeEach(() => {
     container = document.createElement('div')
     document.body.appendChild(container)
-    formWrapper = mount(
-      <Comp />,
-      { attachTo: container }
-    )
+    formWrapper = mount(<Comp />, { attachTo: container })
     formRef = formWrapper.childAt(0).instance()
     input = formWrapper.find('#input')
   })
@@ -59,7 +54,7 @@ describe('test for Input in Form', () => {
   })
 
   it('未触发trigger事件，已设置初始值，外部value情况', () => {
-    formWrapper.setProps({initialValue: 'input'})
+    formWrapper.setProps({ initialValue: 'input' })
     expect(formRef.getFieldValue('input')).toBe('input')
   })
 
@@ -70,14 +65,14 @@ describe('test for Input in Form', () => {
 
   it('dirty情况下，改变初始值，外部value情况', () => {
     input.simulate('change', { target: { value: 'changed' } })
-    formWrapper.setProps({initialValue: 'changed again'})
+    formWrapper.setProps({ initialValue: 'changed again' })
     expect(formRef.getFieldValue('input')).toBe('changed')
   })
 
   it('非dirty状态下，改变初始值，外部value情况', () => {
     // resetFieldsValue强制恢复为非dirty
     formRef.resetFieldsValue()
-    formWrapper.setProps({initialValue: 'input'})
+    formWrapper.setProps({ initialValue: 'input' })
     expect(formRef.getFieldValue('input')).toBe('input')
   })
 
@@ -90,7 +85,7 @@ describe('test for Input in Form', () => {
 
   it('resetFieldsValue，外部value情况', () => {
     // 先预设初始值
-    formWrapper.setProps({initialValue: 'input'})
+    formWrapper.setProps({ initialValue: 'input' })
 
     // 模拟输入，使之为dirty
     input.simulate('change', { target: { value: 'changed' } })
@@ -120,6 +115,33 @@ describe('test for Input in Form', () => {
 
     // 进行校验
     formRef.validateFields()
+    expect(formRef.getFieldErrors('input')).toMatchObject(['aaa', 'bbb'])
+  })
+
+  it('设置rules情况下，validateTrigger + getFieldErrors在事件触发时，获取errors情况', () => {
+    // 先预设初始值
+    formWrapper.setProps({
+      validates: [
+        {
+          pattern: /^aaa/,
+          message: 'aaa'
+        },
+        {
+          pattern: /^bbb/,
+          message: 'bbb'
+        }
+      ]
+    })
+
+    // 模拟输入，validateTrigger没有设置，不会产生errors
+    input.simulate('change', { target: { value: 'invalid' } })
+    expect(formRef.getFieldErrors('input')).toMatchObject([])
+
+    // 模拟输入，validateTrigger进行设置，会产生errors
+    formWrapper.setProps({
+      validateTrigger: 'onChange'
+    })
+    input.simulate('change', { target: { value: 'invalid' } })
     expect(formRef.getFieldErrors('input')).toMatchObject(['aaa', 'bbb'])
   })
 })
