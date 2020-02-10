@@ -16,9 +16,6 @@ type FormFuncs = {
   getFieldValue: (name: string) => any
   getFieldsValue: (names: string[]) => any[]
   getFieldErrors: (name: string) => any[]
-  getCriticalProps: (
-    name: string
-  ) => { trigger: string; valuePropName: string; errors: string[] }
   setFieldValue: (name: string, value: any) => void
   setFieldsValue: (fields: { [x: string]: any }) => void
   setFieldValueWithDirty: (name: string, value: any) => void

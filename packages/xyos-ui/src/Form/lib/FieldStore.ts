@@ -33,7 +33,7 @@ class FieldStore {
 
   /* set a field */
   @params('string', ['object', 'undefined'])
-  setField = (name: string, options: Partial<Omit<Fields[string], 'name'>>) => {
+  setField = (name: string, options: Partial<Omit<Fields[string], 'name'>> = {}) => {
     if (this.fields[name]) {
       this.fields[name] = {
         ...this.fields[name],

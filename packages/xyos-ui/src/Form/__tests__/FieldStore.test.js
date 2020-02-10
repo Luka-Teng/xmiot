@@ -1,4 +1,4 @@
-import FieldStore from '../FieldStore'
+import FieldStore from '../lib/FieldStore'
 
 describe('FieldStore in module(xyos-ui/Form)', () => {
   /* the instance of FieldStore */
@@ -7,11 +7,11 @@ describe('FieldStore in module(xyos-ui/Form)', () => {
   let getInitialField = name => ({
     name: name,
     dirty: false,
-    trigger: 'onChange',
-    valuePropName: 'value',
     validates: [],
-    value: null,
-    errors: []
+    value: undefined,
+    initialValue: undefined,
+    errors: [],
+    ref: null
   })
 
   beforeEach(() => {
@@ -24,10 +24,8 @@ describe('FieldStore in module(xyos-ui/Form)', () => {
   })
 
   it('setField could override an existing field', () => {
-    store.setField('a', { value: 'prev', trigger: 'onSelect' })
-    store.setField('a', { value: 'next' })
+    store.setField('a', { initialValue: 'next' })
     expect(store.fields.a.value).toBe('next')
-    expect(store.fields.a.trigger).toBe('onSelect')
   })
 
   it('getField须返回field对象，如果发现field存在', () => {
@@ -39,28 +37,29 @@ describe('FieldStore in module(xyos-ui/Form)', () => {
   it('resetFieldValue会dirty，error，value三个值进行初始化', () => {
     store.setField('a', {
       dirty: true,
-      errors: ['aaa'],
-      value: '2222',
-      trigger: 'onSelect'
+      errors: ['aaa']
+    })
+    store.setField('a', {
+      value: 222
     })
     expect(store.getField('a')).toMatchObject({
       name: 'a',
       dirty: true,
-      trigger: 'onSelect',
-      valuePropName: 'value',
       validates: [],
-      value: '2222',
-      errors: ['aaa']
+      value: 222,
+      errors: ['aaa'],
+      initialValue: undefined,
+      ref: null
     })
     store.resetFieldValue('a')
     expect(store.getField('a')).toMatchObject({
       name: 'a',
       dirty: false,
-      errors: [],
-      trigger: 'onSelect',
-      valuePropName: 'value',
       validates: [],
-      value: null
+      value: undefined,
+      errors: [],
+      initialValue: undefined,
+      ref: null
     })
   })
 
