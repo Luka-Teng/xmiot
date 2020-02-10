@@ -2,7 +2,7 @@
  * options
  * @prop { extract[number].test } regex 被打包的组
  * @prop { extract[number].filename } string 打包出来的文件名
- * @prop { autoUse } boolean 是否在dui
+ * @prop { autoUse } boolean 是否要在入口文件自动引入样式
  */
 
 const loader = require('./loader')
