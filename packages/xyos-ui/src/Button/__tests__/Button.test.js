@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { mount, shallow } from 'enzyme'
-import { Button } from '../index.tsx'
+import Button  from '../index.tsx'
 
 
 describe('Button', () => {

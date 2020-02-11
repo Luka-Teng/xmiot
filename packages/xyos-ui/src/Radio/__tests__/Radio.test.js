@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { mount, shallow } from 'enzyme'
-import { Radio, RadioGroup } from '../index.tsx'
+import Radio from '../index.tsx'
 
 describe('Radio',()=>{
 
@@ -17,9 +17,9 @@ describe('Radio',()=>{
     document.body.appendChild(container);
     const onChange = jest.fn();
     const wrapper = mount(
-      <RadioGroup name="platform"  onChange={onChange}>
+      <Radio.Group name="platform"  onChange={onChange}>
       <Radio value="PC" disabled={true}>选项一</Radio>
-    </RadioGroup>
+    </Radio.Group>
     );
     wrapper.find('.rc-radio-input').simulate('change');
     expect(onChange).not.toHaveBeenCalled();

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { mount, shallow } from 'enzyme'
-import { Checkbox } from '../index.tsx'
+import  { Checkbox } from '../index.tsx'
 
 describe('Checkbox',()=>{
 

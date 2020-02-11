@@ -6,6 +6,10 @@
 
 ```s
 npm run server 入口文件（相对于更目录）
+
+// 单元测试
+npm run test --projects packages/xyos-ui/src/Form
+
 ```
 
 #### 注意事项
