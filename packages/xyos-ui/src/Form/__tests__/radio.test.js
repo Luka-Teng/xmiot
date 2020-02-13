@@ -48,7 +48,7 @@ describe('test for radio in Form', () => {
     document.body.appendChild(container)
     formWrapper = mount(<Comp />, { attachTo: container })
     formRef = formWrapper.childAt(0).instance()
-    radio = formWrapper.find('.rc-radio-group')
+    radio = formWrapper.find(Radio)
     console.log(radio, 'radio', formWrapper)
   })
 
@@ -68,10 +68,7 @@ describe('test for radio in Form', () => {
   it('触发trigger事件，外部value情况', () => {
     // radio.simulate('change', { target: '1' })
     console.log(radio.find('.rc-radio'), '999')
-    radio
-      .find('.rc-radio')
-      .at(3)
-      .simulate('change')
+    radio.at(3).simulate('change')
     expect(formRef.getFieldValue('radio')).toBe('3')
   })
 
