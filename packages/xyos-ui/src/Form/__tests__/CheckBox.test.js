@@ -3,7 +3,7 @@ import React from 'react'
 import RcCheckbox from 'rc-checkbox'
 import { createForm } from '../index'
 import Radio from '../../Radio'
-
+import {CheckboxGroup,Checkbox} from '../../Checkbox'
 /**
  * 该测试用例主要测试
  *
@@ -25,19 +25,19 @@ describe('test for radio in Form', () => {
   let container
   let formWrapper
   let formRef
-  let radioGroup
+  let checkBoxGroup
 
   const [Form, FormItem] = createForm()
   const onChange = jest.fn()
   const Comp = (props = {}) => {
     return (
       <Form>
-        <FormItem name="radio" {...props}>
-          <Radio.Group name="platform" onChange={onChange}>
-            <Radio value="1">选项一</Radio>
-            <Radio value="2">选项二</Radio>
-            <Radio value="3">选项三</Radio>
-          </Radio.Group>
+        <FormItem name="checkbox" {...props}>
+        <CheckboxGroup  onChange={onChange} >
+          <Checkbox value='1'>Checkbox</Checkbox>
+          <Checkbox value="Checkbox">Checkbox</Checkbox>
+          <Checkbox value="2Checkbox">Checkbox</Checkbox>
+        </CheckboxGroup>
         </FormItem>
       </Form>
     )
@@ -49,7 +49,7 @@ describe('test for radio in Form', () => {
     document.body.appendChild(container)
     formWrapper = mount(<Comp />, { attachTo: container })
     formRef = formWrapper.childAt(0).instance()
-    radioGroup = formWrapper.find(Radio.Group)
+    checkBoxGroup = formWrapper.find(CheckboxGroup)
   })
 
   afterEach(() => {
@@ -57,12 +57,12 @@ describe('test for radio in Form', () => {
   })
 
   it('未触发trigger事件，未设置初始值，外部value情况', () => {
-    expect(formRef.getFieldValue('radio')).toBe(undefined)
+    expect(formRef.getFieldValue('checkbox')).toEqual([])
   })
 
   it('未触发trigger事件，已设置初始值，外部value情况', () => {
-    formWrapper.setProps({ initialValue: '1' })
-    expect(formRef.getFieldValue('radio')).toBe('1')
+    formWrapper.setProps({ initialValue: ['1'] })
+    expect(formRef.getFieldValue('checkbox')).toEqual(['1'])
   })
 
   it('触发trigger事件，外部value情况', () => {
@@ -74,66 +74,47 @@ describe('test for radio in Form', () => {
      * 利用直接触发onChange来模拟RcCheckbox的改变事件
      * 而且change事件必须加上参数
      */
-    radioGroup
+    checkBoxGroup
       .find(RcCheckbox)
       .at(2)
       .props()
-      .onChange({ target: { value: '3' } })
-    expect(formRef.getFieldValue('radio')).toBe('3')
+      .onChange({ target: { value: '2Checkbox' } })
+    expect(formRef.getFieldValue('checkbox')).toEqual(['2Checkbox'])
   })
+  
 
   it('dirty情况下，改变初始值，外部value情况', () => {
-    radioGroup
-      .find(RcCheckbox)
-      .at(2)
-      .props()
-      .onChange({ target: { value: '1' } })
+    checkBoxGroup.find(RcCheckbox).at(0).props().onChange({ target: { value: '1' } })
+    checkBoxGroup.find(RcCheckbox).at(2).props().onChange({ target: { value: '2Checkbox' } })
     formWrapper.setProps({ initialValue: '2' })
-    expect(formRef.getFieldValue('radio')).toBe('1')
+    expect(formRef.getFieldValue('checkbox')).toEqual(['1','2Checkbox'])
   })
 
   it('非dirty状态下，改变初始值，外部value情况', () => {
-    // resetFieldsValue强制恢复为非dirty
     formRef.resetFieldsValue()
-    formWrapper.setProps({ initialValue: '2' })
-    expect(formRef.getFieldValue('radio')).toBe('2')
+    formWrapper.setProps({ initialValue: ['2Checkbox'] })
+    expect(formRef.getFieldValue('checkbox')).toEqual(['2Checkbox'])
   })
 
   it('setFieldsValue，外部value情况', () => {
     formRef.setFieldsValue({
-      radio: '2'
+      checkbox: ['1','2Checkbox']
     })
-    expect(formRef.getFieldValue('radio')).toBe('2')
+    expect(formRef.getFieldValue('checkbox')).toEqual(['1','2Checkbox'])
+
   })
 
   it('resetFieldsValue，外部value情况', () => {
     // 先预设初始值
-    formWrapper.setProps({ initialValue: '1' })
+    formWrapper.setProps({ initialValue: ['1'] })
     // 模拟点击
-    radioGroup
+    checkBoxGroup
     .find(RcCheckbox)
     .at(2)
     .props()
-    .onChange({ target: { value: '2' } })
+    .onChange({ target: { value: ['2Checkbox'] } })
     // 重置
     formRef.resetFieldsValue()
-    expect(formRef.getFieldValue('radio')).toBe('1')
+    expect(formRef.getFieldValue('checkbox')).toEqual(['1'])
   })
-
-  
-  it('设置rules情况下，validateFields + getFieldErrors，获取errors情况', () => {
-    // 先预设初始值
-    formWrapper.setProps({ initialValue: '1' })
-    // 模拟输入
-    radioGroup
-    .find(RcCheckbox)
-    .at(2)
-    .props()
-    .onChange({ target: { value: '2' } })
-    // 进行校验
-    formRef.validateFields()
-    expect(formRef.getFieldErrors('radio')).toMatchObject([])
-  })
-
-
 })

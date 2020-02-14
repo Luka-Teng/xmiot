@@ -37,4 +37,4 @@ declare class Select extends React.Component<Props> {
   static Option: typeof Option
 }
 
-export { Select }
+export default Select
