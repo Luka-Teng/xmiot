@@ -60,7 +60,7 @@ function getOptions (format) {
       dir: './entry',
       format
     },
-    external: Object.keys(packageJson.dependencies)
+    external: [...Object.keys(packageJson.dependencies), 'react', 'react-dom']
   }
 }
 

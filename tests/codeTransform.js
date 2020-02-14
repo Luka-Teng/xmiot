@@ -1,7 +1,8 @@
 const babelConfig = {
-  presets: [['react-app', { flow: true, typescript: true }]],
   overrides: [
     {
+      exclude: /node_modules/,
+      presets: [['react-app', { flow: false, typescript: true }]],
       plugins: [
         ['@babel/plugin-proposal-decorators', { legacy: true }],
         ['@babel/plugin-proposal-class-properties', { loose: true }]
@@ -10,6 +11,14 @@ const babelConfig = {
   ]
 }
 
-module.exports = require('babel-jest').createTransformer({
-  ...babelConfig
-})
+module.exports = {
+  process (src, filename, config) {
+    const code = require('babel-jest')
+      .createTransformer({
+        ...babelConfig
+      })
+      .process(src, filename, config)
+
+    return code
+  }
+}

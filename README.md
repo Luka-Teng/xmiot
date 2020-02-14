@@ -22,5 +22,7 @@ npm run test --projects packages/xyos-ui/src/Form
 
 ##### 4. 每个库可以在copyOptions中对文件复制到输出目录的某个地方
 
+##### 5. 由于monorepo的原因，单元测试的enzyme在遇到hooks会出现react两份拷贝的问题，所以现在项目中对react，react-dom的依赖全部改为peerDependency，react和react-dom安装在根目录
+
 ![xmiot](./xmiot.png)
   
