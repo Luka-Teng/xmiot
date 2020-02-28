@@ -45,7 +45,6 @@ class Select extends React.Component<Props, SelectState> {
 
   constructor (props: Props) {
     super(props)
-    console.log(props.value, 'props.value ')
     const values =
       typeof props.value === 'undefined' ? props.defaultValue : props.value
     this.state = {
@@ -54,7 +53,6 @@ class Select extends React.Component<Props, SelectState> {
   }
 
   static getDerivedStateFromProps (nextProps: Props) {
-    console.log(nextProps, 'nextProps')
     if ('value' in nextProps) {
       if (!nextProps.value) {
         return {

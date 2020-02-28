@@ -278,6 +278,10 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
 
     let { visible } = state
 
+    if (!('visible' in props) && this.isNoTitle()) {
+      visible = false
+    }
+
     let direction
 
     const children = props.children as React.ReactElement<any>

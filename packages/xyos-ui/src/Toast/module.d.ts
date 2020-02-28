@@ -1,6 +1,5 @@
 declare module 'rc-notification' {
   import * as React from 'react'
-
   export interface Props {
     content: React.ReactNode
     duration: number | null

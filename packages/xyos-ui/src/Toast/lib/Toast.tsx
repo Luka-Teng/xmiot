@@ -1,5 +1,6 @@
 import React from 'react'
 import Notification from 'rc-notification'
+// import { NotificationInstance as RCNotificationInstance } from 'rc-notification/lib/Notification';
 import classNames from 'classnames'
 import Icon from '../../Icon/index'
 import './toast.less'
@@ -17,12 +18,12 @@ export interface ThenableArgument {
 
 /** 实例 */
 // let notifier: MessageNotify = null
-// let messageInstance: any;
 let defaultDuration = 3
 let defaultTop = 24;
 let defaultBottom = 24;
-let messageInstance: any;
+// let messageInstance: any;
 let defaultGetContainer: () => HTMLElement;
+const messageInstance: { [key: string]: any } = {};
 
 let key: number = 0
 let transitionName = 'move-up'
@@ -174,12 +175,12 @@ function getNotifier(
   );
 
   if (messageInstance) {
-
     if (messageInstance[cacheKey]) {
       callback(messageInstance[cacheKey]);
       return;
     }
   }
+
   Notification.newInstance(
     {
       prefixCls,
@@ -191,7 +192,6 @@ function getNotifier(
       closeIcon: closeIconToRender,
     },
     (instance: any) => {
-
       if (!messageInstance) {
         messageInstance = instance
       }
@@ -307,6 +307,7 @@ const api: any = {
     })
   }
 };
+
 ['success', 'info', 'warning', 'error'].forEach(type => {
   api[type] = (args: ArgsProps) =>
     api.open({

@@ -1,5 +1,6 @@
 import React from 'react'
 import RCToast from 'rc-notification'
+import { NotificationInstance as RCNotificationInstance } from 'rc-notification/lib/Notification';
 type NoticeType = 'info' | 'success' | 'error' | 'warning' | 'loading'
 
 export type NotificationPlacement = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | "topCenter";
