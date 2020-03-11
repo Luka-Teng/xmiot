@@ -25,7 +25,7 @@ module.exports = done => {
       if (semver.lt(localVersion, lastestVersion)) {
         console.log(chalk.yellow(`  A newer version of ${name} is available.`))
         console.log()
-        console.log('  latest:    ' + chalk.green(lastestVersion))
+        console.log('  latest:   ' + chalk.green(lastestVersion))
         console.log('  installed: ' + chalk.red(localVersion))
         console.log()
       }
