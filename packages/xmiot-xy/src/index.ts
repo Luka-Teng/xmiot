@@ -1,5 +1,4 @@
 import { getPromise, checkVersion } from './utils'
-import { nameMap } from './constant'
 /**
  * public api:
  *
@@ -27,13 +26,13 @@ window.nativeCallback = {}
 let callbackIndex = 0
 
 class XY {
-  constructor() {
+  constructor () {
     // 确认sdk的版本信息
     checkVersion()
   }
 
   // 注册callback，并在运行后自动注销
-  private registerCallBacks(...callbacks: Function[]) {
+  private registerCallBacks (...callbacks: Function[]) {
     if (callbacks.length < 1) {
       throw new Error('registerCallBacks需要至少一个回调参数')
     }
@@ -51,42 +50,27 @@ class XY {
     return callbackNames
   }
 
-  // 包装nativeFn，注册回调
-  private wrapNativeFn(nativeFn: Function) {
+  public call (functionName: string, params: genObject = {}): Promise<any> {
+    // 错误边界
+    if (!window.JSBridge.nativeCallback) {
+      throw new Error('请在native环境中使用sdk')
+    }
+    if (typeof functionName !== 'string') {
+      throw new Error('方法名必须为字符串')
+    }
+
     const { promise, res, rej } = getPromise()
 
     // 将回调方法注册入回调队列
     const [cb1, cb2] = this.registerCallBacks(res, rej)
 
-    return (params: genObject) => {
-      nativeFn(params, cb1, cb2)
-      return promise
-    }
+    // 调用native方法
+    window.JSBridge.nativeCallback(params, functionName, cb1, cb2)
+
+    return promise
   }
 
-  private findNativeFn(name: string) {
-    /**
-     * 加入map，H5和nativeFn名字的映射
-     */
-    const fn = window.JSBridge[nameMap[name] || name]
-    if (fn) {
-      return fn.bind(window.JSBridge)
-    }
-    return null
-  }
-
-  public call(functionName: string, params: genObject = {}): Promise<any> {
-    const fn = this.findNativeFn(functionName)
-
-    if (!fn) {
-      console.error('没有对应的nativeFn，或nativeFn尚未注入')
-      return new Promise(() => {})
-    }
-
-    return this.wrapNativeFn(fn)(params)
-  }
-
-  public on(functionName: string, callback: Function) {
+  public on (functionName: string, callback: Function) {
     window.hybrid[functionName] = callback.bind(window.JSBridge)
   }
 }
